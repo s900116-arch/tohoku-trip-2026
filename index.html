@@ -220,6 +220,8 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .wxb .alr{font-style:normal;font-size:11px;color:#b4502a;font-weight:700;white-space:pre-line;margin-top:3px;line-height:1.45}
 @media(min-width:601px){.wxb{width:168px;box-sizing:border-box}}
 .wxb .alr[hidden]{display:none}
+.wxb .snq{font-style:normal;font-size:11px;color:var(--soft);white-space:nowrap;margin-top:2px}
+@media(max-width:600px){.wxb .snq{flex-basis:100%}}
 .wxc .sky .ext{display:block;flex-basis:100%;font-size:12px;color:var(--soft)}
 .nowwx{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:10px;padding:10px 14px;border:1px dashed var(--rule);border-radius:12px}
 .nowwx b{font-size:20px}
@@ -791,10 +793,10 @@ const autoWx=async()=>{try{
   el.querySelector(".au").textContent=`${w.geo.map(g=>g.n).join("・")}｜API ${stamp}`;
   el.title=`${w.geo.map(g=>g.n).join("・")}｜${m[1]} ${lo}–${hi}°C${pp!=null?`，降雨機率 ${pp}%`:""}（Open-Meteo API 預報，日本時間 ${stamp} 更新）`;
   const gu=Math.max(...rows.map(x=>x.gu??0)),sn=Math.max(...rows.map(x=>x.sn??0)),fl=Math.min(...rows.map(x=>x.fl??99));
-  const al=[];if(gu>=40)al.push(`💨 陣風 ${Math.round(gu)} km/h`);if(sn>=1)al.push(`❄️ 降雪 ${Math.round(sn)} cm`);
-  let ae=el.querySelector(".alr");if(!ae){ae=document.createElement("i");ae.className="alr";el.appendChild(ae)}ae.textContent=al.join("\n");ae.hidden=!al.length;
+  const al=[];if(gu>=40)al.push(`💨 陣風 ${Math.round(gu)} km/h`);const snv=sn>=1?Math.round(sn):Math.round(sn*10)/10;if(sn>=1)al.push(`❄️ 降雪 ${snv} cm`);
+  let ae=el.querySelector(".alr");if(!ae){ae=document.createElement("i");ae.className="alr";el.appendChild(ae)}ae.textContent=al.join("\n");let sq=el.querySelector(".snq");if(w.geo.some(g=>g.snow)&&sn<1){if(!sq){sq=document.createElement("i");sq.className="snq";el.appendChild(sq)}sq.textContent=sn>0?`❄️ 降雪 ${snv} cm`:"❄️ 預估不下雪"}else if(sq)sq.remove();ae.hidden=!al.length;
   el.title+=`${fl<99?`；體感最低 ${Math.round(fl)}°C`:""}${gu?`；最大陣風 ${Math.round(gu)} km/h`:""}${sn?`；降雪 ${Math.round(sn)} cm`:""}`;
-  el.classList.add("live");n++;const card=document.getElementById("wx-"+di);if(card){const lv=card.querySelector(".sky.live");if(lv){lv.hidden=false;lv.innerHTML=`<b>最新 ${m[0]} ${m[1]}</b><span class="tp">${lo}–${hi}°C</span>${pp!=null?`降雨 ${pp}%`:""}<span class="ext">${fl<99?`體感最低 ${Math.round(fl)}°`:""}${gu?`　最大陣風 ${Math.round(gu)} km/h`:""}${sn>=0.5?`　降雪 ${Math.round(sn)} cm`:""}</span><small class="src">API・${esc(w.geo.map(g=>g.n).join("・"))}・${stamp}</small>`}}});
+  el.classList.add("live");n++;const card=document.getElementById("wx-"+di);if(card){const lv=card.querySelector(".sky.live");if(lv){lv.hidden=false;lv.innerHTML=`<b>最新 ${m[0]} ${m[1]}</b><span class="tp">${lo}–${hi}°C</span>${pp!=null?`降雨 ${pp}%`:""}<span class="ext">${fl<99?`體感最低 ${Math.round(fl)}°`:""}${gu?`　最大陣風 ${Math.round(gu)} km/h`:""}${sn>0||w.geo.some(g=>g.snow)?`　降雪 ${sn>=1?Math.round(sn):Math.round(sn*10)/10} cm`:""}</span><small class="src">API・${esc(w.geo.map(g=>g.n).join("・"))}・${stamp}</small>`}}});
  (C.temps||[]).forEach((t,ti)=>{const w=W[ti];if(!w||!w.geo)return;const g=w.geo[0];if(!g)return;const r=data[g.n+"|"+w.date];if(!r||r.lo==null)return;const row=document.getElementById("temp-"+ti);if(!row)return;const L=-12,H=20,lo=Math.round(r.lo),hi=Math.round(r.hi),a=Math.max(L,lo),b=Math.min(H,hi);const i=row.querySelector(".tbar i");i.style.left=(a-L)/(H-L)*100+"%";i.style.width=Math.max(2,(b-a)/(H-L)*100)+"%";row.querySelector(".tval").innerHTML=`${lo}° / ${hi}°<small class="tsrc">API ${stamp.split(" ")[0]}</small>`;row.classList.add("live")});
  const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點（Day 1 仙台車站、Day 2 松島海岸、Day 3 銀山溫泉、Day 4 藏王溫泉、Day 5 藏王樹冰、Day 6 狐狸村、Day 7 仙台車站）。「每天行程地點的大約溫度」也會自動更新（藏王樹冰用海拔 1,661 m 地藏山頂站計算）。天氣代碼是當天「最差」的天氣，例如只有一小段時間下毛毛雨也會顯示毛毛雨。陣風 40 km/h 以上或預估會下雪時，小卡會出現紅字提醒；旅行期間「今天」區塊會顯示當地現在的氣溫、體感和風速。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
