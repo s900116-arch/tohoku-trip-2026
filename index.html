@@ -601,7 +601,7 @@ el.hidden=false;el.innerHTML=`<div class="wrap tgrid"><div><span class="tl">今�
 const openTaxi=i=>{const h=C.hotels[i];if(!h)return;const row=(k,v)=>v?`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`:"";const list=(k,a)=>a&&a.length?`<div><dt>${k}</dt><dd><ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd></div>`:"";
 $("taxibody").innerHTML=`<p class="hk">${esc(h.stay||h.when)}</p><h3 class="hn">${esc(h.name)}</h3>
 <div class="drv"><p class="tk1" lang="ja">こちらへ行ってください</p><p class="tk2" lang="ja">${esc(h.ja).replace("（","<br>（")}</p><p class="tk3" lang="ja">${esc(h.addr)}</p><p class="tk4">TEL ${esc(h.tel)}</p><p class="tk5">搭計程車時把這一格給司機看</p></div>
-<dl class="hinfo">${row("房間",h.rooms)}${row("入住",h.cin)}${row("退房",h.cout)}${row("交通",h.access)}${row("停車",h.park)}${row("泡湯",h.bath)}${row("餐飲",h.food)}${list("設施",h.facil)}${list("注意",h.notes)}</dl>
+<dl class="hinfo">${row("房間",h.rooms)}${row("房型",h.rtype)}${row("入住",h.cin)}${row("退房",h.cout)}${row("交通",h.access)}${row("停車",h.park)}${row("泡湯",h.bath)}${row("餐飲",h.food)}${list("設施",h.facil)}${list("注意",h.notes)}</dl>
 <p class="acts" style="justify-content:center">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">Google Maps 導航</a>`:""}</p>`;
 $("taxi").hidden=false;document.body.classList.add("modal-on");$("taxix").focus({preventScroll:true});document.querySelector(".tbox").scrollTop=0};
 const closeTaxi=()=>{$("taxi").hidden=true;document.body.classList.remove("modal-on")};
