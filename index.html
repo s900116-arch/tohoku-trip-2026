@@ -216,6 +216,7 @@ details[open] .arr{transform:rotate(180deg)}
 .wxb .au:empty{display:none}
 .wxc .sky .src{display:block;flex-basis:100%;font-size:11px;color:var(--soft);font-weight:400;margin-top:2px}
 .wxc .sky.live{margin-top:6px;border:1px dashed var(--rule)}
+.tval .tsrc{display:block;font-size:10px;color:var(--soft);font-weight:400}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -539,7 +540,7 @@ footer .install{color:#9fb0c8}
     <div id="fc"></div>
     <h3 class="fch">每天行程地點的大約溫度</h3>
     <div class="temps" id="temps"></div>
-    <p class="note">每天行程地點的大約溫度（°C）：平地依氣象廳預報，銀山、藏王、狐狸村是用平地預報推估（山區比平地低 5–12°C）。點「即時預報」看最新天氣；12 月初約 16:20 天黑。</p>
+    <p class="note">每天行程地點的大約溫度（°C）：平地依氣象廳預報，銀山、藏王、狐狸村是用平地預報推估（山區比平地低 5–12°C）。數字後面標「自動」是 Open-Meteo 最新預報，標「人工 11/25」是當時整理的推估；藏王山頂只有人工推估。點「即時預報」看最新天氣；12 月初約 16:20 天黑。</p>
   </div>
 </section>
 
@@ -638,11 +639,11 @@ const rateHtml=h=>h.gr?`<p class="rate"><span class="st">★ ${esc(h.gr)}</span>
 const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card hotel" id="hotel-${i}"><div class="n">${esc(h.when)}${h.rooms?`・${esc(h.rooms)}`:""}</div><h3>${esc(h.name)}</h3>${rateHtml(h)}<p>${esc(h.desc)}</p>${h.ja?`<p class="ja" lang="ja">${esc(h.ja)}<br>${esc(h.addr)}<br>TEL ${esc(h.tel)}</p>`:""}<p class="acts">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">導航</a>`:""}${h.ja?`<button class="btn sm" type="button" data-taxi="${i}">飯店資訊</button>`:""}</p></div>`).join('');
 $("sostaxi").innerHTML=C.hotels.map((h,i)=>h.ja?`<button class="btn light" type="button" data-taxi="${i}">${esc(h.when.split("・")[0])} ${esc(h.name)}</button>`:"").join("")};
 const renderFc=()=>{const f=C.forecast,el=$("fc");if(!f||!el){if(el)el.innerHTML="";return}
-el.innerHTML=`<h3 class="fch">最新預報 <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
+el.innerHTML=`<h3 class="fch">氣象廳預報表（人工整理・11/25） <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
 const WL=["","輕便冬裝","保暖冬裝","防水保暖","全副雪地裝備"];
 const lvHtml=n=>`<span class="lv" aria-label="穿著等級 ${n} / 4">${[1,2,3,4].map(k=>`<i class="${k<=n?"on":""}"></i>`).join("")}${esc(WL[n]||"")}</span>`;
 const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><header><a href="#day${i+1}"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></a><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}<small class="src">人工整理・11/25 氣象廳</small></div><div class="sky live" hidden></div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl></article>`}).join("")};
-const renderTemps=()=>{renderFc();const lo=-12,hi=20;$("temps").innerHTML=C.temps.map(t=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°</span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
+const renderTemps=()=>{renderFc();const lo=-12,hi=20;$("temps").innerHTML=C.temps.map((t,ti)=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow" id="temp-${ti}"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°<small class="tsrc">人工 11/25</small></span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
 const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}catch(e){st={}}
 const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`};
 const renderPack=()=>{$("check").innerHTML=C.items.map((x,i)=>`<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x)}" ${st[x]?'checked':''}><span>${esc(x)}</span></label></li>`).join('');upd()};
@@ -751,7 +752,8 @@ const autoWx=async()=>{try{
   el.querySelector(".au").textContent=`${w.geo.map(g=>g.n).join("・")}｜自動 ${stamp}`;
   el.title=`${w.geo.map(g=>g.n).join("・")}｜${m[1]} ${lo}–${hi}°C${pp!=null?`，降雨機率 ${pp}%`:""}（Open-Meteo 自動預報，日本時間 ${stamp} 更新）`;
   el.classList.add("live");n++;const card=document.getElementById("wx-"+di);if(card){const lv=card.querySelector(".sky.live");if(lv){lv.hidden=false;lv.innerHTML=`<b>最新 ${m[0]} ${m[1]}</b><span class="tp">${lo}–${hi}°C</span>${pp!=null?`降雨 ${pp}%`:""}<small class="src">自動・${esc(w.geo.map(g=>g.n).join("・"))}・${stamp}</small>`}}});
- const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。下面的每日建議和預報表：人工整理（${C.updated||""} 氣象廳資料）。`;
+ (C.temps||[]).forEach((t,ti)=>{const w=W[ti];if(!w||!w.geo)return;const g=w.geo.find(g=>t.place.includes(g.n));if(!g)return;const r=data[g.n+"|"+w.date];if(!r||r.lo==null)return;const row=document.getElementById("temp-"+ti);if(!row)return;const L=-12,H=20,lo=Math.round(r.lo),hi=Math.round(r.hi),a=Math.max(L,lo),b=Math.min(H,hi);const i=row.querySelector(".tbar i");i.style.left=(a-L)/(H-L)*100+"%";i.style.width=Math.max(2,(b-a)/(H-L)*100)+"%";row.querySelector(".tval").innerHTML=`${lo}° / ${hi}°<small class="tsrc">自動 ${stamp.split(" ")[0]}</small>`;row.classList.add("live")});
+ const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。「每天行程地點的大約溫度」也會自動更新（藏王山頂除外）。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
 const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
