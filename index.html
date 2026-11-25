@@ -191,6 +191,15 @@ details[open] .arr{transform:rotate(180deg)}
 #tax .lb{font-weight:700;margin-right:6px}
 #tax .lb::after{content:"："}
 #tax .card.air{border-color:var(--red);border-width:2px}
+.sos .ins{margin-top:14px}
+.sos .ins h3{margin:0 0 8px;color:#fff;font-size:18px}
+.sos .ins .big a{color:inherit;text-decoration:none}
+.sos .ins p{margin:0 0 10px}
+.sos .ins .pts{margin:0;padding:0;list-style:none}
+.sos .ins .pts li{position:relative;padding-left:14px;margin:0 0 7px;line-height:1.7}
+.sos .ins .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.6}
+.sos .ins .lb{font-weight:700;margin-right:6px;color:var(--lamp)}
+.sos .ins .lb::after{content:"："}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -557,6 +566,21 @@ footer .install{color:#9fb0c8}
       <div class="card"><div class="big">119</div><p>救護車、消防（受傷、急病、火災）</p></div>
       <div class="card"><div class="big">050-3816-2787</div><p>日本觀光廳訪日外國人熱線，24 小時，可用中文</p></div>
     </div>
+    <div class="card ins" id="ins">
+      <h3>國泰產險 海外急難救助（有保國泰產險旅遊保險的人適用）</h3>
+      <div class="big"><a href="tel:+886227551258">+886-2-2755-1258</a></div>
+      <p>24 小時中文服務，在日本直接撥這支國際碼即可，電話費自付。也可以加國泰產險 LINE 官方帳號，輸入「海外急難救助」。</p>
+      <ul class="pts">
+        <li><b class="lb">打電話前準備</b>中英文姓名、身分證字號、保單號碼、出生日期（資料各自保管，不要放進群組）</li>
+        <li><b class="lb">諮詢服務</b>當地旅遊資訊、緊急訂機票和旅館、醫療問題中英文口譯、推薦翻譯人員、緊急醫療諮詢、法律諮詢</li>
+        <li><b class="lb">旅遊和醫療協助</b>協尋並轉送遺失行李、協助補辦護照等旅遊文件、推薦醫院和診所、協助安排住院、遞送緊急醫療用品、追蹤醫療病情</li>
+        <li><b class="lb">要自己付的</b>醫療費、住院費、訴訟費、轉送和遞送費用等先由自己負擔，回台再依保單理賠</li>
+        <li><b class="lb">日本醫療費代墊</b>要符合保單條件（有附加「海外旅行急難救助保險」且保額達標），是否適用請先問自己的保單</li>
+        <li><b class="lb">重大事件</b>醫療轉送、親友赴日探視、遺體運送、搜索救助等，依自己保單的「海外旅遊急難救助保險」理賠；探視等項目通常要住院 7 天以上</li>
+        <li><b class="lb">不會講電話</b>請飯店櫃檯幫忙，給他看這段英文：「Please help me make a call to Taiwan: +886-2-27551258. I'd like to talk to the service center of Cathay Century Insurance.」</li>
+        <li><b class="lb">不保的情況</b>酒駕、吸毒、懷孕相關、原本就有的慢性病等，依保單條款為準</li>
+      </ul>
+    </div>
     <h3 style="color:#fff;margin:22px 0 10px;font-size:19px">飯店資訊（含給計程車司機看的日文地址）</h3>
     <div class="acts" id="sostaxi"></div>
     <p class="note" style="color:#fff">走散時先打電話給團員；約好每天的集合點就是當天的飯店大廳。</p>
@@ -654,7 +678,7 @@ $("allopen").addEventListener("click",()=>{const any=[...document.querySelectorA
 
 /* ---------- search ---------- */
 let idx=[];
-const buildIdx=()=>{idx=[];(C.tax&&C.tax.cards||[]).forEach((c,i)=>idx.push({lab:"退稅",cat:"購物",title:c.title,sub:(c.pts||[]).join(" "),tgt:`tax-${i}`}));
+const buildIdx=()=>{idx=[];idx.push({lab:"緊急",cat:"保險",title:"國泰產險 海外急難救助",sub:"+886-2-27551258 24小時中文 保險 救助 醫療 口譯 護照 行李 住院",tgt:"ins"});(C.tax&&C.tax.cards||[]).forEach((c,i)=>idx.push({lab:"退稅",cat:"購物",title:c.title,sub:(c.pts||[]).join(" "),tgt:`tax-${i}`}));
 C.days.forEach((d,di)=>{const id="day"+(di+1);(d.s||[]).forEach((x,i)=>idx.push({lab:`Day ${di+1}`,cat:x.cat||"",title:`${x.t} ${x.title}`,sub:[x.sub,x.detail,x.warn].filter(Boolean).join(" "),tgt:`${id}-${i}`}));(d.t||[]).forEach(x=>idx.push({lab:`Day ${di+1}`,cat:"提醒",title:`${d.title}：今日提醒`,sub:x,tgt:id}))});
 if(C.announce)idx.push({lab:"公告",cat:"提醒",title:"最新公告",sub:C.announce,tgt:"ann"});
 idx.push({lab:"航班",cat:"交通",title:"去程 JX862 12/01 11:50 → 16:00",sub:"桃園 T1 → 仙台機場 星宇航空 起飛 抵達 集合",tgt:"flight"},{lab:"航班",cat:"交通",title:"回程 JX863 12/07 17:25 → 20:35",sub:"仙台機場 → 桃園 T1 星宇航空 起飛 抵達",tgt:"flight"});
