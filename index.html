@@ -374,6 +374,14 @@ footer .install{color:#9fb0c8}
 .scene.photo svg{pointer-events:none}
 .scene.photo::before{content:"";position:absolute;left:0;right:0;top:0;height:28%;background:linear-gradient(#121e33,rgba(18,30,51,0));z-index:1;pointer-events:none}
 .scene.photo svg{z-index:2}
+.fch{font-size:17px;margin:6px 0 10px;color:var(--pine)}
+.fch a{font-size:13px;font-weight:400;color:var(--soft);margin-left:6px}
+.fct{width:100%;border-collapse:collapse;font-size:15px;background:var(--bg);border-radius:12px;overflow:hidden}
+.fct th{font-size:13px;color:var(--soft);text-align:left;padding:8px 12px;border-bottom:2px solid var(--rule)}
+.fct td{padding:9px 12px;border-bottom:1px solid var(--rule)}
+.fct td small,.fct th small{color:var(--soft);font-size:12px;font-weight:400;display:block;white-space:nowrap}
+.fct td.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
+#fc+h3{margin-top:22px}
 </style>
 </head>
 <body>
@@ -443,8 +451,10 @@ footer .install{color:#9fb0c8}
 <section class="band sec" id="weather" style="background:var(--panel)">
   <div class="wrap">
     <h2>12 月初天氣參考</h2>
+    <div id="fc"></div>
+    <h3 class="fch">各地大約參考</h3>
     <div class="temps" id="temps"></div>
-    <p class="note">12 月上旬大約的參考氣溫（°C），點「即時預報」看實際天氣，山區常下雪、風大體感更冷。12 月初約 16:20 天黑，出發前再看當週預報。</p>
+    <p class="note">仙台、松島、白石依氣象廳預報；銀山、山形、藏王是 12 月上旬大約的參考氣溫（°C），點「即時預報」看實際天氣，山區常下雪、風大體感更冷。12 月初約 16:20 天黑，出發前再看當週預報。</p>
   </div>
 </section>
 
@@ -527,7 +537,9 @@ const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>
 </div></details></section>`}).join('')};
 const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card hotel" id="hotel-${i}"><div class="n">${esc(h.when)}</div><h3>${esc(h.name)}</h3><p>${esc(h.desc)}</p>${h.ja?`<p class="ja" lang="ja">${esc(h.ja)}<br>${esc(h.addr)}<br>TEL ${esc(h.tel)}</p>`:""}<p class="acts">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">導航</a>`:""}${h.ja?`<button class="btn sm" type="button" data-taxi="${i}">給司機看</button>`:""}</p></div>`).join('');
 $("sostaxi").innerHTML=C.hotels.map((h,i)=>h.ja?`<button class="btn light" type="button" data-taxi="${i}">${esc(h.when.split("・")[0])} ${esc(h.name)}</button>`:"").join("")};
-const renderTemps=()=>{const lo=-14,hi=12;$("temps").innerHTML=C.temps.map(t=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°</span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
+const renderFc=()=>{const f=C.forecast,el=$("fc");if(!f||!el){if(el)el.innerHTML="";return}
+el.innerHTML=`<h3 class="fch">最新預報 <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>最高 / 最低</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
+const renderTemps=()=>{renderFc();const lo=-14,hi=12;$("temps").innerHTML=C.temps.map(t=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°</span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
 const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}catch(e){st={}}
 const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`};
 const renderPack=()=>{$("check").innerHTML=C.items.map((x,i)=>`<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x)}" ${st[x]?'checked':''}><span>${esc(x)}</span></label></li>`).join('');upd()};
