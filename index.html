@@ -179,6 +179,16 @@ details[open] .arr{transform:rotate(180deg)}
 .det p{margin:0 0 6px}
 .det .warn{margin:8px 0 0;padding:8px 12px;border-left:4px solid var(--red);background:color-mix(in srgb,var(--red) 8%,transparent);border-radius:0 8px 8px 0}
 .det .warn b{color:var(--red)}
+.det .pts{margin:0;padding:0;list-style:none}
+.det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
+.det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
+.det .lb{display:inline-block;margin-right:6px;font-weight:700;color:inherit!important}
+.det .lb::after{content:"："}
+.det .warn{display:block}
+.det .warn>b{display:block;margin-bottom:4px}
+.det .warn p{margin:0}
+.det .warn .pts li:last-child{margin-bottom:0}
+
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%,40%{background:color-mix(in srgb,var(--gold) 30%,transparent)}100%{background:transparent}}
 @media(prefers-reduced-motion:reduce){.arr{transition:none}.flash{animation:none}}
@@ -565,7 +575,8 @@ const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]
 /* ---------- render ---------- */
 const renderAnn=()=>{const a=$("ann");a.hidden=!C.announce;a.innerHTML=C.announce?`<b>最新公告</b><span>${esc(C.announce)}</span>`:"";$("upd").textContent=C.updated?`內容最後更新：${C.updated}`:""};
 const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}" data-day="${i}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#sos">緊急</a>'};
-const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det"><p>${esc(x.detail)||"—"}</p>${x.warn?`<p class="warn"><b>注意：</b>${esc(x.warn)}</p>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google Maps 導航</a></p>`:''}</div></details>`;
+const pts=t=>{if(!t)return"";let L=String(t).includes("\n")?String(t).split("\n"):(String(t).length>70||String(t).includes("；")?String(t).split(/(?<=[。；;])(?![）)」])/):[String(t)]);L=L.map(x=>x.replace(/^[；;]\s*/,"").replace(/[；;]\s*$/,"").trim()).filter(Boolean);const f=x=>{const m=x.match(/^([^：:0-9]{1,8})：(.+)$/);return m?`<b class="lb">${esc(m[1])}</b>${esc(m[2])}`:esc(x)};return L.length<2?`<p>${f(L[0]||"")}</p>`:`<ul class="pts">${L.map(x=>`<li>${f(x)}</li>`).join("")}</ul>`};
+const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google Maps 導航</a></p>`:''}</div></details>`;
 const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
 const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div><svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
 <div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
