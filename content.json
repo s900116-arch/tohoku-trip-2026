@@ -940,36 +940,239 @@
  ],
  "phr": [
   {
+   "g": "基本",
    "ja": "すみません",
    "zh": "sumimasen・不好意思／請問"
   },
   {
+   "g": "基本",
    "ja": "ありがとうございます",
    "zh": "arigatō gozaimasu・謝謝"
   },
   {
-   "ja": "これをください",
-   "zh": "kore o kudasai・我要這個"
+   "g": "基本",
+   "ja": "大丈夫です",
+   "zh": "daijōbu desu・不用了／沒關係（婉拒時也可以用）"
   },
   {
+   "g": "基本",
+   "ja": "もう一度お願いします",
+   "zh": "mō ichido onegaishimasu・請再說一次"
+  },
+  {
+   "g": "基本",
+   "ja": "ゆっくり話してください",
+   "zh": "yukkuri hanashite kudasai・請說慢一點"
+  },
+  {
+   "g": "基本",
+   "ja": "日本語がわかりません",
+   "zh": "nihongo ga wakarimasen・我不懂日文"
+  },
+  {
+   "g": "基本",
    "ja": "トイレはどこですか",
    "zh": "toire wa doko desu ka・廁所在哪"
   },
   {
+   "g": "基本",
    "ja": "写真を撮ってもいいですか",
    "zh": "shashin o totte mo ii desu ka・可以拍照嗎"
   },
   {
+   "g": "基本",
+   "ja": "写真を撮ってもらえますか",
+   "zh": "shashin o totte moraemasu ka・可以幫我們拍照嗎"
+  },
+  {
+   "g": "餐廳",
+   "ja": "5人です",
+   "zh": "go-nin desu・我們 5 個人"
+  },
+  {
+   "g": "餐廳",
+   "ja": "予約しています",
+   "zh": "yoyaku shite imasu・我們有預約"
+  },
+  {
+   "g": "餐廳",
+   "ja": "何分ぐらい待ちますか",
+   "zh": "nan-pun gurai machimasu ka・大概要等幾分鐘"
+  },
+  {
+   "g": "餐廳",
+   "ja": "英語のメニューはありますか",
+   "zh": "eigo no menyū wa arimasu ka・有英文菜單嗎"
+  },
+  {
+   "g": "餐廳",
+   "ja": "おすすめは何ですか",
+   "zh": "osusume wa nan desu ka・推薦什麼"
+  },
+  {
+   "g": "餐廳",
+   "ja": "これをください",
+   "zh": "kore o kudasai・我要這個"
+  },
+  {
+   "g": "餐廳",
+   "ja": "お水をください",
+   "zh": "omizu o kudasai・請給我水"
+  },
+  {
+   "g": "餐廳",
+   "ja": "取り皿をください",
+   "zh": "torizara o kudasai・請給我小盤子"
+  },
+  {
+   "g": "餐廳",
+   "ja": "ご飯の追加をお願いします",
+   "zh": "gohan no tsuika o onegaishimasu・我要加點白飯"
+  },
+  {
+   "g": "餐廳",
    "ja": "お会計お願いします",
    "zh": "okaikei onegaishimasu・麻煩結帳"
   },
   {
+   "g": "餐廳",
+   "ja": "別々に払えますか",
+   "zh": "betsubetsu ni haraemasu ka・可以分開付嗎"
+  },
+  {
+   "g": "餐廳",
+   "ja": "ごちそうさまでした",
+   "zh": "gochisōsama deshita・謝謝招待（吃完離開時說）"
+  },
+  {
+   "g": "購物・退稅",
+   "ja": "これはいくらですか",
+   "zh": "kore wa ikura desu ka・這個多少錢"
+  },
+  {
+   "g": "購物・退稅",
+   "ja": "カードは使えますか",
+   "zh": "kādo wa tsukaemasu ka・可以刷卡嗎"
+  },
+  {
+   "g": "購物・退稅",
    "ja": "現金だけですか",
    "zh": "genkin dake desu ka・只收現金嗎"
   },
   {
-   "ja": "5人です",
-   "zh": "go-nin desu・我們 5 個人"
+   "g": "購物・退稅",
+   "ja": "免税できますか",
+   "zh": "menzei dekimasu ka・可以辦免稅嗎"
+  },
+  {
+   "g": "購物・退稅",
+   "ja": "返金はクレジットカードでお願いします",
+   "zh": "henkin wa kurejitto kādo de onegaishimasu・退稅請退到信用卡"
+  },
+  {
+   "g": "購物・退稅",
+   "ja": "袋をください",
+   "zh": "fukuro o kudasai・請給我袋子"
+  },
+  {
+   "g": "購物・退稅",
+   "ja": "別々に包んでください",
+   "zh": "betsubetsu ni tsutsunde kudasai・請分開包裝"
+  },
+  {
+   "g": "飯店",
+   "ja": "チェックインお願いします",
+   "zh": "chekku-in onegaishimasu・麻煩辦入住"
+  },
+  {
+   "g": "飯店",
+   "ja": "荷物を預かってもらえますか",
+   "zh": "nimotsu o azukatte moraemasu ka・可以寄放行李嗎"
+  },
+  {
+   "g": "飯店",
+   "ja": "朝食は何時からですか",
+   "zh": "chōshoku wa nan-ji kara desu ka・早餐幾點開始"
+  },
+  {
+   "g": "飯店",
+   "ja": "貸切風呂は何時からですか",
+   "zh": "kashikiri-buro wa nan-ji kara desu ka・包場溫泉幾點開始"
+  },
+  {
+   "g": "飯店",
+   "ja": "Wi-Fiのパスワードは何ですか",
+   "zh": "waifai no pasuwādo wa nan desu ka・Wi-Fi 密碼是什麼"
+  },
+  {
+   "g": "飯店",
+   "ja": "タクシーを呼んでもらえますか",
+   "zh": "takushī o yonde moraemasu ka・可以幫忙叫計程車嗎"
+  },
+  {
+   "g": "交通・開車",
+   "ja": "この電車は仙台駅に行きますか",
+   "zh": "kono densha wa Sendai-eki ni ikimasu ka・這班車有到仙台站嗎"
+  },
+  {
+   "g": "交通・開車",
+   "ja": "ここまでお願いします",
+   "zh": "koko made onegaishimasu・請到這裡（搭計程車時指著地址）"
+  },
+  {
+   "g": "交通・開車",
+   "ja": "レギュラー満タンでお願いします",
+   "zh": "regyurā mantan de onegaishimasu・一般汽油加滿"
+  },
+  {
+   "g": "交通・開車",
+   "ja": "駐車場はどこですか",
+   "zh": "chūshajō wa doko desu ka・停車場在哪"
+  },
+  {
+   "g": "交通・開車",
+   "ja": "道は凍っていますか",
+   "zh": "michi wa kōtte imasu ka・路面有結冰嗎"
+  },
+  {
+   "g": "交通・開車",
+   "ja": "車を返しに来ました",
+   "zh": "kuruma o kaeshi ni kimashita・我來還車"
+  },
+  {
+   "g": "緊急",
+   "ja": "助けてください",
+   "zh": "tasukete kudasai・請幫幫我"
+  },
+  {
+   "g": "緊急",
+   "ja": "救急車を呼んでください",
+   "zh": "kyūkyūsha o yonde kudasai・請叫救護車"
+  },
+  {
+   "g": "緊急",
+   "ja": "具合が悪いです",
+   "zh": "guai ga warui desu・我身體不舒服"
+  },
+  {
+   "g": "緊急",
+   "ja": "病院はどこですか",
+   "zh": "byōin wa doko desu ka・醫院在哪"
+  },
+  {
+   "g": "緊急",
+   "ja": "道に迷いました",
+   "zh": "michi ni mayoimashita・我迷路了"
+  },
+  {
+   "g": "緊急",
+   "ja": "財布をなくしました",
+   "zh": "saifu o nakushimashita・我的錢包不見了"
+  },
+  {
+   "g": "緊急",
+   "ja": "警察を呼んでください",
+   "zh": "keisatsu o yonde kudasai・請叫警察"
   }
  ],
  "forecast": {

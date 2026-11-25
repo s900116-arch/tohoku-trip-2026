@@ -133,6 +133,8 @@ button.reset:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .phr{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
 .phr div{border-left:4px solid var(--pine);padding:6px 14px}
 .phr b{display:block;font-size:18px}
+.phr .phrg{grid-column:1/-1;margin:14px 0 0;font-size:17px;border:0;padding:0}
+.phr .phrg:first-child{margin-top:0}
 .phr span{color:var(--soft);font-size:14px}
 .sos{background:var(--pine);color:#fff}
 .sos h2{color:#fff}
@@ -617,7 +619,7 @@ $("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
 const renderTax=()=>{const T=C.tax;if(!T){$("tax").hidden=true;return}$("taxlead").textContent=T.lead||"";$("taxg").innerHTML=(T.cards||[]).map((c,i)=>`<div class="card${/機場/.test(c.title)?" air":""}" id="tax-${i}"><h3>${esc(c.title)}</h3>${pts((c.pts||[]).join("\n")+((c.pts||[]).length<2?"\n":""))}</div>`).join("")};
 const renderNotes=()=>{$("notes").innerHTML=C.notes.map((n,i)=>`<div class="card" id="note-${i}"><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></div>`).join('')};
 const canSpeak="speechSynthesis" in window;
-const renderPhr=()=>{$("phr").innerHTML=C.phr.map((p,i)=>`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`).join('')};
+const renderPhr=()=>{let h="",cur=null;C.phr.forEach((p,i)=>{if(p.g&&p.g!==cur){h+=`<h3 class="phrg">${esc(p.g)}</h3>`;cur=p.g}h+=`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`});$("phr").innerHTML=h};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(!b)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="ja-JP";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^ja/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(err){}});
 
 /* ---------- today ---------- */
@@ -658,7 +660,7 @@ if(C.announce)idx.push({lab:"公告",cat:"提醒",title:"最新公告",sub:C.ann
 idx.push({lab:"航班",cat:"交通",title:"去程 JX862 12/01 11:50 → 16:00",sub:"桃園 T1 → 仙台機場 星宇航空 起飛 抵達 集合",tgt:"flight"},{lab:"航班",cat:"交通",title:"回程 JX863 12/07 17:25 → 20:35",sub:"仙台機場 → 桃園 T1 星宇航空 起飛 抵達",tgt:"flight"});
 C.hotels.forEach((h,i)=>idx.push({lab:"住宿",cat:"住宿",title:h.name,sub:[h.when,h.desc,h.ja,h.addr,h.tel,"飯店 旅館 地址 電話 計程車"].join(" "),tgt:`hotel-${i}`}));
 C.notes.forEach((n,i)=>idx.push({lab:"提醒",cat:"提醒",title:n.title,sub:n.text,tgt:`note-${i}`}));
-C.phr.forEach((p,i)=>idx.push({lab:"日語",cat:"日語",title:p.ja,sub:p.zh,tgt:`phr-${i}`}));
+C.phr.forEach((p,i)=>idx.push({lab:"日語",cat:p.g||"日語",title:p.ja,sub:p.zh,tgt:`phr-${i}`}));
 C.items.forEach((x,i)=>idx.push({lab:"行李",cat:"行李",title:x,sub:"行李清單 要帶什麼",tgt:`pack-${i}`}));
 (C.wx||[]).forEach((w,i)=>idx.push({lab:`Day ${i+1}`,cat:"提醒",title:`Day ${i+1} 天氣：${w.sky} ${w.temp}`,sub:[w.place,"天氣 下雨 下雪 穿著 開車 路況",w.trip,w.drive,w.wear].join(" "),tgt:`wx-${i}`}));C.temps.forEach(t=>idx.push({lab:"天氣",cat:"天氣",title:`${t.place} 約 ${t.lo}° / ${t.hi}°`,sub:"氣溫 天氣 冷 穿著 預報",tgt:"weather"}));
 idx.push({lab:"緊急",cat:"緊急",title:"110 警察",sub:"遺失 竊盜 交通事故 報警",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"119 救護車、消防",sub:"受傷 急病 火災 醫院",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"050-3816-2787 訪日外國人熱線",sub:"24 小時 中文 求助",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"給計程車司機看的飯店地址",sub:"計程車 司機 地址 走散 迷路",tgt:"sos"})};
