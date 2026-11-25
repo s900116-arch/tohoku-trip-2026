@@ -32,3 +32,7 @@
 ## 注意
 
 這個網站是公開的。不要放姓名、機票號碼、訂位代號、金額或其他個資。
+
+## 其他文件
+- [FEATURES.md](FEATURES.md)：網頁功能與內容總覽
+- [CHANGELOG.md](CHANGELOG.md)：網頁變更紀錄
