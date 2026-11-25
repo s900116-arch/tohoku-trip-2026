@@ -16,9 +16,18 @@
 - `updated`：頁尾顯示的更新時間
 - `days[n].s`：第 n+1 天的行程項目，每項有 `t`（時間）、`title`、`sub`、`cat`（美食／交通／景點／溫泉／住宿／採買）、`detail`、`warn`
 - `days[n].t`：今日提醒
-- `hotels`、`notes`、`temps`、`items`、`phr`：住宿、提醒、天氣、行李、日語
+- `days[n].s[i].q`：導航目的地（Google Maps 搜尋字，日文名稱或地址最準），留空就不顯示導航按鈕
+- `hotels`：住宿；`ja`、`addr`、`tel` 會顯示在「給司機看」的日文地址卡，`q` 是導航目的地
+- `temps`：天氣參考，`w` 是「即時預報」搜尋用的日文地名
+- `notes`、`items`、`phr`：提醒、行李、日語
 
 改完如果網頁變空白，通常是 JSON 少了逗號或引號，可以貼到 https://jsonlint.com 檢查。
+
+## 其他檔案
+
+- `sw.js`、`manifest.webmanifest`、`icon-*.png`：讓網站可以加到手機主畫面、離線也能看
+- `og.png`：在 LINE 分享網址時顯示的預覽圖
+- 網址加 `?now=2026-12-03T13:00` 可以模擬旅途中某個時間，檢查「今天」區塊（日本時間）
 
 ## 注意
 

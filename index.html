@@ -6,13 +6,28 @@
 <title>東北雪國自駕之旅</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<meta name="description" content="12/01–12/07 仙台、松島、銀山溫泉、山形、藏王 7 天 6 夜全團行程：每日行程、導航、住宿、天氣、行李清單。">
+<meta name="theme-color" content="#c4372b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="東北雪國">
+<meta property="og:type" content="website">
+<meta property="og:title" content="2026 日本東北雪國自駕之旅">
+<meta property="og:description" content="12/01–12/07・仙台／松島／銀山溫泉／山形／藏王｜全團行程、導航、住宿與行李清單">
+<meta property="og:url" content="https://s900116-arch.github.io/tohoku-trip-2026/">
+<meta property="og:image" content="https://s900116-arch.github.io/tohoku-trip-2026/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 /* VOICE everyday travel, warm and clear, for the whole group on phones
    IDEA a Japanese 旅のしおり (trip booklet) for snow country: red station-sign bands, white paper, hanging times
    PICTURE a layered snowy Tohoku scene: Zao ridges, cedar pines, a gas-lit onsen street, falling snow; a line of stops beneath
    COLOUR snow white ground, persimmon red #c4372b dominant bands, pine #1f4a3c support, gas-lamp gold accent; night = same scene after dark
-   TYPE Noto Serif TC 900 display + Noto Sans TC text
+   TYPE Noto Serif TC 900 display + system sans text
    LAYOUT title + countdown across the top, scene full width under it, red stop line; then days as hanging-time schedules; phone stacks */
 :root{color-scheme:light dark;
 --bg:light-dark(#ffffff,#10161d);
@@ -37,7 +52,7 @@
 :root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html{scroll-padding-top:72px}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;overflow-x:clip}
 h1,h2,h3{font-family:"Noto Serif TC","PMingLiU",serif;line-height:1.1;letter-spacing:-.01em;margin:0;text-wrap:balance}
 .band{padding-block:clamp(28px,4vw,56px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
 .wrap{max-width:1240px;margin:0 auto}
@@ -233,6 +248,63 @@ body.modal-on{overflow:hidden}
 .lib{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .btn.sm{min-height:36px;padding:6px 12px;font-size:14px}
 .btn.del{color:var(--red)}
+.nb{display:inline-block}
+.ar{color:var(--red)}
+.chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none}
+.line{position:relative}
+.line::after{content:"滑動看更多 →";position:absolute;right:max(5vw,16px);bottom:4px;font-size:12px;opacity:0;transition:opacity .2s;pointer-events:none}
+.line.more::after{opacity:.85}
+.line.more .stops{-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
+.stop{color:inherit;text-decoration:none;border-radius:10px}
+.stop:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.topbar{display:flex;gap:8px;align-items:center}
+#bigbtn{flex:none}
+html.big body{zoom:1.15}
+section.day{padding-block:0}
+details.dayx>summary{list-style:none;cursor:pointer;padding-block:clamp(22px,3vw,40px);display:block}
+details.dayx>summary::-webkit-details-marker{display:none}
+details.dayx>summary:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+details.dayx .dayhead{margin-bottom:0;grid-template-columns:auto minmax(0,1fr) 120px 36px}
+details.dayx[open] .dayhead{margin-bottom:6px}
+details.dayx>.wrap{padding-bottom:clamp(28px,4vw,56px)}
+.arr.big{width:36px;height:36px}
+details.dayx[open] .arr.big{transform:rotate(180deg)}
+.dayx .arr.big{transition:transform .2s}
+.allrow{display:flex;justify-content:flex-end;max-width:1240px;margin:0 auto;padding:14px max(5vw,16px) 0}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+a.go{display:inline-flex;align-items:center;min-height:40px;padding:8px 16px;border-radius:999px;background:var(--pine);color:#fff;text-decoration:none;font-size:15px;font-weight:700}
+a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.btn.light{background:#ffffff1a;color:#fff;border-color:#ffffff55;text-align:left;white-space:normal}
+.stay .btn{margin-left:8px;vertical-align:middle}
+.hotel .ja{color:var(--ink);font-size:14px;background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:8px 12px}
+.trow{grid-template-columns:7.5em minmax(0,1fr) 6.5em 5.5em}
+.wx{font-size:14px;color:var(--pine);white-space:nowrap;text-align:right}
+.phr>div{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#today{background:var(--pine);color:#fff;padding:18px max(5vw,16px)}
+#today[hidden]{display:none}
+.tgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
+.tgrid h2{font-size:clamp(22px,3vw,30px);font-weight:900;margin-top:4px}
+.tl{display:block;font-size:14px;opacity:.85}
+.tnext b,.tstay b{display:block;font-size:18px;line-height:1.4;margin-top:2px}
+.tnext time{color:#ffd88a;font-family:"Noto Serif TC",serif;margin-right:4px}
+.tnext small{display:block;opacity:.85;font-size:14px}
+#today .btn{background:#ffffff1a;color:#fff;border-color:#ffffff66}
+#today a.go{background:#fff;color:var(--pine)}
+#taxi{z-index:70}
+.tbox{background:#fff;color:#111;border-radius:18px;width:min(640px,100%);max-height:calc(100svh - 32px);overflow:auto;padding:24px 22px;text-align:center}
+.tbox p{margin:0 0 12px}
+.tk1{font-size:18px;color:#555}
+.tk2{font:900 clamp(28px,7vw,44px)/1.25 "Noto Serif TC",serif}
+.tk3{font-size:clamp(20px,5vw,28px);line-height:1.4}
+.tk4{font-size:clamp(20px,5vw,26px);font-weight:700}
+.tk5{font-size:15px;color:#666}
+#taxix{margin-top:8px}
+#loading{padding:40px max(5vw,16px);text-align:center;color:var(--soft)}
+.install{font-size:14px;color:var(--soft)}
+@media(max-width:860px){.tgrid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){details.dayx .dayhead{grid-template-columns:auto minmax(0,1fr) 36px}.trow{grid-template-columns:5.2em minmax(0,1fr) 5.4em;row-gap:2px}.trow .wx{grid-column:2/-1;text-align:left}}
 </style>
 </head>
 <body>
@@ -245,6 +317,7 @@ body.modal-on{overflow:hidden}
   <div class="count" id="count"><b>—</b><span>出發倒數</span></div>
 </header>
 <div class="ann" id="ann" hidden></div>
+<section id="today" hidden aria-label="今天"></section>
 
 <div class="scene" aria-label="雪國插圖：藏王山脈、杉樹與點著瓦斯燈的溫泉街">
 <svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
@@ -271,23 +344,13 @@ body.modal-on{overflow:hidden}
 </svg>
 </div>
 
-<div class="line" aria-label="路線">
-  <div class="stops">
-    <div class="stop"><b>仙台</b><small>Day 1–2</small></div>
-    <div class="stop"><b>松島</b><small>Day 2</small></div>
-    <div class="stop"><b>東根</b><small>Day 3</small></div>
-    <div class="stop"><b>銀山溫泉</b><small>Day 3–4</small></div>
-    <div class="stop"><b>山形市</b><small>Day 4</small></div>
-    <div class="stop"><b>藏王溫泉</b><small>Day 4–5</small></div>
-    <div class="stop"><b>仙台</b><small>Day 5</small></div>
-    <div class="stop"><b>白石・岩沼</b><small>Day 6</small></div>
-    <div class="stop"><b>名取・機場</b><small>Day 7</small></div>
-  </div>
+<div class="line" id="line" aria-label="路線"><div class="stops" id="stops"><a class="stop" href="#day1"><b>仙台</b><small>Day 1–2</small></a><a class="stop" href="#day2"><b>松島</b><small>Day 2</small></a><a class="stop" href="#day3"><b>東根</b><small>Day 3</small></a><a class="stop" href="#day3"><b>銀山溫泉</b><small>Day 3–4</small></a><a class="stop" href="#day4"><b>山形市</b><small>Day 4</small></a><a class="stop" href="#day4"><b>藏王溫泉</b><small>Day 4–5</small></a><a class="stop" href="#day5"><b>仙台</b><small>Day 5</small></a><a class="stop" href="#day6"><b>白石・岩沼</b><small>Day 6</small></a><a class="stop" href="#day7"><b>名取・機場</b><small>Day 7</small></a></div></div>
 </div>
 
 <nav class="days" aria-label="跳到">
-  <div class="scroll"><span id="nav" style="display:contents"></span></div>
+  <div class="scroll"><button class="btn" type="button" id="bigbtn" aria-pressed="false">大字</button><span id="nav" style="display:contents"></span></div>
 </nav>
+
 
 <section class="band find" id="search">
   <div class="wrap">
@@ -315,6 +378,8 @@ body.modal-on{overflow:hidden}
   </div>
 </section>
 
+<div class="allrow"><button class="btn" type="button" id="allopen">展開每一天</button></div>
+<div id="loading"><p>行程載入中…</p></div>
 <div id="days"></div>
 
 <section class="band sec" id="hotel" style="border-top:1px solid var(--rule)">
@@ -328,7 +393,7 @@ body.modal-on{overflow:hidden}
   <div class="wrap">
     <h2>12 月初天氣參考</h2>
     <div class="temps" id="temps"></div>
-    <p class="note">例年 12 月上旬約略氣溫（°C），山區常下雪、風大體感更冷。12 月初約 16:20 天黑，出發前再看當週預報。</p>
+    <p class="note">12 月上旬大約的參考氣溫（°C），點「即時預報」看實際天氣，山區常下雪、風大體感更冷。12 月初約 16:20 天黑，出發前再看當週預報。</p>
   </div>
 </section>
 
@@ -364,18 +429,19 @@ body.modal-on{overflow:hidden}
       <div class="card"><div class="big">119</div><p>救護車、消防（受傷、急病、火災）</p></div>
       <div class="card"><div class="big">050-3816-2787</div><p>日本觀光廳訪日外國人熱線，24 小時，可用中文</p></div>
     </div>
+    <h3 style="color:#fff;margin:22px 0 10px;font-size:19px">給計程車司機看（飯店日文地址）</h3>
+    <div class="acts" id="sostaxi"></div>
     <p class="note" style="color:#fff">走散時先打電話給團員；約好每天的集合點就是當天的飯店大廳。</p>
   </div>
 </section>
 
-<footer>2026 東北雪國自駕之旅・全團行程資訊<br><span id="upd"></span></footer>
+<footer>2026 東北雪國自駕之旅・全團行程資訊<br><span id="upd"></span><br><span class="install">加到手機主畫面：iPhone 用 Safari 打開 → 分享 → 加入主畫面；Android 用 Chrome 選單 → 加到主畫面。打開過一次後，沒網路也能看。</span></footer>
 
+<div class="modal" id="taxi" hidden><div class="tbox" role="dialog" aria-modal="true" aria-label="給司機看的地址"><div id="taxibody"></div><button class="btn" type="button" id="taxix">關閉</button></div></div>
 <script>
 {
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const clone=o=>JSON.parse(JSON.stringify(o));
-const DEF={"updated": "2026/11/25", "announce": "", "days": [{"id": "day1", "n": 1, "date": "12/01", "dow": "二", "title": "出發・抵達仙台", "lede": "毛豆奶昔、現炸魚板、炭烤厚切牛舌，第一晚就吃仙台。", "ico": "plane", "stay": "仙台大都會大飯店（第 1 晚）", "t": ["落地後打開手機的日本網路，台灣門號記得關漫遊。", "第一天天已黑，跟緊隊伍、行李不離身。"], "s": [{"t": "08:30", "title": "前往桃園機場第一航廈", "sub": "", "cat": "交通", "detail": "接送車依約定時間到，前一晚先把行李整理好。", "warn": "護照與手機放隨身包，不要放進託運行李。"}, {"t": "09:30", "title": "星宇航空報到、託運、出境", "sub": "每人託運 1 件 23kg", "cat": "交通", "detail": "第一航廈星宇航空櫃檯報到，託運完成後出境、逛免稅店。", "warn": "行動電源、打火機只能隨身；起飛前 60 分鐘關櫃，最晚 10:30 前完成報到。"}, {"t": "11:50", "title": "JX862 起飛", "sub": "飛行約 3 小時 10 分", "cat": "交通", "detail": "機上可先打開 Visit Japan Web 的入境 QR Code 截圖備用。", "warn": "落地前把手錶調快 1 小時（日本時間）。"}, {"t": "16:00", "title": "抵達仙台機場", "sub": "入境、領行李", "cat": "交通", "detail": "入境審查 → 領行李 → 海關，出來後跟著「仙台空港駅」指標走。", "warn": "落地後打開日本網路，台灣門號關掉數據漫遊。"}, {"t": "16:30", "title": "仙台機場 Access 線 → JR 仙台站", "sub": "約 25 分鐘，刷 Suica", "cat": "交通", "detail": "機場站直達 JR 仙台站，Suica 刷卡進站即可。", "warn": "出發前先在 Apple Pay 加好 Suica 並加值。"}, {"t": "17:15", "title": "ずんだ茶寮 毛豆奶昔 → 飯店 Check-in", "sub": "仙台站 3F，飯店與車站相連", "cat": "美食", "detail": "ずんだシェイク（毛豆奶昔）是仙台名物；飯店從車站 2F 連通道步行約 2 分鐘。", "warn": "人多時可以先 Check-in 放行李再回來。"}, {"t": "17:45", "title": "一番町 阿部蒲鉾店本店", "sub": "現炸葫蘆炸魚板，18:30 打烊", "cat": "美食", "detail": "招牌ひょうたん揚げ（葫蘆形炸魚板），現點現炸。從仙台站步行到一番町約 15 分鐘。", "warn": "18:30 打烊，時間來不及就改到 Day 5 下午逛一番町時再去。"}, {"t": "18:30", "title": "晚餐：炭烤厚切牛舌", "sub": "仙台站 3F 牛舌通或市區名店", "cat": "美食", "detail": "仙台站 3F「牛たん通り」有多家名店，推薦厚切牛舌定食配麥飯和牛尾湯。", "warn": "晚餐尖峰常排 30–60 分鐘，先拿號碼牌再去附近逛。"}, {"t": "20:00", "title": "Clis Road 商店街散步", "sub": "藥妝、伴手禮", "cat": "採買", "detail": "仙台最熱鬧的拱頂商店街，下雨下雪也好逛，藥妝店很多。", "warn": "購物要退稅記得帶護照正本。"}]}, {"id": "day2", "n": 2, "date": "12/02", "dow": "三", "title": "日本三景 松島", "lede": "搭觀光船看奇岩小島，吃現烤牡蠣，走進國寶瑞巖寺。", "ico": "boat", "stay": "仙台大都會大飯店（第 2 晚）", "t": ["海邊風很大，船的二樓甲板特別冷，帽子手套要戴。", "瑞巖寺比較早關，先去瑞巖寺再去圓通院。"], "s": [{"t": "09:34", "title": "JR 仙石線 仙台 → 松島海岸", "sub": "約 40 分鐘", "cat": "交通", "detail": "從 JR 仙台站地下月台搭仙石線，在「松島海岸」站下車。", "warn": "不是「松島」站（那是東北本線），一定要在「松島海岸」站下。"}, {"t": "10:15", "title": "碼頭窗口集合、取船票", "sub": "10:45 前到", "cat": "交通", "detail": "出站步行約 5 分鐘到觀光船乘船處窗口取票。", "warn": "開船前 15 分鐘要完成取票，大家不要走散。"}, {"t": "11:00", "title": "松島島巡觀光船・仁王丸航線", "sub": "約 50 分鐘", "cat": "景點", "detail": "繞行松島灣，可看仁王島、鐘島、千貫島等奇岩小島。", "warn": "甲板風大很冷；拿食物餵海鷗時小心被搶。"}, {"t": "11:50", "title": "五大堂、紅色透橋", "sub": "", "cat": "景點", "detail": "伊達政宗重建的佛堂，走過紅色「透橋」，橋板之間可以看到海面。", "warn": "橋面濕滑，穿防滑鞋慢慢走。"}, {"t": "12:15", "title": "午餐：現烤帶殼牡蠣、海鮮丼", "sub": "松島魚市場或牡蠣小屋", "cat": "美食", "detail": "12 月正是松島牡蠣季，牡蠣小屋現烤帶殼大牡蠣，也可以選海鮮丼。", "warn": "牡蠣小屋多是限時制，先確認要不要預約；腸胃敏感的人生食要注意。"}, {"t": "13:45", "title": "國寶 瑞巖寺", "sub": "15:00 最後入場", "cat": "景點", "detail": "伊達家菩提寺，國寶本堂與巨杉參道，寶物館可一起看。", "warn": "12 月 15:30 關門、15:00 最後入場，所以先來這裡。"}, {"t": "14:45", "title": "圓通院 枯山水庭園", "sub": "", "cat": "景點", "detail": "伊達光宗的靈廟，苔庭與枯山水庭園，冬天雪景很美。", "warn": "傍晚就關門，不要拖太晚。"}, {"t": "15:30", "title": "蜂蜜蛋糕配熱茶、現烤大仙貝", "sub": "時間夠再走福浦橋", "cat": "美食", "detail": "松華堂菓子店的蜂蜜蛋糕配熱茶，松島雪竹屋的現烤大仙貝。", "warn": "福浦橋來回約 20–30 分鐘，看時間決定。"}, {"t": "16:40", "title": "JR 仙石線返回仙台", "sub": "", "cat": "交通", "detail": "松島海岸站搭仙石線回仙台。", "warn": "16:20 左右就天黑，回程車站集合不要遲到。"}, {"t": "18:00", "title": "晚餐：燒肉或海鮮居酒屋", "sub": "", "cat": "美食", "detail": "米澤牛炭火燒肉或海鮮居酒屋二選一。", "warn": "5 人用餐建議先訂位。"}]}, {"id": "day3", "n": 3, "date": "12/03", "dow": "四", "title": "開車上路 → 銀山溫泉雪夜", "lede": "翻過關山峠進山形，吃辛味噌拉麵，晚上看瓦斯燈亮起的大正老街。", "ico": "lamp", "stay": "銀山溫泉 御宿 やなだ屋 別館", "t": ["從停車場走到旅館是雪地下坡，把今晚要用的東西收進一個小包。", "雪地很滑，穿防滑鞋，慢慢走。"], "s": [{"t": "08:30", "title": "退房，步行到租車店取車", "sub": "仙台站西口，步行約 7 分鐘", "cat": "交通", "detail": "確認 4WD、雪胎、ETC 卡；導航可切中文，或用電話號碼／MAPCODE 設定目的地。", "warn": "駕駛帶護照、台灣駕照正本＋日文譯本；取車時先拍車身四周照片。"}, {"t": "09:00", "title": "國道 48 號 關山峠 → 山形縣東根市", "sub": "免費山路，約 2 小時", "cat": "交通", "detail": "翻越關山峠進入山形縣，沿途雪景很漂亮。", "warn": "前一晚查路況，大雪時改走山形自動車道。"}, {"t": "11:10", "title": "赤湯辛味噌拉麵 龍上海 東根店", "sub": "11:30 開門，提早排隊", "cat": "美食", "detail": "招牌是碗中央的一球辣味噌，吃到一半再拌開，湯頭越喝越香。", "warn": "辣味噌很辣，不吃辣的人可以先撥到一旁。"}, {"t": "12:30", "title": "國道 13 號 → 尾花澤超市", "sub": "買晚餐和隔天早餐", "cat": "採買", "detail": "買尾花澤牛便當、山形草莓、熟食、地酒，順便買零食。", "warn": "先確認旅館可不可以在房內吃外帶。"}, {"t": "14:15", "title": "銀山溫泉外圍停車場", "sub": "步行下坡到旅館", "cat": "交通", "detail": "車停在溫泉街外圍停車場，再步行下坡進溫泉街。", "warn": "溫泉街內一般車輛不能進入；坡道結冰很滑。"}, {"t": "15:00", "title": "御宿 やなだ屋 別館 Check-in", "sub": "領入浴券、預約包場溫泉", "cat": "住宿", "detail": "Check-in 時領入浴券，並預約本館包場溫泉時段。", "warn": "大行李留在車上，只帶今晚要用的小包。"}, {"t": "15:30", "title": "溫泉街漫步、和樂足湯", "sub": "", "cat": "景點", "detail": "銀山川兩岸都是木造旅館，和樂足湯免費。", "warn": "足湯要自己帶小毛巾擦腳。"}, {"t": "16:20", "title": "瓦斯燈點燈", "sub": "天色轉藍時最美", "cat": "景點", "detail": "天色轉成藍色時瓦斯燈亮起，是銀山最經典的畫面，從橋上拍兩岸。", "warn": "人很多，不要在橋中間停太久擋路。"}, {"t": "18:00", "title": "房內晚餐派對", "sub": "尾花澤牛、草莓", "cat": "美食", "detail": "把超市買的晚餐拿出來開派對。", "warn": "垃圾照旅館規定分類。"}, {"t": "20:00", "title": "包場溫泉", "sub": "依預約時段", "cat": "溫泉", "detail": "照預約時段使用本館包場溫泉。", "warn": "準時到、準時離開，後面還有下一組。"}]}, {"id": "day4", "n": 4, "date": "12/04", "dow": "五", "title": "山形市 → 藏王溫泉", "lede": "清晨的銀山最安靜，中午吃板蕎麥，傍晚泡藏王硫磺泉。", "ico": "soba", "stay": "藏王溫泉 名湯舎 創", "t": ["藏王是強酸性硫磺泉，銀飾會變黑，泡湯前先拿下來。", "共同浴場沒有沐浴乳和毛巾，自己帶小毛巾。"], "s": [{"t": "08:30", "title": "清晨的銀山老街", "sub": "幾乎沒有遊客，最好拍", "cat": "景點", "detail": "早上遊客少，雪景與河面霧氣最有氣氛。", "warn": "清晨路面容易結冰。"}, {"t": "10:00", "title": "退房，回停車場出發", "sub": "", "cat": "住宿", "detail": "走回停車場，先清掉車上積雪再出發。", "warn": "雨刷結冰不要硬扳，先開除霜等它化開。"}, {"t": "10:30", "title": "國道 13 號南下山形市", "sub": "約 1.5 小時", "cat": "交通", "detail": "一路往南開到山形市區。", "warn": "駕駛累了就在路邊休息站（道の駅）休息。"}, {"t": "12:00", "title": "午餐：板蕎麥麵＋野菜天婦羅", "sub": "山形名物", "cat": "美食", "detail": "長木盒裝的冷蕎麥麵，口感有嚼勁，配現炸野菜天婦羅。", "warn": "份量很大，可以分著點。"}, {"t": "13:00", "title": "文翔館或霞城公園", "sub": "文翔館 09:00–16:30，免費參觀", "cat": "景點", "detail": "文翔館是大正時代的舊縣廳，紅磚歐風建築；旁邊的霞城公園是山形城跡。", "warn": "不要停留太久，要留時間在天黑前上山。"}, {"t": "14:15", "title": "西藏王高原線上山", "sub": "約 20–30 分鐘", "cat": "交通", "detail": "從山形市開上藏王溫泉的山路，沿途可俯瞰山形市。", "warn": "天黑前走完；下坡多用低速檔，少踩煞車。"}, {"t": "15:00", "title": "藏王溫泉 名湯舎 創 Check-in", "sub": "含隔天早餐", "cat": "住宿", "detail": "有免費停車場，Check-in 後就可以出去走走。", "warn": ""}, {"t": "15:30", "title": "高湯通漫步、共同浴場", "sub": "上湯／下湯", "cat": "溫泉", "detail": "上湯、下湯是木造的公共浴場，在地人也會來泡。", "warn": "放錢箱或投幣，請準備日圓硬幣；浴場沒有沐浴乳和毛巾。"}, {"t": "18:00", "title": "晚餐：成吉思汗烤羊肉、芋煮", "sub": "藏王名物", "cat": "美食", "detail": "ジンギスカン（成吉思汗烤羊肉）是藏王名物，再配一碗山形芋煮。", "warn": "衣服容易沾到烤肉味。"}, {"t": "20:00", "title": "強酸性硫磺泉 露天風呂", "sub": "", "cat": "溫泉", "detail": "乳白色的強酸性硫磺泉，日本有名的美人湯。", "warn": "銀飾會變黑先拿下；泡太久會頭暈，泉水不要碰到眼睛。"}]}, {"id": "day5", "n": 5, "date": "12/05", "dow": "六", "title": "藏王纜車 → 仙台光之盛宴", "lede": "搭纜車上地藏山頂看初冬雪景，晚上吃壽喜燒、走進定禪寺通的光之隧道。", "ico": "ropeway", "stay": "大和魯內 PREMIER 仙台西口（第 1 晚）", "t": ["12 月初樹冰還沒長好，比較可能看到霧淞和初雪，期待值放輕鬆。", "纜車全線停駛就改泡湯或提早回仙台。"], "s": [{"t": "08:00", "title": "早餐、退房", "sub": "", "cat": "住宿", "detail": "在旅館吃早餐後退房。", "warn": "退房前檢查房間有沒有遺留物。"}, {"t": "08:45", "title": "藏王山麓站", "sub": "開車約 3 分鐘", "cat": "交通", "detail": "到藏王纜車山麓站停車買票。", "warn": "出發前先看纜車官網的運行狀態與山頂天氣。"}, {"t": "09:00", "title": "兩段纜車上地藏山頂站", "sub": "初冬雪景、雪中地藏尊", "cat": "景點", "detail": "山麓線到樹冰高原站，再轉山頂線到海拔約 1,661m 的地藏山頂站，可看到雪中地藏尊。", "warn": "12 月初樹冰還沒長好；山頂常零下 10°C 以下且風很強；山頂線停駛就只搭到樹冰高原站。"}, {"t": "11:30", "title": "溫泉街熱食午餐", "sub": "", "cat": "美食", "detail": "下山後在溫泉街吃熱騰騰的午餐暖身。", "warn": ""}, {"t": "13:00", "title": "山形道 → 東北道回仙台", "sub": "約 1.5 小時", "cat": "交通", "detail": "走高速公路回仙台，收費站走 ETC 車道。", "warn": "ETC 車道要減速慢慢通過，柵欄打開才走。"}, {"t": "15:00", "title": "大和魯內 PREMIER 仙台西口 Check-in", "sub": "車停立體車塔", "cat": "住宿", "detail": "飯店離仙台站和朝市都很近。", "warn": "立體車塔有車高限制，照現場人員指示停車。"}, {"t": "15:30", "title": "一番町、藤崎百貨採買", "sub": "", "cat": "採買", "detail": "一番町商店街、藤崎百貨與藥妝店。", "warn": "免稅記得帶護照正本。"}, {"t": "17:30", "title": "晚餐：割烹壽喜燒", "sub": "仙台牛，專人桌邊烹調", "cat": "美食", "detail": "すき焼 割烹かとう，仙台牛壽喜燒，由店員在桌邊烹調。", "warn": "一定要先預約；會遲到請先打電話告知。"}, {"t": "19:30", "title": "定禪寺通 SENDAI 光之盛宴", "sub": "會期 12/04–12/27", "cat": "景點", "detail": "定禪寺通 127 棵櫸樹點上約 48 萬顆燈，旁邊錦町公園有聖誕市集（12/04–12/25）。", "warn": "人潮很多，注意隨身物品；地下鐵勾當台公園站最近。"}]}, {"id": "day6", "n": 6, "date": "12/06", "dow": "日", "title": "狐狸村・金蛇水神社・青葉城", "lede": "雪地裡的蓬鬆狐狸、求財運的神社，最後在青葉山看夕陽下的仙台。", "ico": "fox", "stay": "大和魯內 PREMIER 仙台西口（第 2 晚）", "t": ["狐狸村入場與體驗只收現金，準備日圓。", "時間不夠就跳過青葉城，不要拖到還車時間。"], "s": [{"t": "08:45", "title": "東北道南下白石 → 宮城藏王狐狸村", "sub": "15:30 最後入場", "cat": "景點", "detail": "雪地裡上百隻狐狸自由活動，可以參加抱狐狸體驗。", "warn": "只收現金；包包拉鍊拉好、別帶晃動的吊飾、不要蹲下，狐狸會咬東西。"}, {"t": "12:00", "title": "岩沼 金蛇水神社", "sub": "開放 08:30–16:00", "cat": "景點", "detail": "以求財運聞名的神社，可以買蛇紋御守、摸蛇紋石祈福。", "warn": "參拜：鞠躬兩次、拍手兩次、再鞠躬一次。"}, {"t": "12:45", "title": "午餐、甘酒", "sub": "神社旁 Sando Terrace", "cat": "美食", "detail": "神社旁的 Sando Terrace 吃午餐，喝一杯熱甘酒。", "warn": ""}, {"t": "14:30", "title": "仙台城跡（青葉城跡）", "sub": "伊達政宗騎馬像", "cat": "景點", "detail": "青葉山上的伊達政宗騎馬像，可以俯瞰整個仙台市區。", "warn": "山上風大，外套穿好。"}, {"t": "16:00", "title": "俯瞰仙台夕陽", "sub": "約 16:20 日落", "cat": "景點", "detail": "在展望台等夕陽落在仙台市區上方。", "warn": ""}, {"t": "16:45", "title": "加油", "sub": "加滿一般汽油", "cat": "交通", "detail": "下山後找加油站加滿「レギュラー」（一般汽油），保留收據。", "warn": "日本很多加油站是自助式，不會操作就找店員。"}, {"t": "18:00", "title": "還車", "sub": "18:00 前完成", "cat": "交通", "detail": "開回仙台站西口的租車店還車，結算 ETC 過路費。", "warn": "週日傍晚會塞車，提早出發；還車前檢查車內有無遺留物。"}, {"t": "晚上", "title": "自由活動", "sub": "附近居酒屋或仙台站周邊", "cat": "美食", "detail": "最後一晚自由安排，可以回牛舌通或找居酒屋。", "warn": "今晚先把回程行李整理好。"}]}, {"id": "day7", "n": 7, "date": "12/07", "dow": "一", "title": "朝市・AEON 採買 → 返台", "lede": "早上逛朝市吃草莓和可樂餅，在 AEON MALL 買好最後一輪伴手禮再上飛機。", "ico": "train", "stay": "", "t": ["飲料、酒類、醬料、果醬要放託運行李。", "置物櫃位置有限，大家一起先放行李。"], "s": [{"t": "08:45", "title": "退房、行李寄放飯店", "sub": "", "cat": "住宿", "detail": "退房後把大行李寄放在飯店櫃檯。", "warn": "寄放牌收好，回來領行李要用。"}, {"t": "09:00", "title": "仙台朝市", "sub": "現切海鮮、草莓、熱可樂餅", "cat": "美食", "detail": "仙台站西口步行約 3 分鐘，在地人的菜市場，可以邊走邊吃。", "warn": "很多攤位只收現金。"}, {"t": "10:07", "title": "仙台機場 Access 線 → 杜せきのした站", "sub": "約 18 分鐘", "cat": "交通", "detail": "往機場方向，在「杜せきのした」站下車，天橋直通 AEON MALL。", "warn": "不要坐過頭到機場。"}, {"t": "10:40", "title": "AEON MALL 名取", "sub": "最後採買", "cat": "採買", "detail": "先把行李放進大型置物櫃再逛，服務台可詢問外國旅客優惠。", "warn": "置物櫃數量有限，大家一起先放好行李。"}, {"t": "12:30", "title": "美食街午餐", "sub": "", "cat": "美食", "detail": "在 AEON MALL 美食街吃午餐。", "warn": ""}, {"t": "14:27", "title": "杜せきのした → 仙台空港站", "sub": "約 10 分鐘", "cat": "交通", "detail": "拿行李搭往機場方向的電車。", "warn": "14:27 這班沒趕上就搭下一班，時間仍充裕。"}, {"t": "14:45", "title": "星宇航空報到、託運", "sub": "先自己秤行李重量", "cat": "交通", "detail": "到星宇航空櫃檯報到託運。", "warn": "飲料、酒、醬料放託運；行動電源隨身帶。"}, {"t": "17:25", "title": "JX863 起飛", "sub": "飛行約 4 小時 10 分", "cat": "交通", "detail": "返回桃園第一航廈。", "warn": "手錶調回台灣時間。"}, {"t": "20:35", "title": "抵達桃園第一航廈", "sub": "領完行李再聯絡接機", "cat": "交通", "detail": "入境、領行李後再打電話給接機司機。", "warn": "機場路邊只能短暫停車，到出口再上車。"}]}], "hotels": [{"when": "12/01–12/03・2 晚", "name": "仙台大都會大飯店", "desc": "與 JR 仙台站相連，Day 1–2 以仙台為據點，搭電車去松島。"}, {"when": "12/03・1 晚", "name": "銀山溫泉 御宿 やなだ屋 別館", "desc": "大正浪漫溫泉街，車停在外圍停車場，步行下坡進溫泉街。"}, {"when": "12/04・1 晚", "name": "藏王溫泉 名湯舎 創", "desc": "強酸性硫磺泉，附早餐，走路可到共同浴場，開車 3 分鐘到纜車站。"}, {"when": "12/05–12/07・2 晚", "name": "大和魯內 PREMIER 仙台西口", "desc": "離仙台站與朝市都近，最後一天可寄放行李。"}], "notes": [{"title": "雪地開車", "text": "駕駛放慢車速、拉大車距，橋面與隧道口最容易結冰；山路盡量在 16:20 天黑前走完。"}, {"title": "停車過夜", "text": "雨刷立起來、不拉手煞車改排 P 檔，避免結冰凍住。"}, {"title": "洋蔥式穿法", "text": "室內暖氣很強、戶外很冷，外套要好穿脫；手機低溫容易掉電。"}, {"title": "溫泉禮儀", "text": "先沖洗再入池，毛巾不放進池裡，長髮綁起；泡湯前後多喝水。"}, {"title": "電車與 Suica", "text": "進出站都要刷卡；松島和機場線都用 Suica，餘額不夠在車站機器加值。"}, {"title": "行李重量", "text": "每件託運上限 23kg；伴手禮與液體類放託運，回程前一晚先整理。"}, {"title": "現金", "text": "狐狸村、朝市、共同浴場、小攤販常只收現金，身上備好日圓與硬幣。"}, {"title": "退稅", "text": "單店單日滿額可免稅，結帳時出示護照正本；免稅品出境前不要拆封。"}], "temps": [{"place": "仙台市區", "lo": 2, "hi": 9}, {"place": "松島", "lo": 2, "hi": 9}, {"place": "銀山溫泉", "lo": -2, "hi": 4}, {"place": "山形市", "lo": -1, "hi": 7}, {"place": "藏王溫泉", "lo": -4, "hi": 2}, {"place": "藏王山頂", "lo": -12, "hi": -5}], "items": ["護照（效期 6 個月以上）", "台灣駕照正本＋日文譯本（駕駛）", "手機與充電線", "行動電源（隨身，不託運）", "日本網路（eSIM／SIM）已安裝", "Apple Pay Suica 或交通卡", "日圓現金與硬幣", "信用卡", "發熱衣與保暖內層", "抓絨或羽絨中層", "防風防水外套", "防滑雪靴或鞋底冰爪", "毛帽、手套、圍巾", "暖暖包", "小毛巾（共同浴場用）", "泡湯用小包", "護唇膏、乳液（乾燥）", "個人常備藥品", "太陽眼鏡（雪地反光）", "摺疊環保購物袋"], "phr": [{"ja": "すみません", "zh": "sumimasen・不好意思／請問"}, {"ja": "ありがとうございます", "zh": "arigatō gozaimasu・謝謝"}, {"ja": "これをください", "zh": "kore o kudasai・我要這個"}, {"ja": "トイレはどこですか", "zh": "toire wa doko desu ka・廁所在哪"}, {"ja": "写真を撮ってもいいですか", "zh": "shashin o totte mo ii desu ka・可以拍照嗎"}, {"ja": "お会計お願いします", "zh": "okaikei onegaishimasu・麻煩結帳"}, {"ja": "現金だけですか", "zh": "genkin dake desu ka・只收現金嗎"}, {"ja": "5人です", "zh": "go-nin desu・我們 5 個人"}]};
 const ico={
 plane:'<path d="M10 52 L110 30 L114 38 L64 54 L44 80 L34 80 L44 58 L18 64 L12 72 L6 72 L10 56 Z" fill="var(--red)"/><circle cx="96" cy="18" r="8" fill="var(--gold)"/>',
 boat:'<path d="M0 66 Q30 58 60 66 T120 66 L120 90 L0 90 Z" fill="#5f8fb8"/><path d="M18 52 L102 52 L92 68 L28 68 Z" fill="var(--red)"/><rect x="34" y="34" width="50" height="18" rx="3" fill="var(--snow)" stroke="var(--rule)"/><rect x="40" y="38" width="10" height="8" fill="#5f8fb8"/><rect x="56" y="38" width="10" height="8" fill="#5f8fb8"/><rect x="72" y="38" width="8" height="8" fill="#5f8fb8"/><path d="M96 30 Q104 20 112 30 L112 52 L96 52 Z" fill="var(--pine)"/>',
@@ -386,29 +452,65 @@ fox:'<path d="M0 88 Q60 76 120 88 Z" fill="var(--snowsh)"/><path d="M30 80 Q24 5
 train:'<rect x="14" y="26" width="92" height="46" rx="12" fill="var(--snow)" stroke="var(--rule)" stroke-width="2"/><rect x="14" y="52" width="92" height="8" fill="var(--red)"/><rect x="24" y="34" width="20" height="14" rx="3" fill="#5f8fb8"/><rect x="50" y="34" width="20" height="14" rx="3" fill="#5f8fb8"/><rect x="76" y="34" width="20" height="14" rx="3" fill="#5f8fb8"/><circle cx="34" cy="76" r="6" fill="var(--ink)"/><circle cx="86" cy="76" r="6" fill="var(--ink)"/><path d="M0 84 L120 84" stroke="var(--soft)" stroke-width="3"/>'
 };
 
-let C=clone(DEF);const editing=false;
+let C=null;
 const CATS=["美食","交通","景點","溫泉","住宿","採買"];
-const yen=n=>"¥"+Number(n||0).toLocaleString("en-US"),twd=n=>"NT$"+Number(n||0).toLocaleString("en-US");
-const edb=()=>"";
+const navUrl=q=>"https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(q);
+const nb=t=>esc(t).split(/\s*→\s*/).map(s=>`<span class="nb">${s}</span>`).join(' <span class="ar">→</span> ');
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
 
-/* ---------- public render ---------- */
+/* ---------- time (Japan) ---------- */
+const params=new URLSearchParams(location.search);
+const nowJ=()=>{const n=params.get("now")?new Date(params.get("now")+"+09:00"):new Date();const f=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(n);const g=t=>f.find(p=>p.type===t).value;return{date:`${g("year")}-${g("month")}-${g("day")}`,min:+g("hour")*60+ +g("minute"),real:n}};
+const tripDay=()=>{const j=nowJ();const d=Math.round((new Date(j.date+"T00:00:00Z")-new Date("2026-12-01T00:00:00Z"))/864e5);return d>=0&&d<7?d:-1};
+const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]:(/晚/.test(t)?19*60:null)};
+
+/* ---------- render ---------- */
 const renderAnn=()=>{const a=$("ann");a.hidden=!C.announce;a.innerHTML=C.announce?`<b>最新公告</b><span>${esc(C.announce)}</span>`:"";$("upd").textContent=C.updated?`內容最後更新：${C.updated}`:""};
-const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#sos">緊急</a>'};
-const renderDays=()=>{$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1);return `<section class="band day" id="${id}"><div class="wrap">
-<div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${esc(d.title)}</h2><p>${esc(d.lede)}</p></div><svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg></div>
-<div class="daytools"><button class="btn" type="button" data-open="${id}">全部展開</button><button class="btn" type="button" data-close="${id}">全部收合</button>${edb("day:"+di,"編輯這一天")}</div>
-<div class="daybody"><div class="sched">${(d.s||[]).map((x,i)=>`<details class="it" id="${id}-${i}"><summary><time>${esc(x.t)}</time><div><b>${esc(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det"><p>${esc(x.detail)||"—"}</p>${x.warn?`<p class="warn"><b>注意：</b>${esc(x.warn)}</p>`:''}</div></details>`).join('')}</div>
-<aside class="tips"><h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b></div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
-</div></section>`}).join('')};
-const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card" id="hotel-${i}"><div class="n">${esc(h.when)}</div><h3>${esc(h.name)}</h3><p>${esc(h.desc)}</p></div>`).join('')};
-const renderTemps=()=>{const lo=-14,hi=12;$("temps").innerHTML=C.temps.map(t=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°</span></div>`}).join('')};
-const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(localStorage.getItem(pkKey)||"{}")}catch(e){st={}}
+const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}" data-day="${i}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#sos">緊急</a>'};
+const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det"><p>${esc(x.detail)||"—"}</p>${x.warn?`<p class="warn"><b>注意：</b>${esc(x.warn)}</p>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google Maps 導航</a></p>`:''}</div></details>`;
+const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
+const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div><svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
+<div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
+<div class="daybody"><div class="sched">${(d.s||[]).map((x,i)=>itemHtml(x,`${id}-${i}`)).join('')}</div>
+<aside class="tips"><h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b>${hi>=0?`<button class="btn sm" type="button" data-taxi="${hi}">給司機看</button>`:""}</div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
+</div></details></section>`}).join('')};
+const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card hotel" id="hotel-${i}"><div class="n">${esc(h.when)}</div><h3>${esc(h.name)}</h3><p>${esc(h.desc)}</p>${h.ja?`<p class="ja" lang="ja">${esc(h.ja)}<br>${esc(h.addr)}<br>TEL ${esc(h.tel)}</p>`:""}<p class="acts">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">導航</a>`:""}${h.ja?`<button class="btn sm" type="button" data-taxi="${i}">給司機看</button>`:""}</p></div>`).join('');
+$("sostaxi").innerHTML=C.hotels.map((h,i)=>h.ja?`<button class="btn light" type="button" data-taxi="${i}">${esc(h.when.split("・")[0])} ${esc(h.name)}</button>`:"").join("")};
+const renderTemps=()=>{const lo=-14,hi=12;$("temps").innerHTML=C.temps.map(t=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°</span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
+const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}catch(e){st={}}
 const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`};
 const renderPack=()=>{$("check").innerHTML=C.items.map((x,i)=>`<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x)}" ${st[x]?'checked':''}><span>${esc(x)}</span></label></li>`).join('');upd()};
-$("check").addEventListener("change",e=>{const v=e.target.dataset.v;if(v===undefined)return;st[v]=e.target.checked;try{localStorage.setItem(pkKey,JSON.stringify(st))}catch(err){}upd()});
-$("reset").addEventListener("click",()=>{st={};try{localStorage.removeItem(pkKey)}catch(err){}renderPack()});
+$("check").addEventListener("change",e=>{const v=e.target.dataset.v;if(v===undefined)return;st[v]=e.target.checked;store.set(pkKey,JSON.stringify(st));upd()});
+$("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
 const renderNotes=()=>{$("notes").innerHTML=C.notes.map((n,i)=>`<div class="card" id="note-${i}"><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></div>`).join('')};
-const renderPhr=()=>{$("phr").innerHTML=C.phr.map((p,i)=>`<div id="phr-${i}"><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>`).join('')};
+const canSpeak="speechSynthesis" in window;
+const renderPhr=()=>{$("phr").innerHTML=C.phr.map((p,i)=>`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`).join('')};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(!b)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="ja-JP";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^ja/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(err){}});
+
+/* ---------- today ---------- */
+const renderToday=()=>{const el=$("today"),td=tripDay();if(td<0){el.hidden=true;return}
+const d=C.days[td],j=nowJ();if(!d){el.hidden=true;return}
+const items=d.s||[];let nx=items.findIndex(x=>{const m=tmin(x.t);return m!==null&&m>=j.min-10});
+const cur=nx>0?items[nx-1]:null,next=nx>=0?items[nx]:null,hi=hotelIdx(d.stay);
+el.hidden=false;el.innerHTML=`<div class="wrap tgrid"><div><span class="tl">今天 Day ${td+1}・${esc(d.date)}（${esc(d.dow)}）</span><h2>${nb(d.title)}</h2></div>
+<div class="tnext">${next?`<span class="tl">下一站</span><b><time>${esc(next.t)}</time> ${nb(next.title)}</b>${next.sub?`<small>${esc(next.sub)}</small>`:""}<p class="acts"><button class="btn sm" type="button" data-goto="day${td+1}-${nx}">看詳細</button>${next.q?`<a class="go" href="${navUrl(next.q)}" target="_blank" rel="noopener">導航</a>`:""}</p>`:`<span class="tl">今天的行程都結束了</span><b>好好休息</b>`}</div>
+<div class="tstay">${d.stay?`<span class="tl">今晚住宿</span><b>${esc(d.stay)}</b>${hi>=0?`<p class="acts">${C.hotels[hi].q?`<a class="go" href="${navUrl(C.hotels[hi].q)}" target="_blank" rel="noopener">導航</a>`:""}<button class="btn sm" type="button" data-taxi="${hi}">給司機看</button></p>`:""}`:`<span class="tl">今晚</span><b>回到台灣</b>`}</div></div>`};
+
+/* ---------- taxi card ---------- */
+const openTaxi=i=>{const h=C.hotels[i];if(!h)return;$("taxibody").innerHTML=`<p class="tk1" lang="ja">こちらへ行ってください</p><p class="tk2" lang="ja">${esc(h.ja).replace("（","<br>（")}</p><p class="tk3" lang="ja">${esc(h.addr)}</p><p class="tk4">TEL ${esc(h.tel)}</p><p class="tk5">請帶我到這裡（${esc(h.name)}）</p>`;$("taxi").hidden=false;document.body.classList.add("modal-on");$("taxix").focus()};
+const closeTaxi=()=>{$("taxi").hidden=true;document.body.classList.remove("modal-on")};
+document.addEventListener("click",e=>{const t=e.target.closest("[data-taxi]");if(t){openTaxi(+t.dataset.taxi);return}if(e.target.id==="taxi"||e.target.closest("#taxix"))closeTaxi()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("taxi").hidden)closeTaxi()});
+
+/* ---------- open/scroll helpers ---------- */
+const reveal=el=>{const dx=el.closest("details.dayx");if(dx)dx.open=true;if(el.tagName==="DETAILS")el.open=true};
+const go=id=>{const el=$(id);if(!el)return;reveal(el);el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:el.classList.contains("day")?"start":"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")};
+document.addEventListener("click",e=>{const o=e.target.closest("[data-open]"),c=e.target.closest("[data-close]"),g=e.target.closest("[data-goto]");
+if(o)document.querySelectorAll(`#${o.dataset.open} details.it`).forEach(x=>x.open=true);
+if(c)document.querySelectorAll(`#${c.dataset.close} details.it`).forEach(x=>x.open=false);
+if(g)go(g.dataset.goto);
+const a=e.target.closest('a[href^="#day"]');if(a){const el=$(a.getAttribute("href").slice(1));if(el){const dx=el.querySelector("details.dayx");if(dx)dx.open=true}}});
+$("allopen").addEventListener("click",()=>{const any=[...document.querySelectorAll("details.dayx")].some(d=>!d.open);document.querySelectorAll("details.dayx").forEach(d=>d.open=any);$("allopen").textContent=any?"收合每一天":"展開每一天"});
 
 /* ---------- search ---------- */
 let idx=[];
@@ -416,45 +518,54 @@ const buildIdx=()=>{idx=[];
 C.days.forEach((d,di)=>{const id="day"+(di+1);(d.s||[]).forEach((x,i)=>idx.push({lab:`Day ${di+1}`,cat:x.cat||"",title:`${x.t} ${x.title}`,sub:[x.sub,x.detail,x.warn].filter(Boolean).join(" "),tgt:`${id}-${i}`}));(d.t||[]).forEach(x=>idx.push({lab:`Day ${di+1}`,cat:"提醒",title:`${d.title}：今日提醒`,sub:x,tgt:id}))});
 if(C.announce)idx.push({lab:"公告",cat:"提醒",title:"最新公告",sub:C.announce,tgt:"ann"});
 idx.push({lab:"航班",cat:"交通",title:"去程 JX862 12/01 11:50 → 16:00",sub:"桃園 T1 → 仙台機場 星宇航空 起飛 抵達 集合",tgt:"flight"},{lab:"航班",cat:"交通",title:"回程 JX863 12/07 17:25 → 20:35",sub:"仙台機場 → 桃園 T1 星宇航空 起飛 抵達",tgt:"flight"});
-C.hotels.forEach((h,i)=>idx.push({lab:"住宿",cat:"住宿",title:h.name,sub:h.when+" "+h.desc+" 飯店 旅館",tgt:`hotel-${i}`}));
+C.hotels.forEach((h,i)=>idx.push({lab:"住宿",cat:"住宿",title:h.name,sub:[h.when,h.desc,h.ja,h.addr,h.tel,"飯店 旅館 地址 電話 計程車"].join(" "),tgt:`hotel-${i}`}));
 C.notes.forEach((n,i)=>idx.push({lab:"提醒",cat:"提醒",title:n.title,sub:n.text,tgt:`note-${i}`}));
 C.phr.forEach((p,i)=>idx.push({lab:"日語",cat:"日語",title:p.ja,sub:p.zh,tgt:`phr-${i}`}));
 C.items.forEach((x,i)=>idx.push({lab:"行李",cat:"行李",title:x,sub:"行李清單 要帶什麼",tgt:`pack-${i}`}));
-C.temps.forEach(t=>idx.push({lab:"天氣",cat:"天氣",title:`${t.place} 約 ${t.lo}° / ${t.hi}°`,sub:"氣溫 天氣 冷 穿著",tgt:"weather"}));
-idx.push({lab:"緊急",cat:"緊急",title:"110 警察",sub:"遺失 竊盜 交通事故 報警",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"119 救護車、消防",sub:"受傷 急病 火災 醫院",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"050-3816-2787 訪日外國人熱線",sub:"24 小時 中文 求助",tgt:"sos"})};
+C.temps.forEach(t=>idx.push({lab:"天氣",cat:"天氣",title:`${t.place} 約 ${t.lo}° / ${t.hi}°`,sub:"氣溫 天氣 冷 穿著 預報",tgt:"weather"}));
+idx.push({lab:"緊急",cat:"緊急",title:"110 警察",sub:"遺失 竊盜 交通事故 報警",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"119 救護車、消防",sub:"受傷 急病 火災 醫院",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"050-3816-2787 訪日外國人熱線",sub:"24 小時 中文 求助",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"給計程車司機看的飯店地址",sub:"計程車 司機 地址 走散 迷路",tgt:"sos"})};
 const cats=["全部",...CATS,"提醒","行李","日語","緊急"];let cat="全部",hits=[];
 $("chips").innerHTML=cats.map(c=>`<button class="chip" type="button" data-c="${c}" aria-pressed="${c===cat}">${c}</button>`).join('');
 const hl=(t,ws)=>{let s=esc(t);ws.forEach(w=>{const re=new RegExp(esc(w).replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi");s=s.replace(re,m=>`<mark>${m}</mark>`)});return s};
 const snip=(t,ws)=>{const w=ws.find(w=>t.toLowerCase().includes(w));if(!w||t.length<70)return t;const p=Math.max(0,t.toLowerCase().indexOf(w)-24);return(p?"…":"")+t.slice(p,p+70)+"…"};
-const run=()=>{const ws=$("q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+const run=()=>{if(!C)return;const ws=$("q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
 if(!ws.length&&cat==="全部"){$("res").innerHTML="";$("cnt").textContent="";return}
 hits=idx.filter(r=>{if(cat!=="全部"&&r.cat!==cat)return false;const h=(r.lab+" "+r.cat+" "+r.title+" "+r.sub).toLowerCase();return ws.every(w=>h.includes(w))});
 $("cnt").textContent=hits.length?`找到 ${hits.length} 筆`:"找不到相關資訊，換個關鍵字試試";
 $("res").innerHTML=hits.slice(0,60).map((r,i)=>`<button class="hit" type="button" data-k="${i}"><span class="lab">${esc(r.lab)}</span><span><b>${hl(r.title,ws)}</b><small>${hl(snip(r.sub,ws),ws)}</small></span></button>`).join('')};
-const go=r=>{const el=$(r.tgt);if(!el)return;if(el.tagName==="DETAILS")el.open=true;el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")};
-$("res").addEventListener("click",e=>{const b=e.target.closest(".hit");if(b)go(hits[+b.dataset.k])});
+$("res").addEventListener("click",e=>{const b=e.target.closest(".hit");if(b)go(hits[+b.dataset.k].tgt)});
 let tm;$("q").addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(run,120)});
 $("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===cat));run()});
 $("clr").addEventListener("click",()=>{$("q").value="";cat="全部";document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===cat));run();$("q").focus()});
 document.addEventListener("keydown",e=>{if(e.key==="/"&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();$("q").focus()}});
-document.addEventListener("click",e=>{const o=e.target.closest("[data-open]"),c=e.target.closest("[data-close]");if(o)document.querySelectorAll(`#${o.dataset.open} details`).forEach(x=>x.open=true);if(c)document.querySelectorAll(`#${c.dataset.close} details`).forEach(x=>x.open=false)});
 
-const renderAll=()=>{const open=[...document.querySelectorAll("details.it[open]")].map(x=>x.id);renderAnn();renderNav();renderDays();renderHotels();renderTemps();renderPack();renderNotes();renderPhr();buildIdx();run();open.forEach(id=>{const el=$(id);if(el)el.open=true})};
+/* ---------- big text ---------- */
+const setBig=on=>{document.documentElement.classList.toggle("big",on);$("bigbtn").setAttribute("aria-pressed",on);$("bigbtn").textContent=on?"一般字":"大字";store.set("tohoku26-big",on?"1":"")};
+setBig(store.get("tohoku26-big")==="1");
+$("bigbtn").addEventListener("click",()=>setBig(!document.documentElement.classList.contains("big")));
+
+/* ---------- route stops hint ---------- */
+const stops=$("stops"),hint=()=>{const end=stops.scrollLeft+stops.clientWidth>=stops.scrollWidth-4;$("line").classList.toggle("more",!end)};
+stops.addEventListener("scroll",hint,{passive:true});const sro=new ResizeObserver(hint);sro.observe(stops);
 
 /* ---------- boot ---------- */
-renderAll();
-fetch("content.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{if(d&&Array.isArray(d.days)){C=d;renderAll()}}).catch(()=>{});
+const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();renderHotels();renderTemps();renderPack();renderNotes();renderPhr();buildIdx();run();
+if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
+fetch("content.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{C=d;$("loading").remove();renderAll()}).catch(()=>{$("loading").innerHTML="<p>行程內容載入失敗。請確認網路後重新整理；加到主畫面並打開過一次後，沒網路也能看。</p>"});
+setInterval(()=>{if(C)renderToday()},60000);
 
 /* countdown */
 const c=$("count");
-const dep=new Date("2026-12-01T11:50:00+08:00"),end=new Date("2026-12-07T20:35:00+08:00"),d0=new Date("2026-12-01T00:00:00+08:00");
-const tick=()=>{const now=new Date();let big,small;if(now<dep){const tz=new Date(now.toLocaleDateString("sv-SE",{timeZone:"Asia/Taipei"})+"T00:00:00+08:00");const n=Math.round((d0-tz)/864e5);big=n>0?n+" 天":"今天";small=n>0?"距離出發":"出發日"}else if(now<end){big="Day "+Math.min(Math.floor((now-d0)/864e5)+1,7);small="旅程進行中"}else{big="平安回家";small="旅程結束"}c.innerHTML=`<b>${big}</b><span>${small}</span>`};
+const d0=new Date("2026-12-01T00:00:00+08:00"),dep=new Date("2026-12-01T11:50:00+08:00"),end=new Date("2026-12-07T20:35:00+08:00");
+const tick=()=>{const now=nowJ().real;let big,small;if(now<dep){const tz=new Date(now.toLocaleDateString("sv-SE",{timeZone:"Asia/Taipei"})+"T00:00:00+08:00");const n=Math.round((d0-tz)/864e5);big=n>0?n+" 天":"今天";small=n>0?"距離出發":"出發日"}else if(now<end){big="Day "+(Math.max(0,tripDay())+1);small="旅程進行中"}else{big="平安回家";small="旅程結束"}c.innerHTML=`<b>${big}</b><span>${small}</span>`};
 tick();setInterval(tick,60000);
-c.style.cursor="pointer";c.addEventListener("click",()=>{const now=new Date();const n=now>=dep&&now<end?Math.min(7,Math.floor((now-d0)/864e5)+1):1;const el=$("day"+n);if(el)el.scrollIntoView({behavior:"smooth"})});
+c.addEventListener("click",()=>{const td=tripDay();go(td>=0?($("today").hidden?"day"+(td+1):"today"):"day1")});
 /* snow */
 const g=$("snowfall");let sd=7;const rnd=()=>(sd=sd*16807%2147483647)/2147483647;let out="";
-for(let i=0;i<70;i++){const x=rnd()*1200,y=rnd()*440,r=1.5+rnd()*2.8,dur=10+rnd()*12,del=-rnd()*22;out+=`<circle class="flake" cx="${x.toFixed(0)}" cy="${(-y).toFixed(0)}" r="${r.toFixed(1)}" fill="#fff" opacity="${(.55+rnd()*.4).toFixed(2)}" style="animation-duration:${dur.toFixed(1)}s;animation-delay:${del.toFixed(1)}s"/>`}
+for(let i=0;i<60;i++){const x=rnd()*1200,y=rnd()*440,r=1.5+rnd()*2.8,dur=10+rnd()*12,del=-rnd()*22;out+=`<circle class="flake" cx="${x.toFixed(0)}" cy="${(-y).toFixed(0)}" r="${r.toFixed(1)}" fill="#fff" opacity="${(.55+rnd()*.4).toFixed(2)}" style="animation-duration:${dur.toFixed(1)}s;animation-delay:${del.toFixed(1)}s"/>`}
 g.innerHTML=out;
+/* PWA */
+if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("sw.js").catch(()=>{});
 }
 </script>
 </body>
