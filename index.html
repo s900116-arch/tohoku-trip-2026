@@ -224,6 +224,14 @@ details[open] .arr{transform:rotate(180deg)}
 .nowwx b{font-size:20px}
 .nowwx small{color:var(--soft);font-size:11px}
 @media(max-width:600px){.wxb .alr{flex-basis:100%;font-size:11px}}
+.phrs{display:grid;gap:10px}
+.phrd{border:1px solid var(--rule);border-radius:14px;background:var(--panel)}
+.phrd>summary{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;list-style:none;font-size:17px}
+.phrd>summary::-webkit-details-marker{display:none}
+.phrd>summary span{color:var(--soft);font-size:14px;margin-left:auto}
+.phrd>summary::after{content:"⌄";margin-left:10px;color:var(--soft);transition:transform .2s}
+.phrd[open]>summary::after{transform:rotate(180deg)}
+.phrd>.phr{padding:0 18px 16px}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -580,7 +588,7 @@ footer .install{color:#9fb0c8}
 <section class="band sec" id="talk">
   <div class="wrap">
     <h2>實用日語</h2>
-    <div class="phr" id="phr"></div>
+    <div class="phrs" id="phr"></div>
   </div>
 </section>
 
@@ -660,7 +668,7 @@ $("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
 const renderTax=()=>{const T=C.tax;if(!T){$("tax").hidden=true;return}$("taxlead").textContent=T.lead||"";$("taxg").innerHTML=(T.cards||[]).map((c,i)=>`<div class="card${/機場/.test(c.title)?" air":""}" id="tax-${i}"><h3>${esc(c.title)}</h3>${pts((c.pts||[]).join("\n")+((c.pts||[]).length<2?"\n":""))}</div>`).join("")};
 const renderNotes=()=>{$("notes").innerHTML=C.notes.map((n,i)=>`<div class="card" id="note-${i}"><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></div>`).join('')};
 const canSpeak="speechSynthesis" in window;
-const renderPhr=()=>{let h="",cur=null;C.phr.forEach((p,i)=>{if(p.g&&p.g!==cur){h+=`<h3 class="phrg">${esc(p.g)}</h3>`;cur=p.g}h+=`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`});$("phr").innerHTML=h};
+const renderPhr=()=>{const G=[];C.phr.forEach((p,i)=>{const g=p.g||"常用";let o=G.find(x=>x.g===g);if(!o){o={g,L:[]};G.push(o)}o.L.push([p,i])});$("phr").innerHTML=G.map(o=>`<details class="phrd"><summary><b>${esc(o.g)}</b><span>${o.L.length} 句</span></summary><div class="phr">${o.L.map(([p,i])=>`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`).join("")}</div></details>`).join("")};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(!b)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="ja-JP";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^ja/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(err){}});
 
 /* ---------- today ---------- */
@@ -692,7 +700,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-taxi]");if
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("taxi").hidden)closeTaxi()});
 
 /* ---------- open/scroll helpers ---------- */
-const reveal=el=>{const dx=el.closest("details.dayx");if(dx)dx.open=true;if(el.tagName==="DETAILS")el.open=true};
+const reveal=el=>{const dx=el.closest("details.dayx");if(dx)dx.open=true;const pd=el.closest&&el.closest("details.phrd");if(pd)pd.open=true;if(el.tagName==="DETAILS")el.open=true};
 const go=id=>{const el=$(id);if(!el)return;reveal(el);el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:el.classList.contains("day")?"start":"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")};
 document.addEventListener("click",e=>{const o=e.target.closest("[data-open]"),c=e.target.closest("[data-close]"),g=e.target.closest("[data-goto]");
 if(o)document.querySelectorAll(`#${o.dataset.open} details.it`).forEach(x=>x.open=true);
