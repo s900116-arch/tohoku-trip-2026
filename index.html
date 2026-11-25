@@ -179,6 +179,15 @@ details[open] .arr{transform:rotate(180deg)}
 .det p{margin:0 0 6px}
 .det .warn{margin:8px 0 0;padding:8px 12px;border-left:4px solid var(--red);background:color-mix(in srgb,var(--red) 8%,transparent);border-radius:0 8px 8px 0}
 .det .warn b{color:var(--red)}
+#tax .taxlead{margin:0 0 16px;line-height:1.8}
+#tax .taxg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}
+#tax .card h3{margin:0 0 10px}
+#tax .pts{margin:0;padding:0;list-style:none}
+#tax .pts li{position:relative;padding-left:14px;margin:0 0 7px;line-height:1.7}
+#tax .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
+#tax .lb{font-weight:700;margin-right:6px}
+#tax .lb::after{content:"："}
+#tax .card.air{border-color:var(--red);border-width:2px}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -522,6 +531,14 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<section class="band sec" id="tax">
+  <div class="wrap">
+    <h2>退稅新制（2026/11/1 起）</h2>
+    <p class="taxlead" id="taxlead"></p>
+    <div class="grid2 taxg" id="taxg"></div>
+  </div>
+</section>
+
 <section class="band sec" id="talk">
   <div class="wrap">
     <h2>實用日語</h2>
@@ -574,7 +591,7 @@ const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]
 
 /* ---------- render ---------- */
 const renderAnn=()=>{const a=$("ann");a.hidden=!C.announce;a.innerHTML=C.announce?`<b>最新公告</b><span>${esc(C.announce)}</span>`:"";$("upd").textContent=C.updated?`內容最後更新：${C.updated}`:""};
-const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}" data-day="${i}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#sos">緊急</a>'};
+const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}" data-day="${i}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#tax">退稅</a><a href="#sos">緊急</a>'};
 const pts=t=>{if(!t)return"";let L=String(t).includes("\n")?String(t).split("\n"):(String(t).length>70||String(t).includes("；")?String(t).split(/(?<=[。；;])(?![）)」])/):[String(t)]);L=L.map(x=>x.replace(/^[；;]\s*/,"").replace(/[；;]\s*$/,"").trim()).filter(Boolean);const f=x=>{const m=x.match(/^([^：:0-9]{1,8})：(.+)$/);return m?`<b class="lb">${esc(m[1])}</b>${esc(m[2])}`:esc(x)};return L.length<2?`<p>${f(L[0]||"")}</p>`:`<ul class="pts">${L.map(x=>`<li>${f(x)}</li>`).join("")}</ul>`};
 const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google Maps 導航</a></p>`:''}</div></details>`;
 const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
@@ -596,6 +613,7 @@ const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`�
 const renderPack=()=>{$("check").innerHTML=C.items.map((x,i)=>`<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x)}" ${st[x]?'checked':''}><span>${esc(x)}</span></label></li>`).join('');upd()};
 $("check").addEventListener("change",e=>{const v=e.target.dataset.v;if(v===undefined)return;st[v]=e.target.checked;store.set(pkKey,JSON.stringify(st));upd()});
 $("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
+const renderTax=()=>{const T=C.tax;if(!T){$("tax").hidden=true;return}$("taxlead").textContent=T.lead||"";$("taxg").innerHTML=(T.cards||[]).map((c,i)=>`<div class="card${/機場/.test(c.title)?" air":""}" id="tax-${i}"><h3>${esc(c.title)}</h3>${pts((c.pts||[]).join("\n")+((c.pts||[]).length<2?"\n":""))}</div>`).join("")};
 const renderNotes=()=>{$("notes").innerHTML=C.notes.map((n,i)=>`<div class="card" id="note-${i}"><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></div>`).join('')};
 const canSpeak="speechSynthesis" in window;
 const renderPhr=()=>{$("phr").innerHTML=C.phr.map((p,i)=>`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`).join('')};
@@ -633,7 +651,7 @@ $("allopen").addEventListener("click",()=>{const any=[...document.querySelectorA
 
 /* ---------- search ---------- */
 let idx=[];
-const buildIdx=()=>{idx=[];
+const buildIdx=()=>{idx=[];(C.tax&&C.tax.cards||[]).forEach((c,i)=>idx.push({lab:"退稅",cat:"購物",title:c.title,sub:(c.pts||[]).join(" "),tgt:`tax-${i}`}));
 C.days.forEach((d,di)=>{const id="day"+(di+1);(d.s||[]).forEach((x,i)=>idx.push({lab:`Day ${di+1}`,cat:x.cat||"",title:`${x.t} ${x.title}`,sub:[x.sub,x.detail,x.warn].filter(Boolean).join(" "),tgt:`${id}-${i}`}));(d.t||[]).forEach(x=>idx.push({lab:`Day ${di+1}`,cat:"提醒",title:`${d.title}：今日提醒`,sub:x,tgt:id}))});
 if(C.announce)idx.push({lab:"公告",cat:"提醒",title:"最新公告",sub:C.announce,tgt:"ann"});
 idx.push({lab:"航班",cat:"交通",title:"去程 JX862 12/01 11:50 → 16:00",sub:"桃園 T1 → 仙台機場 星宇航空 起飛 抵達 集合",tgt:"flight"},{lab:"航班",cat:"交通",title:"回程 JX863 12/07 17:25 → 20:35",sub:"仙台機場 → 桃園 T1 星宇航空 起飛 抵達",tgt:"flight"});
@@ -668,7 +686,7 @@ const stops=$("stops"),hint=()=>{const end=stops.scrollLeft+stops.clientWidth>=s
 stops.addEventListener("scroll",hint,{passive:true});const sro=new ResizeObserver(hint);sro.observe(stops);
 
 /* ---------- boot ---------- */
-const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderPhr();buildIdx();run();
+const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
 fetch("content.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{C=d;$("loading").remove();renderAll()}).catch(()=>{$("loading").innerHTML="<p>行程內容載入失敗。請確認網路後重新整理；加到主畫面並打開過一次後，沒網路也能看。</p>"});
 setInterval(()=>{if(C)renderToday()},60000);
