@@ -448,7 +448,7 @@ fetch("content.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{if
 /* countdown */
 const c=$("count");
 const dep=new Date("2026-12-01T11:50:00+08:00"),end=new Date("2026-12-07T20:35:00+08:00"),d0=new Date("2026-12-01T00:00:00+08:00");
-const tick=()=>{const now=new Date();let big,small;if(now<dep){big=Math.ceil((dep-now)/864e5)+" 天";small="距離出發"}else if(now<end){big="Day "+Math.min(Math.floor((now-d0)/864e5)+1,7);small="旅程進行中"}else{big="平安回家";small="旅程結束"}c.innerHTML=`<b>${big}</b><span>${small}</span>`};
+const tick=()=>{const now=new Date();let big,small;if(now<dep){const tz=new Date(now.toLocaleDateString("sv-SE",{timeZone:"Asia/Taipei"})+"T00:00:00+08:00");const n=Math.round((d0-tz)/864e5);big=n>0?n+" 天":"今天";small=n>0?"距離出發":"出發日"}else if(now<end){big="Day "+Math.min(Math.floor((now-d0)/864e5)+1,7);small="旅程進行中"}else{big="平安回家";small="旅程結束"}c.innerHTML=`<b>${big}</b><span>${small}</span>`};
 tick();setInterval(tick,60000);
 c.style.cursor="pointer";c.addEventListener("click",()=>{const now=new Date();const n=now>=dep&&now<end?Math.min(7,Math.floor((now-d0)/864e5)+1):1;const el=$("day"+n);if(el)el.scrollIntoView({behavior:"smooth"})});
 /* snow */
