@@ -541,7 +541,7 @@ footer .install{color:#9fb0c8}
     <div id="fc"></div>
     <h3 class="fch">每天行程地點的大約溫度</h3>
     <div class="temps" id="temps"></div>
-    <p class="note">每天行程地點的大約溫度（°C）：平地依氣象廳預報，銀山、藏王、狐狸村是用平地預報推估（山區比平地低 5–12°C）。數字後面標「自動」是 Open-Meteo 最新預報，標「人工 11/25」是當時整理的推估；藏王山頂只有人工推估。點「即時預報」看最新天氣；12 月初約 16:20 天黑。</p>
+    <p class="note">每天行程地點的大約溫度（°C）：平地依氣象廳預報，銀山、藏王、狐狸村是用平地預報推估（山區比平地低 5–12°C）。數字後面標「自動」是 Open-Meteo 最新預報，標「人工 11/25」是當時整理的推估；藏王山頂用地藏山頂站海拔 1,661 m 計算。點「即時預報」看最新天氣；12 月初約 16:20 天黑。</p>
   </div>
 </section>
 
@@ -730,7 +730,7 @@ const autoWx=async()=>{try{
  const W=C.wx||[];if(!W.length||!W[0].geo)return;
  const pts=[];W.forEach(w=>(w.geo||[]).forEach(g=>{if(!pts.find(p=>p.n===g.n))pts.push(g)}));
  const dates=W.map(w=>w.date).filter(Boolean).sort();
- const key="wxauto1";let cache=null;try{cache=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
+ const key="wxauto2";let cache=null;try{cache=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
  let data=cache&&Date.now()-cache.t<3600e3?cache.d:null,t=cache?cache.t:0;
  if(!data){
   const today=new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
@@ -740,6 +740,7 @@ const autoWx=async()=>{try{
   const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error(r.status);
   let j=await r.json();if(!Array.isArray(j))j=[j];
   data={};pts.forEach((p,i)=>{const dd=j[i]&&j[i].daily;if(!dd)return;dd.time.forEach((tm,k)=>{data[p.n+"|"+tm]={c:dd.weather_code[k],hi:dd.temperature_2m_max[k],lo:dd.temperature_2m_min[k],pp:dd.precipitation_probability_max?dd.precipitation_probability_max[k]:null}})});
+  try{const W5=W.find(w=>(w.geo||[]).some(g=>g.n==="藏王溫泉")&&w.date==="2026-12-05");const d5="2026-12-05";if(d5>=start&&d5<=end){const r2=await fetch("https://api.open-meteo.com/v1/forecast?latitude=38.1444&longitude=140.4407&elevation=1661&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&start_date="+d5+"&end_date="+d5,{cache:"no-store"});if(r2.ok){const j2=await r2.json();const dd=j2.daily;if(dd&&dd.time)dd.time.forEach((tm,k)=>{data["藏王山頂|"+tm]={c:dd.weather_code[k],hi:dd.temperature_2m_max[k],lo:dd.temperature_2m_min[k],pp:dd.precipitation_probability_max?dd.precipitation_probability_max[k]:null}})}}}catch(e){}
   t=Date.now();try{localStorage.setItem(key,JSON.stringify({t,d:data}))}catch(e){}
  }
  const ts=new Date(t+9*3600e3),stamp=`${ts.getUTCMonth()+1}/${ts.getUTCDate()} ${String(ts.getUTCHours()).padStart(2,"0")}:${String(ts.getUTCMinutes()).padStart(2,"0")}`;
@@ -753,8 +754,8 @@ const autoWx=async()=>{try{
   el.querySelector(".au").textContent=`${w.geo.map(g=>g.n).join("・")}｜自動 ${stamp}`;
   el.title=`${w.geo.map(g=>g.n).join("・")}｜${m[1]} ${lo}–${hi}°C${pp!=null?`，降雨機率 ${pp}%`:""}（Open-Meteo 自動預報，日本時間 ${stamp} 更新）`;
   el.classList.add("live");n++;const card=document.getElementById("wx-"+di);if(card){const lv=card.querySelector(".sky.live");if(lv){lv.hidden=false;lv.innerHTML=`<b>最新 ${m[0]} ${m[1]}</b><span class="tp">${lo}–${hi}°C</span>${pp!=null?`降雨 ${pp}%`:""}<small class="src">自動・${esc(w.geo.map(g=>g.n).join("・"))}・${stamp}</small>`}}});
- (C.temps||[]).forEach((t,ti)=>{const w=W[ti];if(!w||!w.geo)return;const g=w.geo.find(g=>t.place.includes(g.n));if(!g)return;const r=data[g.n+"|"+w.date];if(!r||r.lo==null)return;const row=document.getElementById("temp-"+ti);if(!row)return;const L=-12,H=20,lo=Math.round(r.lo),hi=Math.round(r.hi),a=Math.max(L,lo),b=Math.min(H,hi);const i=row.querySelector(".tbar i");i.style.left=(a-L)/(H-L)*100+"%";i.style.width=Math.max(2,(b-a)/(H-L)*100)+"%";row.querySelector(".tval").innerHTML=`${lo}° / ${hi}°<small class="tsrc">自動 ${stamp.split(" ")[0]}</small>`;row.classList.add("live")});
- const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。「每天行程地點的大約溫度」也會自動更新（藏王山頂除外）。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
+ (C.temps||[]).forEach((t,ti)=>{const w=W[ti];if(!w||!w.geo)return;const g=t.place.includes("山頂")?{n:"藏王山頂"}:w.geo.find(g=>t.place.includes(g.n));if(!g)return;const r=data[g.n+"|"+w.date];if(!r||r.lo==null)return;const row=document.getElementById("temp-"+ti);if(!row)return;const L=-12,H=20,lo=Math.round(r.lo),hi=Math.round(r.hi),a=Math.max(L,lo),b=Math.min(H,hi);const i=row.querySelector(".tbar i");i.style.left=(a-L)/(H-L)*100+"%";i.style.width=Math.max(2,(b-a)/(H-L)*100)+"%";row.querySelector(".tval").innerHTML=`${lo}° / ${hi}°<small class="tsrc">自動 ${stamp.split(" ")[0]}</small>`;row.classList.add("live")});
+ const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。「每天行程地點的大約溫度」也會自動更新（藏王山頂用海拔 1,661 m 地藏山頂站計算）。天氣代碼是當天「最差」的天氣，例如只有一小段時間下毛毛雨也會顯示毛毛雨。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
 const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
