@@ -233,6 +233,19 @@ details[open] .arr{transform:rotate(180deg)}
 .phrd>summary::after{content:"⌄";margin-left:10px;color:var(--soft);transition:transform .2s}
 .phrd[open]>summary::after{transform:rotate(180deg)}
 .phrd>.phr{padding:0 18px 16px}
+.pks{display:grid;gap:10px}
+.pkd{border:1px solid var(--rule);border-radius:14px;background:var(--panel)}
+.pkd>summary{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;list-style:none;font-size:17px}
+.pkd>summary::-webkit-details-marker{display:none}
+.pkd>summary .pkn{margin-left:auto;color:var(--soft);font-size:14px}
+.pkd>summary .pkn.done{color:#2e7d4f;font-weight:700}
+.pkd>summary .pkn.done::before{content:"✓ "}
+.pkd>summary::after{content:"⌄";color:var(--soft);transition:transform .2s}
+.pkd[open]>summary::after{transform:rotate(180deg)}
+.pknote{margin:-4px 18px 6px;color:var(--soft);font-size:13px}
+.pkd>.check{padding:0 18px 12px}
+.check .tag{font-style:normal;font-size:11px;margin-left:6px;padding:1px 7px;border-radius:999px;border:1px solid var(--rule);color:var(--soft);white-space:nowrap;text-decoration:none;display:inline-block}
+.check .tag.t-must{color:#b4502a;border-color:#b4502a}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -565,7 +578,8 @@ footer .install{color:#9fb0c8}
   <div class="wrap">
     <h2>行李清單</h2>
     <p class="prog" id="prog"></p>
-    <ul class="check" id="check"></ul>
+    <p class="note">「必帶」是一定要帶的；標「男生」「女生」「駕駛」的看自己需要。點分類展開，勾選會記在自己的手機。</p>
+    <div class="pks" id="check"></div>
     <button class="reset" id="reset" type="button">全部取消勾選</button>
     <p class="note">勾選狀態只存在你自己的瀏覽器。</p>
   </div>
@@ -662,8 +676,8 @@ const lvHtml=n=>`<span class="lv" aria-label="穿著等級 ${n} / 4">${[1,2,3,4]
 const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><header><a href="#day${i+1}"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></a><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}<small class="src">人工整理・11/25 氣象廳</small></div><div class="sky live" hidden></div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl></article>`}).join("")};
 const renderTemps=()=>{renderFc();const lo=-12,hi=20;$("temps").innerHTML=C.temps.map((t,ti)=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow" id="temp-${ti}"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°<small class="tsrc">人工 11/25</small></span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
 const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}catch(e){st={}}
-const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`};
-const renderPack=()=>{$("check").innerHTML=C.items.map((x,i)=>`<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x)}" ${st[x]?'checked':''}><span>${esc(x)}</span></label></li>`).join('');upd()};
+const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`;(C.pack||[]).forEach((g,gi)=>{const e=document.querySelector(`.pkd[data-g="${gi}"] .pkn`);if(e){const m=g.L.filter(x=>st[x.t]).length;e.textContent=`${m} / ${g.L.length}`;e.classList.toggle("done",m===g.L.length)}})};
+const renderPack=()=>{const G=C.pack||[{g:"行李",note:"",L:C.items.map(t=>({t,tag:""}))}];C.items=G.flatMap(g=>g.L.map(x=>x.t));let k=0;$("check").innerHTML=G.map((g,gi)=>`<details class="pkd" data-g="${gi}"${gi===0?" open":""}><summary><b>${esc(g.g)}</b><span class="pkn"></span></summary>${g.note?`<p class="pknote">${esc(g.note)}</p>`:""}<ul class="check">${g.L.map(x=>{const i=k++;return `<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x.t)}" ${st[x.t]?'checked':''}><span>${esc(x.t)}${x.tag?`<em class="tag t-${x.tag==="必帶"?"must":"who"}">${esc(x.tag)}</em>`:""}</span></label></li>`}).join("")}</ul></details>`).join("");upd()};
 $("check").addEventListener("change",e=>{const v=e.target.dataset.v;if(v===undefined)return;st[v]=e.target.checked;store.set(pkKey,JSON.stringify(st));upd()});
 $("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
 const renderTax=()=>{const T=C.tax;if(!T){$("tax").hidden=true;return}$("taxlead").textContent=T.lead||"";$("taxg").innerHTML=(T.cards||[]).map((c,i)=>`<div class="card${/機場/.test(c.title)?" air":""}" id="tax-${i}"><h3>${esc(c.title)}</h3>${pts((c.pts||[]).join("\n")+((c.pts||[]).length<2?"\n":""))}</div>`).join("")};
@@ -701,7 +715,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-taxi]");if
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("taxi").hidden)closeTaxi()});
 
 /* ---------- open/scroll helpers ---------- */
-const reveal=el=>{const dx=el.closest("details.dayx");if(dx)dx.open=true;const pd=el.closest&&el.closest("details.phrd");if(pd)pd.open=true;if(el.tagName==="DETAILS")el.open=true};
+const reveal=el=>{const pk=el.closest&&el.closest("details.pkd");if(pk)pk.open=true;const dx=el.closest("details.dayx");if(dx)dx.open=true;const pd=el.closest&&el.closest("details.phrd");if(pd)pd.open=true;if(el.tagName==="DETAILS")el.open=true};
 const go=id=>{const el=$(id);if(!el)return;reveal(el);el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:el.classList.contains("day")?"start":"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")};
 document.addEventListener("click",e=>{const o=e.target.closest("[data-open]"),c=e.target.closest("[data-close]"),g=e.target.closest("[data-goto]");
 if(o)document.querySelectorAll(`#${o.dataset.open} details.it`).forEach(x=>x.open=true);
