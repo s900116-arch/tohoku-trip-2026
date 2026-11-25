@@ -8,7 +8,7 @@
 - **公開網頁的隱私原則**：
   - 不放個資、金額、訂單編號、付款方式和保險資訊。
   - 只放房型、房間配置（1＋2＋2／3＋2）、車型等大家需要知道的資訊。
-- **怎麼更新**：內容統一放在 `content.json`，由團長請 Claude 進 GitHub 修改。變更紀錄見 [CHANGELOG.md](CHANGELOG.md)。
+- **怎麼更新**：內容統一放在 `content.json`，由團長請 Claude 進 GitHub 修改。變更紀錄見 [CHANGELOG-變更紀錄.md](CHANGELOG-變更紀錄.md)。
 
 ## 二、外觀設計
 - **冬季雪國主題**：深藍夜色配溫泉燈火的暖黃，背景有雪花紋路和飄雪動畫。
@@ -85,5 +85,5 @@
 | `favicon.svg`、`favicon-32.png`、`favicon.ico`、`icon-192.png`、`icon-512.png`、`apple-touch-icon.png` | 分頁與 App 圖示 |
 | `hero-800/1200/1920.jpg`、`og.png` | 主視覺插畫與分享預覽圖 |
 | `README.md` | 內容欄位怎麼修改 |
-| `FEATURES.md` | 本檔：功能與內容總覽 |
-| `CHANGELOG.md` | 網頁變更紀錄 |
+| `FEATURES-功能總覽.md` | 本檔：功能與內容總覽 |
+| `CHANGELOG-變更紀錄.md` | 網頁變更紀錄 |
