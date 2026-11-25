@@ -384,6 +384,26 @@ footer .install{color:#9fb0c8}
 #fc+h3{margin-top:22px}
 #fc .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .fct{min-width:520px}
+.wxlead{margin:-6px 0 14px;color:var(--soft)}
+.wxd{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:26px}
+.wxc{background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;display:grid;gap:8px;align-content:start}
+.wxc header{display:grid;gap:6px}
+.wxc header a{color:inherit;text-decoration:none}
+.wxc header a b{display:block;font:900 20px/1.2 "Noto Serif TC",serif}
+.wxc header a span{font-size:14px;color:var(--soft)}
+.wxc .sky{font-size:14px;color:var(--soft);background:var(--panel);border-radius:8px;padding:6px 10px}
+.wxc .sky b{font-size:15px;color:var(--ink);margin-right:8px}
+.wxc .tp{font-weight:700;color:var(--red);margin-right:8px}
+.wxc dl{margin:0;display:grid;gap:6px}
+.wxc dl div{display:grid;grid-template-columns:3em minmax(0,1fr);gap:8px;font-size:15px}
+.wxc dt{font-weight:700;color:var(--pine)}
+.wxc dd{margin:0}
+.lv{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--soft)}
+.lv i{display:inline-block;width:10px;height:14px;border-radius:3px;background:var(--rule)}
+.lv i.on{background:var(--pine)}
+.wxbox{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--bg);border:1px dashed var(--rule);font-size:15px}
+.wxbox b{color:var(--red)}
+.wxbox p{margin:4px 0 0}
 </style>
 </head>
 <body>
@@ -453,6 +473,8 @@ footer .install{color:#9fb0c8}
 <section class="band sec" id="weather" style="background:var(--panel)">
   <div class="wrap">
     <h2>旅程天氣預估</h2>
+    <p class="wxlead">每天的天氣、穿著和開車注意事項。點日期可以跳到當天行程。</p>
+    <div class="wxd" id="wxdays"></div>
     <div id="fc"></div>
     <h3 class="fch">每天行程地點的大約溫度</h3>
     <div class="temps" id="temps"></div>
@@ -535,12 +557,15 @@ const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
 const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div><svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
 <div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
 <div class="daybody"><div class="sched">${(d.s||[]).map((x,i)=>itemHtml(x,`${id}-${i}`)).join('')}</div>
-<aside class="tips"><h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b>${hi>=0?`<button class="btn sm" type="button" data-taxi="${hi}">給司機看</button>`:""}</div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
+<aside class="tips">${(C.wx&&C.wx[di])?`<div class="wxbox"><b>${esc(C.wx[di].sky)}・${esc(C.wx[di].temp)}${C.wx[di].rain&&C.wx[di].rain!=="—"?"・降雨 "+esc(C.wx[di].rain):""}</b><br>${lvHtml(+C.wx[di].lv||0)}<p><b>穿著</b> ${esc(C.wx[di].wear)}</p><p><b>開車</b> ${esc(C.wx[di].drive)}</p><p><a href="#wx-${di}">看天氣詳細</a></p></div>`:""}<h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b>${hi>=0?`<button class="btn sm" type="button" data-taxi="${hi}">給司機看</button>`:""}</div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
 </div></details></section>`}).join('')};
 const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card hotel" id="hotel-${i}"><div class="n">${esc(h.when)}</div><h3>${esc(h.name)}</h3><p>${esc(h.desc)}</p>${h.ja?`<p class="ja" lang="ja">${esc(h.ja)}<br>${esc(h.addr)}<br>TEL ${esc(h.tel)}</p>`:""}<p class="acts">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">導航</a>`:""}${h.ja?`<button class="btn sm" type="button" data-taxi="${i}">給司機看</button>`:""}</p></div>`).join('');
 $("sostaxi").innerHTML=C.hotels.map((h,i)=>h.ja?`<button class="btn light" type="button" data-taxi="${i}">${esc(h.when.split("・")[0])} ${esc(h.name)}</button>`:"").join("")};
 const renderFc=()=>{const f=C.forecast,el=$("fc");if(!f||!el){if(el)el.innerHTML="";return}
 el.innerHTML=`<h3 class="fch">最新預報 <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
+const WL=["","輕便冬裝","保暖冬裝","防水保暖","全副雪地裝備"];
+const lvHtml=n=>`<span class="lv" aria-label="穿著等級 ${n} / 4">${[1,2,3,4].map(k=>`<i class="${k<=n?"on":""}"></i>`).join("")}${esc(WL[n]||"")}</span>`;
+const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><header><a href="#day${i+1}"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></a><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}</div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl></article>`}).join("")};
 const renderTemps=()=>{renderFc();const lo=-12,hi=20;$("temps").innerHTML=C.temps.map(t=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°</span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
 const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}catch(e){st={}}
 const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`};
@@ -587,7 +612,7 @@ C.hotels.forEach((h,i)=>idx.push({lab:"住宿",cat:"住宿",title:h.name,sub:[h.
 C.notes.forEach((n,i)=>idx.push({lab:"提醒",cat:"提醒",title:n.title,sub:n.text,tgt:`note-${i}`}));
 C.phr.forEach((p,i)=>idx.push({lab:"日語",cat:"日語",title:p.ja,sub:p.zh,tgt:`phr-${i}`}));
 C.items.forEach((x,i)=>idx.push({lab:"行李",cat:"行李",title:x,sub:"行李清單 要帶什麼",tgt:`pack-${i}`}));
-C.temps.forEach(t=>idx.push({lab:"天氣",cat:"天氣",title:`${t.place} 約 ${t.lo}° / ${t.hi}°`,sub:"氣溫 天氣 冷 穿著 預報",tgt:"weather"}));
+(C.wx||[]).forEach((w,i)=>idx.push({lab:`Day ${i+1}`,cat:"提醒",title:`Day ${i+1} 天氣：${w.sky} ${w.temp}`,sub:[w.place,"天氣 下雨 下雪 穿著 開車 路況",w.trip,w.drive,w.wear].join(" "),tgt:`wx-${i}`}));C.temps.forEach(t=>idx.push({lab:"天氣",cat:"天氣",title:`${t.place} 約 ${t.lo}° / ${t.hi}°`,sub:"氣溫 天氣 冷 穿著 預報",tgt:"weather"}));
 idx.push({lab:"緊急",cat:"緊急",title:"110 警察",sub:"遺失 竊盜 交通事故 報警",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"119 救護車、消防",sub:"受傷 急病 火災 醫院",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"050-3816-2787 訪日外國人熱線",sub:"24 小時 中文 求助",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"給計程車司機看的飯店地址",sub:"計程車 司機 地址 走散 迷路",tgt:"sos"})};
 const cats=["全部",...CATS,"提醒","行李","日語","緊急"];let cat="全部",hits=[];
 $("chips").innerHTML=cats.map(c=>`<button class="chip" type="button" data-c="${c}" aria-pressed="${c===cat}">${c}</button>`).join('');
@@ -614,7 +639,7 @@ const stops=$("stops"),hint=()=>{const end=stops.scrollLeft+stops.clientWidth>=s
 stops.addEventListener("scroll",hint,{passive:true});const sro=new ResizeObserver(hint);sro.observe(stops);
 
 /* ---------- boot ---------- */
-const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();renderHotels();renderTemps();renderPack();renderNotes();renderPhr();buildIdx();run();
+const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
 fetch("content.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{C=d;$("loading").remove();renderAll()}).catch(()=>{$("loading").innerHTML="<p>行程內容載入失敗。請確認網路後重新整理；加到主畫面並打開過一次後，沒網路也能看。</p>"});
 setInterval(()=>{if(C)renderToday()},60000);
