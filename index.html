@@ -211,8 +211,8 @@ details[open] .arr{transform:rotate(180deg)}
 .wxb .wi{font-size:30px;line-height:1}
 .wxb b{font-size:13px;margin-top:4px;white-space:nowrap}
 .wxb small{font-size:12px;color:var(--soft);white-space:nowrap}
-@media(max-width:600px){details.dayx .dayhead{grid-template-columns:auto minmax(0,1fr) 36px!important;row-gap:8px}details.dayx .dayhead .dnum{grid-row:1/3}details.dayx .dayhead .arr{grid-column:3;grid-row:1/3}.wxb{grid-column:2;grid-row:2;flex-direction:row;gap:6px;justify-self:start;min-width:0;padding:4px 10px;border-radius:999px}.wxb .wi{font-size:18px}.wxb b{font-size:12px;margin-top:0}.wxb small{font-size:12px}.wxb .au{display:none}.wxb{max-width:100%;flex-wrap:wrap}}
-.wxb .au{font-style:normal;font-size:10px;color:var(--soft);white-space:nowrap;opacity:.8}
+@media(max-width:600px){details.dayx .dayhead{grid-template-columns:auto minmax(0,1fr) 36px!important;row-gap:8px}details.dayx .dayhead .dnum{grid-row:1/3}details.dayx .dayhead .arr{grid-column:3;grid-row:1/3}.wxb{grid-column:2;grid-row:2;flex-direction:row;gap:6px;justify-self:start;min-width:0;padding:4px 10px;border-radius:999px}.wxb .wi{font-size:18px}.wxb b{font-size:12px;margin-top:0}.wxb small{font-size:12px}.wxb{max-width:100%;flex-wrap:wrap;border-radius:12px;row-gap:0}.wxb .au{flex-basis:100%;font-size:10px}}
+.wxb .au{font-style:normal;font-size:10px;color:var(--soft);white-space:nowrap;opacity:.85;margin-top:2px}
 .wxb .au:empty{display:none}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
@@ -531,7 +531,7 @@ footer .install{color:#9fb0c8}
 <section class="band sec" id="weather" style="background:var(--panel)">
   <div class="wrap">
     <h2>旅程天氣預估</h2>
-    <p class="note" id="wxauto"></p>
+    <p class="note" id="wxauto">每天標題旁的天氣小卡會自動抓最新預報；目前顯示的是人工整理的資料。</p>
     <p class="wxlead">每天的天氣、穿著和開車注意事項。點日期可以跳到當天行程。</p>
     <div class="wxd" id="wxdays"></div>
     <div id="fc"></div>
@@ -627,7 +627,7 @@ const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#f
 const pts=t=>{if(!t)return"";let L=String(t).includes("\n")?String(t).split("\n"):(String(t).length>70||String(t).includes("；")?String(t).split(/(?<=[。；;])(?![）)」])/):[String(t)]);L=L.map(x=>x.replace(/^[；;]\s*/,"").replace(/[；;]\s*$/,"").trim()).filter(Boolean);const f=x=>{const m=x.match(/^([^：:]{1,8})：(.+)$/);return m?`<b class="lb">${esc(m[1])}</b>${esc(m[2])}`:esc(x)};return L.length<2?`<p>${f(L[0]||"")}</p>`:`<ul class="pts">${L.map(x=>`<li>${f(x)}</li>`).join("")}</ul>`};
 const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google Maps 導航</a></p>`:''}</div></details>`;
 const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
-const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div>${(()=>{const w=(C.wx||[])[di];return w&&w.icon?`<a class="wxb" id="wxb-${di}" href="#weather" title="${esc(w.sky)}，${esc(w.temp)}" onclick="event.stopPropagation()"><span class="wi" aria-hidden="true">${w.icon}</span><b>${esc(w.short)}</b><small>${esc(w.range)}</small><i class="au"></i></a>`:"<span></span>"})()}<svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
+const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div>${(()=>{const w=(C.wx||[])[di];return w&&w.icon?`<a class="wxb" id="wxb-${di}" href="#weather" title="${esc(w.sky)}，${esc(w.temp)}" onclick="event.stopPropagation()"><span class="wi" aria-hidden="true">${w.icon}</span><b>${esc(w.short)}</b><small>${esc(w.range)}</small><i class="au">${esc((w.geo||[]).map(g=>g.n).join("・"))}｜手動 11/25</i></a>`:"<span></span>"})()}<svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
 <div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
 <div class="daybody"><div class="sched">${(d.s||[]).map((x,i)=>itemHtml(x,`${id}-${i}`)).join('')}</div>
 <aside class="tips">${(C.wx&&C.wx[di])?`<div class="wxbox"><b>${esc(C.wx[di].sky)}・${esc(C.wx[di].temp)}${C.wx[di].rain&&C.wx[di].rain!=="—"?"・降雨 "+esc(C.wx[di].rain):""}</b><br>${lvHtml(+C.wx[di].lv||0)}<p><b>穿著</b> ${esc(C.wx[di].wear)}</p><p><b>開車</b> ${esc(C.wx[di].drive)}</p><p><a href="#wx-${di}">看天氣詳細</a></p></div>`:""}<h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b>${hi>=0?`<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button>`:""}</div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
@@ -746,10 +746,10 @@ const autoWx=async()=>{try{
   const pp=rows[0].pp;
   el.querySelector(".wi").textContent=m[0];el.querySelector("b").textContent=m[1];
   el.querySelector("small").textContent=`${lo}–${hi}°${pp!=null?` ☔${pp}%`:""}`;
-  el.querySelector(".au").textContent=`自動 ${stamp}`;
+  el.querySelector(".au").textContent=`${w.geo.map(g=>g.n).join("・")}｜自動 ${stamp}`;
   el.title=`${w.geo.map(g=>g.n).join("・")}｜${m[1]} ${lo}–${hi}°C${pp!=null?`，降雨機率 ${pp}%`:""}（Open-Meteo 自動預報，日本時間 ${stamp} 更新）`;
   el.classList.add("live");n++});
- const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡會自動抓最新預報（Open-Meteo，日本時間 ${stamp} 更新）；下面的建議是人工整理。`;
+ const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。下面的每日建議和預報表：人工整理（${C.updated||""} 氣象廳資料）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
 const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
