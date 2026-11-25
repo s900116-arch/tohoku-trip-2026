@@ -1,5 +1,5 @@
-const CACHE="tohoku26-v3";
-const CORE=["./","index.html","content.json","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png"];
+const CACHE="tohoku26-v4";
+const CORE=["./","index.html","content.json","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png","hero-800.jpg","hero-1200.jpg"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{
