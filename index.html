@@ -214,6 +214,8 @@ details[open] .arr{transform:rotate(180deg)}
 @media(max-width:600px){details.dayx .dayhead{grid-template-columns:auto minmax(0,1fr) 36px!important;row-gap:8px}details.dayx .dayhead .dnum{grid-row:1/3}details.dayx .dayhead .arr{grid-column:3;grid-row:1/3}.wxb{grid-column:2;grid-row:2;flex-direction:row;gap:6px;justify-self:start;min-width:0;padding:4px 10px;border-radius:999px}.wxb .wi{font-size:18px}.wxb b{font-size:12px;margin-top:0}.wxb small{font-size:12px}.wxb{max-width:100%;flex-wrap:wrap;border-radius:12px;row-gap:0}.wxb .au{flex-basis:100%;font-size:10px}}
 .wxb .au{font-style:normal;font-size:10px;color:var(--soft);white-space:nowrap;opacity:.85;margin-top:2px}
 .wxb .au:empty{display:none}
+.wxc .sky .src{display:block;flex-basis:100%;font-size:11px;color:var(--soft);font-weight:400;margin-top:2px}
+.wxc .sky.live{margin-top:6px;border:1px dashed var(--rule)}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -639,7 +641,7 @@ const renderFc=()=>{const f=C.forecast,el=$("fc");if(!f||!el){if(el)el.innerHTML
 el.innerHTML=`<h3 class="fch">最新預報 <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
 const WL=["","輕便冬裝","保暖冬裝","防水保暖","全副雪地裝備"];
 const lvHtml=n=>`<span class="lv" aria-label="穿著等級 ${n} / 4">${[1,2,3,4].map(k=>`<i class="${k<=n?"on":""}"></i>`).join("")}${esc(WL[n]||"")}</span>`;
-const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><header><a href="#day${i+1}"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></a><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}</div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl></article>`}).join("")};
+const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><header><a href="#day${i+1}"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></a><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}<small class="src">人工整理・11/25 氣象廳</small></div><div class="sky live" hidden></div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl></article>`}).join("")};
 const renderTemps=()=>{renderFc();const lo=-12,hi=20;$("temps").innerHTML=C.temps.map(t=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°</span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
 const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}catch(e){st={}}
 const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`};
@@ -748,7 +750,7 @@ const autoWx=async()=>{try{
   el.querySelector("small").textContent=`${lo}–${hi}°${pp!=null?` ☔${pp}%`:""}`;
   el.querySelector(".au").textContent=`${w.geo.map(g=>g.n).join("・")}｜自動 ${stamp}`;
   el.title=`${w.geo.map(g=>g.n).join("・")}｜${m[1]} ${lo}–${hi}°C${pp!=null?`，降雨機率 ${pp}%`:""}（Open-Meteo 自動預報，日本時間 ${stamp} 更新）`;
-  el.classList.add("live");n++});
+  el.classList.add("live");n++;const card=document.getElementById("wx-"+di);if(card){const lv=card.querySelector(".sky.live");if(lv){lv.hidden=false;lv.innerHTML=`<b>最新 ${m[0]} ${m[1]}</b><span class="tp">${lo}–${hi}°C</span>${pp!=null?`降雨 ${pp}%`:""}<small class="src">自動・${esc(w.geo.map(g=>g.n).join("・"))}・${stamp}</small>`}}});
  const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。下面的每日建議和預報表：人工整理（${C.updated||""} 氣象廳資料）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
 const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
