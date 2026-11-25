@@ -217,6 +217,13 @@ details[open] .arr{transform:rotate(180deg)}
 .wxc .sky .src{display:block;flex-basis:100%;font-size:11px;color:var(--soft);font-weight:400;margin-top:2px}
 .wxc .sky.live{margin-top:6px;border:1px dashed var(--rule)}
 .tval .tsrc{display:block;font-size:10px;color:var(--soft);font-weight:400}
+.wxb .alr{font-style:normal;font-size:11px;color:#b4502a;font-weight:700;white-space:nowrap;margin-top:2px}
+.wxb .alr[hidden]{display:none}
+.wxc .sky .ext{display:block;flex-basis:100%;font-size:12px;color:var(--soft)}
+.nowwx{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:10px;padding:10px 14px;border:1px dashed var(--rule);border-radius:12px}
+.nowwx b{font-size:20px}
+.nowwx small{color:var(--soft);font-size:11px}
+@media(max-width:600px){.wxb .alr{flex-basis:100%;font-size:11px}}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -541,7 +548,7 @@ footer .install{color:#9fb0c8}
     <div id="fc"></div>
     <h3 class="fch">每天行程地點的大約溫度</h3>
     <div class="temps" id="temps"></div>
-    <p class="note">每天行程地點的大約溫度（°C）：平地依氣象廳預報，銀山、藏王、狐狸村是用平地預報推估（山區比平地低 5–12°C）。數字後面標「自動」是 Open-Meteo 最新預報，標「人工 11/25」是當時整理的推估；藏王山頂用地藏山頂站海拔 1,661 m 計算。點「即時預報」看最新天氣；12 月初約 16:20 天黑。</p>
+    <p class="note">每天行程地點的大約溫度（°C）：平地依氣象廳預報，銀山、藏王、狐狸村是用平地預報推估（山區比平地低 5–12°C）。數字後面標「API」是 Open-Meteo 最新預報，標「人工 11/25」是當時整理的推估；藏王山頂用地藏山頂站海拔 1,661 m 計算。點「即時預報」看最新天氣；12 月初約 16:20 天黑。</p>
   </div>
 </section>
 
@@ -665,6 +672,14 @@ el.hidden=false;el.innerHTML=`<div class="wrap tgrid"><div><span class="tl">今�
 <div class="tnext">${next?`<span class="tl">下一站</span><b><time>${esc(next.t)}</time> ${nb(next.title)}</b>${next.sub?`<small>${esc(next.sub)}</small>`:""}<p class="acts"><button class="btn sm" type="button" data-goto="day${td+1}-${nx}">看詳細</button>${next.q?`<a class="go" href="${navUrl(next.q)}" target="_blank" rel="noopener">導航</a>`:""}</p>`:`<span class="tl">今天的行程都結束了</span><b>好好休息</b>`}</div>
 <div class="tstay">${d.stay?`<span class="tl">今晚住宿</span><b>${esc(d.stay)}</b>${hi>=0?`<p class="acts">${C.hotels[hi].q?`<a class="go" href="${navUrl(C.hotels[hi].q)}" target="_blank" rel="noopener">導航</a>`:""}<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button></p>`:""}`:`<span class="tl">今晚</span><b>回到台灣</b>`}</div></div>`};
 
+const nowWx=async()=>{try{const td=tripDay();if(td<0)return;const w=(C.wx||[])[td];if(!w||!w.geo)return;const box=$("today");if(!box||box.hidden)return;
+ const key="wxnow1",g=w.geo[0];let c=null;try{c=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
+ let v=c&&c.n===g.n&&Date.now()-c.t<900e3?c.v:null,t=c&&v?c.t:Date.now();
+ if(!v){const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${g.lat}&longitude=${g.lon}&elevation=${g.ele??"nan"}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_gusts_10m&timezone=Asia%2FTokyo`,{cache:"no-store"});if(!r.ok)return;v=(await r.json()).current;t=Date.now();try{localStorage.setItem(key,JSON.stringify({t,n:g.n,v}))}catch(e){}}
+ if(!v)return;const m=WMO(v.weather_code)||["",""];const ts=new Date(t+9*3600e3);
+ let e=$("nowwx");if(!e){e=document.createElement("div");e.id="nowwx";e.className="nowwx wrap";box.appendChild(e)}
+ e.innerHTML=`<span class="tl">${esc(g.n)} 現在</span><b>${m[0]} ${Math.round(v.temperature_2m)}°C</b><span>體感 ${Math.round(v.apparent_temperature)}°・${esc(m[1])}・風 ${Math.round(v.wind_speed_10m)} km/h（陣風 ${Math.round(v.wind_gusts_10m)}）</span><small>Open-Meteo・${ts.getUTCHours()}:${String(ts.getUTCMinutes()).padStart(2,"0")} 更新</small>`;
+}catch(e){}};
 /* ---------- taxi card ---------- */
 const openTaxi=i=>{const h=C.hotels[i];if(!h)return;const row=(k,v)=>v?`<div><dt>${k}</dt><dd>${String(v).includes("\n")?pts(v):esc(v)}</dd></div>`:"";const list=(k,a)=>a&&a.length?`<div><dt>${k}</dt><dd><ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd></div>`:"";
 $("taxibody").innerHTML=`<p class="hk">${esc(h.stay||h.when)}</p><h3 class="hn">${esc(h.name)}</h3>${rateHtml(h)}
@@ -725,7 +740,7 @@ stops.addEventListener("scroll",hint,{passive:true});const sro=new ResizeObserve
 /* ---------- boot ---------- */
 
 /* 自動天氣：Open-Meteo（免金鑰），失敗時保留 content.json 的手動資料 */
-const WMO=c=>c===0?["☀️","晴"]:c===1?["🌤️","晴"]:c===2?["⛅","晴時多雲"]:c===3?["☁️","陰"]:(c===45||c===48)?["🌫️","霧"]:(c>=51&&c<=57)?["🌦️","毛毛雨"]:(c>=61&&c<=65)?["🌧️","雨"]:(c===66||c===67)?["🌧️","凍雨"]:(c>=71&&c<=77)?["🌨️","雪"]:(c>=80&&c<=82)?["🌦️","陣雨"]:(c===85||c===86)?["🌨️","陣雪"]:c>=95?["⛈️","雷雨"]:null;
+const WMO=c=>c===0?["☀️","晴"]:c===1?["🌤️","晴"]:c===2?["⛅","晴時多雲"]:c===3?["☁️","陰"]:(c===45||c===48)?["🌫️","霧"]:(c===56||c===57)?["🌧️","凍毛毛雨"]:(c>=51&&c<=55)?["🌦️","毛毛雨"]:(c>=61&&c<=65)?["🌧️","雨"]:(c===66||c===67)?["🌧️","凍雨"]:c===77?["🌨️","霰"]:(c>=71&&c<=75)?["🌨️","雪"]:(c>=80&&c<=82)?["🌦️","陣雨"]:(c===85||c===86)?["🌨️","陣雪"]:c>=95?["⛈️","雷雨"]:null;
 const autoWx=async()=>{try{
  const W=C.wx||[];if(!W.length||!W[0].geo)return;
  const pts=[];W.forEach(w=>(w.geo||[]).forEach(g=>{if(!pts.find(p=>p.n===g.n))pts.push(g)}));
@@ -736,11 +751,10 @@ const autoWx=async()=>{try{
   const today=new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
   const start=dates[0]>today?dates[0]:today,end=dates[dates.length-1];
   if(start>end)return;
-  const u="https://api.open-meteo.com/v1/forecast?latitude="+pts.map(p=>p.lat).join(",")+"&longitude="+pts.map(p=>p.lon).join(",")+"&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&start_date="+start+"&end_date="+end;
+  const u="https://api.open-meteo.com/v1/forecast?latitude="+pts.map(p=>p.lat).join(",")+"&longitude="+pts.map(p=>p.lon).join(",")+"&elevation="+pts.map(p=>p.ele??"nan").join(",")+"&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,apparent_temperature_min,wind_gusts_10m_max,snowfall_sum&timezone=Asia%2FTokyo&start_date="+start+"&end_date="+end;
   const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error(r.status);
   let j=await r.json();if(!Array.isArray(j))j=[j];
-  data={};pts.forEach((p,i)=>{const dd=j[i]&&j[i].daily;if(!dd)return;dd.time.forEach((tm,k)=>{data[p.n+"|"+tm]={c:dd.weather_code[k],hi:dd.temperature_2m_max[k],lo:dd.temperature_2m_min[k],pp:dd.precipitation_probability_max?dd.precipitation_probability_max[k]:null}})});
-  try{const W5=W.find(w=>(w.geo||[]).some(g=>g.n==="藏王溫泉")&&w.date==="2026-12-05");const d5="2026-12-05";if(d5>=start&&d5<=end){const r2=await fetch("https://api.open-meteo.com/v1/forecast?latitude=38.1444&longitude=140.4407&elevation=1661&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&start_date="+d5+"&end_date="+d5,{cache:"no-store"});if(r2.ok){const j2=await r2.json();const dd=j2.daily;if(dd&&dd.time)dd.time.forEach((tm,k)=>{data["藏王山頂|"+tm]={c:dd.weather_code[k],hi:dd.temperature_2m_max[k],lo:dd.temperature_2m_min[k],pp:dd.precipitation_probability_max?dd.precipitation_probability_max[k]:null}})}}}catch(e){}
+  data={};pts.forEach((p,i)=>{const dd=j[i]&&j[i].daily;if(!dd)return;dd.time.forEach((tm,k)=>{data[p.n+"|"+tm]={c:dd.weather_code[k],hi:dd.temperature_2m_max[k],lo:dd.temperature_2m_min[k],pp:dd.precipitation_probability_max?dd.precipitation_probability_max[k]:null,fl:dd.apparent_temperature_min?dd.apparent_temperature_min[k]:null,gu:dd.wind_gusts_10m_max?dd.wind_gusts_10m_max[k]:null,sn:dd.snowfall_sum?dd.snowfall_sum[k]:null}})});
   t=Date.now();try{localStorage.setItem(key,JSON.stringify({t,d:data}))}catch(e){}
  }
  const ts=new Date(t+9*3600e3),stamp=`${ts.getUTCMonth()+1}/${ts.getUTCDate()} ${String(ts.getUTCHours()).padStart(2,"0")}:${String(ts.getUTCMinutes()).padStart(2,"0")}`;
@@ -751,13 +765,17 @@ const autoWx=async()=>{try{
   const pp=rows[0].pp;
   el.querySelector(".wi").textContent=m[0];el.querySelector("b").textContent=m[1];
   el.querySelector("small").textContent=`${lo}–${hi}°${pp!=null?` ☔${pp}%`:""}`;
-  el.querySelector(".au").textContent=`${w.geo.map(g=>g.n).join("・")}｜自動 ${stamp}`;
-  el.title=`${w.geo.map(g=>g.n).join("・")}｜${m[1]} ${lo}–${hi}°C${pp!=null?`，降雨機率 ${pp}%`:""}（Open-Meteo 自動預報，日本時間 ${stamp} 更新）`;
-  el.classList.add("live");n++;const card=document.getElementById("wx-"+di);if(card){const lv=card.querySelector(".sky.live");if(lv){lv.hidden=false;lv.innerHTML=`<b>最新 ${m[0]} ${m[1]}</b><span class="tp">${lo}–${hi}°C</span>${pp!=null?`降雨 ${pp}%`:""}<small class="src">自動・${esc(w.geo.map(g=>g.n).join("・"))}・${stamp}</small>`}}});
- (C.temps||[]).forEach((t,ti)=>{const w=W[ti];if(!w||!w.geo)return;const g=t.place.includes("山頂")?{n:"藏王山頂"}:w.geo.find(g=>t.place.includes(g.n));if(!g)return;const r=data[g.n+"|"+w.date];if(!r||r.lo==null)return;const row=document.getElementById("temp-"+ti);if(!row)return;const L=-12,H=20,lo=Math.round(r.lo),hi=Math.round(r.hi),a=Math.max(L,lo),b=Math.min(H,hi);const i=row.querySelector(".tbar i");i.style.left=(a-L)/(H-L)*100+"%";i.style.width=Math.max(2,(b-a)/(H-L)*100)+"%";row.querySelector(".tval").innerHTML=`${lo}° / ${hi}°<small class="tsrc">自動 ${stamp.split(" ")[0]}</small>`;row.classList.add("live")});
- const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。「每天行程地點的大約溫度」也會自動更新（藏王山頂用海拔 1,661 m 地藏山頂站計算）。天氣代碼是當天「最差」的天氣，例如只有一小段時間下毛毛雨也會顯示毛毛雨。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
+  el.querySelector(".au").textContent=`${w.geo.map(g=>g.n).join("・")}｜API ${stamp}`;
+  el.title=`${w.geo.map(g=>g.n).join("・")}｜${m[1]} ${lo}–${hi}°C${pp!=null?`，降雨機率 ${pp}%`:""}（Open-Meteo API 預報，日本時間 ${stamp} 更新）`;
+  const gu=Math.max(...rows.map(x=>x.gu??0)),sn=Math.max(...rows.map(x=>x.sn??0)),fl=Math.min(...rows.map(x=>x.fl??99));
+  const al=[];if(gu>=40)al.push(`💨 陣風 ${Math.round(gu)} km/h`);if(sn>=1)al.push(`❄️ 降雪 ${Math.round(sn)} cm`);
+  let ae=el.querySelector(".alr");if(!ae){ae=document.createElement("i");ae.className="alr";el.appendChild(ae)}ae.textContent=al.join("　");ae.hidden=!al.length;
+  el.title+=`${fl<99?`；體感最低 ${Math.round(fl)}°C`:""}${gu?`；最大陣風 ${Math.round(gu)} km/h`:""}${sn?`；降雪 ${Math.round(sn)} cm`:""}`;
+  el.classList.add("live");n++;const card=document.getElementById("wx-"+di);if(card){const lv=card.querySelector(".sky.live");if(lv){lv.hidden=false;lv.innerHTML=`<b>最新 ${m[0]} ${m[1]}</b><span class="tp">${lo}–${hi}°C</span>${pp!=null?`降雨 ${pp}%`:""}<span class="ext">${fl<99?`體感最低 ${Math.round(fl)}°`:""}${gu?`　最大陣風 ${Math.round(gu)} km/h`:""}${sn>=0.5?`　降雪 ${Math.round(sn)} cm`:""}</span><small class="src">API・${esc(w.geo.map(g=>g.n).join("・"))}・${stamp}</small>`}}});
+ (C.temps||[]).forEach((t,ti)=>{const w=W[ti];if(!w||!w.geo)return;const g=t.place.includes("山頂")?{n:"藏王山頂"}:w.geo.find(g=>t.place.includes(g.n));if(!g)return;const r=data[g.n+"|"+w.date];if(!r||r.lo==null)return;const row=document.getElementById("temp-"+ti);if(!row)return;const L=-12,H=20,lo=Math.round(r.lo),hi=Math.round(r.hi),a=Math.max(L,lo),b=Math.min(H,hi);const i=row.querySelector(".tbar i");i.style.left=(a-L)/(H-L)*100+"%";i.style.width=Math.max(2,(b-a)/(H-L)*100)+"%";row.querySelector(".tval").innerHTML=`${lo}° / ${hi}°<small class="tsrc">API ${stamp.split(" ")[0]}</small>`;row.classList.add("live")});
+ const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點。「每天行程地點的大約溫度」也會自動更新（藏王山頂用海拔 1,661 m 地藏山頂站計算）。天氣代碼是當天「最差」的天氣，例如只有一小段時間下毛毛雨也會顯示毛毛雨。陣風 40 km/h 以上或預估會下雪時，小卡會出現紅字提醒；旅行期間「今天」區塊會顯示當地現在的氣溫、體感和風速。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
-const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
+const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();nowWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
 fetch("content.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{C=d;$("loading").remove();renderAll()}).catch(()=>{$("loading").innerHTML="<p>行程內容載入失敗。請確認網路後重新整理；加到主畫面並打開過一次後，沒網路也能看。</p>"});
 setInterval(()=>{if(C)renderToday()},60000);
