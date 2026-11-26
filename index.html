@@ -460,7 +460,6 @@ a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .tk3{font-size:clamp(20px,5vw,28px);line-height:1.4}
 .tk4{font-size:clamp(20px,5vw,26px);font-weight:700}
 .tk5{font-size:15px;color:#666}
-#taxix{margin-top:8px}
 /* 載入中提示、加到主畫面說明 */
 #loading{padding:40px max(5vw,16px);text-align:center;color:var(--soft)}
 .install{font-size:14px;color:var(--soft)}
@@ -596,7 +595,15 @@ footer .install{color:#9fb0c8}
 .hinfo dt{font-weight:700;color:#1d3050}
 .hinfo dd{margin:0;color:#222}
 .hinfo ul{margin:0;padding-left:1.1em}
-#taxix{display:block;margin:12px auto 0}
+/* 飯店資訊 modal：右上角 sticky 關閉鈕（.tclose 高度 0 不佔版面）、底部 sticky 地圖按鈕列（.tfoot 為最後一個流內元素，捲到底時自然排在內容之後不遮字） */
+.tbox{padding-top:0;padding-bottom:0}
+.tclose{position:sticky;top:0;z-index:3;height:0;display:flex;justify-content:flex-end}
+.xbtn{width:40px;height:40px;margin:10px -10px 0 0;border-radius:50%;border:1px solid #d5dce6;background:rgba(255,255,255,.95);color:#1d3050;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);padding:0}
+.xbtn svg{width:18px;height:18px}
+#taxibody{padding-top:24px;padding-right:30px}
+.tfoot{position:sticky;bottom:0;z-index:2;display:flex;justify-content:center;padding:18px 0 max(16px,env(safe-area-inset-bottom,0px));margin-top:14px;background:linear-gradient(rgba(255,255,255,0),#fff 40%)}
+.tfoot:empty{display:none}
+.tfoot .go{box-shadow:0 4px 14px rgba(0,0,0,.2)}
 </style>
 </head>
 <body>
@@ -750,7 +757,7 @@ footer .install{color:#9fb0c8}
 <footer><svg class="fox" viewBox="0 0 120 96" aria-hidden="true"><path d="M30 92 Q18 60 40 50 L70 50 Q86 56 84 92 Z" fill="#d9782f"/><path d="M40 50 L34 22 L50 38 L64 38 L78 22 L72 50 Z" fill="#d9782f"/><path d="M47 60 Q57 70 67 60 L63 84 L51 84 Z" fill="#fff"/><circle cx="48" cy="50" r="2.6" fill="#1b1b1b"/><circle cx="66" cy="50" r="2.6" fill="#1b1b1b"/><circle cx="57" cy="57" r="2.2" fill="#1b1b1b"/><path d="M82 86 Q118 78 112 46 Q100 70 80 74 Z" fill="#d9782f"/><path d="M112 46 Q118 56 110 62 Q102 54 112 46 Z" fill="#fff"/></svg>2026 東北雪國自駕之旅・全團行程資訊<br><span id="upd"></span><br><span class="credit">天氣資料：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Weather data by Open-Meteo.com</a>（CC BY 4.0）</span><br><span class="install">加到手機主畫面：iPhone 用 Safari 打開 → 分享 → 加入主畫面；Android 用 Chrome 選單 → 加到主畫面。打開過一次後，沒網路也能看。</span></footer>
 
 <!-- 飯店資訊 modal（openTaxi 填入內容） -->
-<div class="modal" id="taxi" hidden><div class="tbox" role="dialog" aria-modal="true" aria-label="飯店詳細資訊"><div id="taxibody"></div><button class="btn" type="button" id="taxix">關閉</button></div></div>
+<div class="modal" id="taxi" hidden><div class="tbox" role="dialog" aria-modal="true" aria-label="飯店詳細資訊"><div class="tclose"><button class="xbtn" type="button" id="taxix" aria-label="關閉" title="關閉"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div id="taxibody"></div><div class="tfoot" id="taxifoot"></div></div></div>
 <script>
 {
 const $=id=>document.getElementById(id);
@@ -912,7 +919,7 @@ const openTaxi=i=>{const h=C.hotels[i];if(!h)return;const row=(k,v)=>v?`<div><dt
 $("taxibody").innerHTML=`<p class="hk">${esc(h.stay||h.when)}</p><h3 class="hn">${esc(h.name)}</h3>${rateHtml(h)}
 <div class="drv"><p class="tk1" lang="ja">こちらへ行ってください</p><p class="tk2" lang="ja">${esc(h.ja).replace("（","<br>（")}</p><p class="tk3" lang="ja">${esc(h.addr)}</p><p class="tk4">TEL ${esc(h.tel)}</p><p class="tk5">搭計程車時把這一格給司機看</p></div>
 <dl class="hinfo">${row("房間",h.rooms)}${row("房型",h.rtype)}${row("入住",h.cin)}${row("退房",h.cout)}${row("交通",h.access)}${row("停車",h.park)}${row("泡湯",h.bath)}${row("餐飲",h.food)}${list("設施",h.facil)}${list("注意",h.notes)}</dl>
-<p class="acts" style="justify-content:center">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">Google 地圖</a>`:""}</p>`;
+`;$("taxifoot").innerHTML=h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">Google 地圖</a>`:"";
 $("taxi").hidden=false;document.body.classList.add("modal-on");$("taxix").focus({preventScroll:true});document.querySelector(".tbox").scrollTop=0};
 /* 關閉 modal 並還原焦點 */
 const closeTaxi=()=>{$("taxi").hidden=true;document.body.classList.remove("modal-on")};
