@@ -262,6 +262,16 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .pin:hover,.pin:focus-visible{z-index:3;transform:scale(1.15)}
 .pin.grp{width:auto;min-width:26px;padding:0 7px;border-radius:13px;font-size:11px;cursor:zoom-in;transform:translateX(-50%);margin-left:0}
 .pin.grp:hover,.pin.grp:focus-visible{transform:translateX(-50%) scale(1.15)}
+/* Leaflet 模式：.lmap 填滿 .dmbox；圖釘在 divIcon（.lpin）內改為靜態定位並置中 */
+.lmap{position:absolute;inset:0;background:#e9e5dd;font:inherit}
+.dmbox.lf{cursor:auto;touch-action:auto}
+.lpin .pin{position:static;margin:0}
+.lpin .pin.grp{display:inline-grid;white-space:nowrap;transform:translate(-50%,-50%)}
+.lpin .pin.grp:hover{transform:translate(-50%,-50%) scale(1.15)}
+.lmap .leaflet-bar a.lfit{width:auto;padding:0 8px;font:700 12px/30px system-ui,sans-serif;color:#222}
+.lmap .leaflet-popup-content{margin:10px 14px;font-size:14px;line-height:1.5;color:#222}
+.lmap .leaflet-popup-content time{color:#b4502a;font-variant-numeric:tabular-nums;margin-right:4px}
+.lmap .leaflet-popup-content a.gm{display:inline-block;margin-top:6px;font-weight:700}
 .mctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px;z-index:4}
 .mctl button{width:36px;height:36px;border-radius:8px;border:1px solid #bbb;background:#fff;color:#222;font:700 18px/1 system-ui,sans-serif;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .mctl button.fit{font-size:11px}
@@ -769,7 +779,7 @@ const mapPts=d=>{const g=[];(d.s||[]).forEach(x=>{if(!x.ll)return;const k=x.ll.j
 /* Web Mercator 投影：經緯度 → 縮放層級 z 的世界像素座標（256px 圖磚） */
 const mPx=(ll,z)=>{const n=256*2**z,s=Math.sin(ll[0]*Math.PI/180);return[(ll[1]+180)/360*n,(.5-Math.log((1+s)/(1-s))/(4*Math.PI))*n]};
 /* 地圖區塊 HTML：summary（地點數）＋地圖容器（延遲至展開時繪製）＋圖例 */
-const mapHtml=(d,di)=>{const g=mapPts(d);if(!g.length)return"";return `<details class="dmap" data-di="${di}"><summary>🗺️ 今日地圖<span>${g.length} 個地點</span></summary><div class="dmbox"><div class="mtiles"></div><div class="mctl"><button type="button" data-mz="1" aria-label="放大">＋</button><button type="button" data-mz="-1" aria-label="縮小">－</button><button type="button" class="fit" data-mz="0" aria-label="顯示全部地點">全覽</button></div><div class="matt">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div></div><p class="mnote">位置為示意；點圖釘或下方地點開 Google 地圖。地圖可拖曳、縮放。</p><ol class="mlg">${g.map(p=>`<li><span class="pn">${p.n}</span><a href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener">${p.items.map(x=>`<time>${esc(x.t)}</time>${esc(x.title)}`).join("<br>")}</a></li>`).join("")}</ol></details>`};
+const mapHtml=(d,di)=>{const g=mapPts(d);if(!g.length)return"";return `<details class="dmap" data-di="${di}"><summary>🗺️ 今日地圖<span>${g.length} 個地點</span></summary><div class="dmbox"><div class="mtiles"></div><div class="mctl"><button type="button" data-mz="1" aria-label="放大">＋</button><button type="button" data-mz="-1" aria-label="縮小">－</button><button type="button" class="fit" data-mz="0" aria-label="顯示全部地點">全覽</button></div><div class="matt">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div></div><p class="mnote">位置為示意；雙指縮放、拖曳移動，點圖釘看地點並開 Google 地圖，合併的圖釘點了會放大。</p><ol class="mlg">${g.map(p=>`<li><span class="pn">${p.n}</span><a href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener">${p.items.map(x=>`<time>${esc(x.t)}</time>${esc(x.title)}`).join("<br>")}</a></li>`).join("")}</ol></details>`};
 /* 全覽：取所有點的像素外框，選能容納（含邊距）的最大 z（上限 16），中心設為外框中點 */
 const mFit=(box,st)=>{const W=box.clientWidth,H=box.clientHeight;let z=16;for(;z>3;z--){const p=st.g.map(q=>mPx(q.ll,z)),xs=p.map(v=>v[0]),ys=p.map(v=>v[1]);if(Math.max(...xs)-Math.min(...xs)<=W-70&&Math.max(...ys)-Math.min(...ys)<=H-60)break}const p=st.g.map(q=>mPx(q.ll,z)),xs=p.map(v=>v[0]),ys=p.map(v=>v[1]);st.z=z;st.cx=(Math.max(...xs)+Math.min(...xs))/2;st.cy=(Math.max(...ys)+Math.min(...ys))/2};
 /* 繪製：依中心與容器尺寸計算可見圖磚範圍，輸出 OSM 圖磚 img 與圖釘（相對容器左上角定位） */
@@ -781,8 +791,26 @@ const mDraw=box=>{const st=box._m,W=box.clientWidth,H=box.clientHeight,z=st.z,n=
   const ns=c.ps.map(p=>p.n),lab=ns.every((n,i)=>!i||n===ns[i-1]+1)?ns[0]+"～"+ns[ns.length-1]:ns.join(",");
   return `<button type="button" class="pin grp" data-mzx="${c.x}" data-mzy="${c.y}" style="left:${l}px;top:${t}px" title="放大查看 ${esc(lab)}" aria-label="放大查看 ${esc(lab)}">${lab}</button>`}).join("");
  const L=box.querySelector(".mtiles");L.style.transform="";L.innerHTML=h};
-/* 初始化：首次展開時建立狀態並綁定拖曳（Pointer Events；位移 >5px 視為拖曳並取消圖釘點擊） */
-const mInit=dt=>{const box=dt.querySelector(".dmbox");if(!box)return;if(box._m){mDraw(box);return}
+/* Leaflet 1.9.4（自架於 lib/leaflet，BSD-2）：首次展開地圖時動態載入 CSS／JS，Promise 快取避免重複載入 */
+let LP;const loadL=()=>LP||(LP=new Promise((ok,ng)=>{if(window.L)return ok();const c=document.createElement("link");c.rel="stylesheet";c.href="lib/leaflet/leaflet.css";document.head.appendChild(c);const s=document.createElement("script");s.src="lib/leaflet/leaflet.js";s.onload=()=>window.L?ok():ng();s.onerror=ng;document.head.appendChild(s)}));
+/* 圖釘彈出視窗：該點所有行程（時間＋標題）與 Google 地圖連結 */
+const popHtml=p=>`${p.items.map(x=>`<div><time>${esc(x.t)}</time>${esc(x.title)}</div>`).join("")}<a class="gm" href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener">Google 地圖 ›</a>`;
+/* Leaflet 地圖：OSM 圖層、fitBounds 全覽、自訂「全覽」控制；zoomend 時依圖層像素距離（<28px）重新聚合圖釘 */
+const lInit=(dt,box)=>{box.querySelectorAll(".mctl,.matt,.mtiles").forEach(e=>e.remove());box.classList.add("lf");const el=document.createElement("div");el.className="lmap";box.appendChild(el);
+ const g=mapPts(C.days[+dt.dataset.di]),m=L.map(el,{scrollWheelZoom:false,zoomSnap:.5});
+ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(m);m.attributionControl.setPrefix(false);
+ const fit=()=>m.fitBounds(L.latLngBounds(g.map(p=>p.ll)),{padding:[36,36],maxZoom:16}),lay=L.layerGroup().addTo(m);
+ const draw=()=>{lay.clearLayers();const cl=[];g.forEach(p=>{const pt=m.latLngToLayerPoint(p.ll),c=cl.find(c=>c.pt.distanceTo(pt)<28);if(c){c.ps.push(p);c.pt=c.pt.multiplyBy(c.ps.length-1).add(pt).divideBy(c.ps.length)}else cl.push({pt,ps:[p]})});
+  cl.forEach(c=>{if(c.ps.length===1){const p=c.ps[0];L.marker(p.ll,{icon:L.divIcon({className:"lpin",html:`<span class="pin">${p.n}</span>`,iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-12]}),title:p.items.map(i=>i.t+" "+i.title).join(" / ")}).bindPopup(popHtml(p),{maxWidth:260}).addTo(lay);return}
+   const ns=c.ps.map(p=>p.n),lab=ns.every((n,i)=>!i||n===ns[i-1]+1)?ns[0]+"～"+ns[ns.length-1]:ns.join(","),ll=m.layerPointToLatLng(c.pt);
+   L.marker(ll,{icon:L.divIcon({className:"lpin",html:`<span class="pin grp">${lab}</span>`,iconSize:null}),title:"放大查看 "+lab,zIndexOffset:500}).on("click",()=>m.setView(ll,Math.min(18,m.getZoom()+2))).addTo(lay)})};
+ const Fit=L.Control.extend({onAdd(){const d=L.DomUtil.create("div","leaflet-bar"),b=L.DomUtil.create("a","lfit",d);b.href="#";b.textContent="全覽";b.title="顯示全部地點";b.setAttribute("role","button");L.DomEvent.on(b,"click",e=>{L.DomEvent.stop(e);fit()});return d}});
+ new Fit({position:"topleft"}).addTo(m);fit();draw();m.on("zoomend",draw);box._lm=m};
+/* 展開地圖：已建立則 invalidateSize（隱藏期間尺寸為 0）；否則載入 Leaflet，失敗時改用內建圖磚拼接版（mFallback） */
+const mInit=dt=>{const box=dt.querySelector(".dmbox");if(!box)return;if(box._lm){box._lm.invalidateSize();return}if(box._m){mDraw(box);return}if(box._ld)return;box._ld=1;
+ loadL().then(()=>lInit(dt,box)).catch(()=>mFallback(dt,box))};
+/* 內建版（Leaflet 載入失敗時）：首次展開時建立狀態並綁定拖曳（Pointer Events；位移 >5px 視為拖曳並取消圖釘點擊） */
+const mFallback=(dt,box)=>{
  box._m={g:mapPts(C.days[+dt.dataset.di])};mFit(box,box._m);mDraw(box);
  let sx=0,sy=0,dx=0,dy=0,on=false,moved=false;const L=box.querySelector(".mtiles");
  box.addEventListener("pointerdown",e=>{if(e.target.closest(".mctl,.matt"))return;on=true;moved=false;sx=e.clientX;sy=e.clientY;dx=dy=0});
@@ -791,7 +819,7 @@ const mInit=dt=>{const box=dt.querySelector(".dmbox");if(!box)return;if(box._m){
  box.addEventListener("pointerup",end);box.addEventListener("pointercancel",end);
  box.addEventListener("click",e=>{if(moved&&e.target.closest(".pin")){e.preventDefault();e.stopPropagation();moved=false}},true)};
 /* 地圖事件：details 展開時初始化；＋／－以中心為基準縮放（世界像素 ×2／÷2）；全覽重設 */
-document.addEventListener("toggle",e=>{const t=e.target;if(t.open&&t.matches&&t.matches("details.dmap"))mInit(t)},true);
+document.addEventListener("toggle",e=>{const t=e.target;if(!t.open||!t.matches)return;if(t.matches("details.dmap"))mInit(t);else t.querySelectorAll("details.dmap[open] .dmbox").forEach(b=>b._lm&&b._lm.invalidateSize())},true);
 /* 聚合圖釘點擊：以聚合點為中心放大 2 層（上限 18） */
 document.addEventListener("click",e=>{const b=e.target.closest("[data-mzx]");if(!b)return;const box=b.closest(".dmbox"),st=box&&box._m;if(!st)return;const z=Math.min(18,st.z+2),f=2**(z-st.z);st.cx=+b.dataset.mzx*f;st.cy=+b.dataset.mzy*f;st.z=z;mDraw(box)});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-mz]");if(!b)return;const box=b.closest(".dmbox"),st=box&&box._m;if(!st)return;const k=+b.dataset.mz;
