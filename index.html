@@ -254,8 +254,8 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .dmap>summary span{margin-left:auto;color:var(--soft);font-size:14px}
 .dmap>summary::after{content:"⌄";color:var(--soft);transition:transform .2s}
 .dmap[open]>summary::after{transform:rotate(180deg)}
-.mbox{position:relative;height:clamp(280px,56vw,440px);margin:0 12px;border-radius:10px;overflow:hidden;background:#e9e5dd;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
-.mbox.drag{cursor:grabbing}
+.dmbox{position:relative;height:clamp(280px,56vw,440px);margin:0 12px;border-radius:10px;overflow:hidden;background:#e9e5dd;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.dmbox.drag{cursor:grabbing}
 .mtiles{position:absolute;inset:0;will-change:transform}
 .mtiles img{position:absolute;width:256px;height:256px;max-width:none;pointer-events:none}
 .pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--red);color:#fff;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);display:grid;place-items:center;font:700 12px/1 system-ui,sans-serif;text-decoration:none;z-index:2}
@@ -769,7 +769,7 @@ const mapPts=d=>{const g=[];(d.s||[]).forEach(x=>{if(!x.ll)return;const k=x.ll.j
 /* Web Mercator 投影：經緯度 → 縮放層級 z 的世界像素座標（256px 圖磚） */
 const mPx=(ll,z)=>{const n=256*2**z,s=Math.sin(ll[0]*Math.PI/180);return[(ll[1]+180)/360*n,(.5-Math.log((1+s)/(1-s))/(4*Math.PI))*n]};
 /* 地圖區塊 HTML：summary（地點數）＋地圖容器（延遲至展開時繪製）＋圖例 */
-const mapHtml=(d,di)=>{const g=mapPts(d);if(!g.length)return"";return `<details class="dmap" data-di="${di}"><summary>🗺️ 今日地圖<span>${g.length} 個地點</span></summary><div class="mbox"><div class="mtiles"></div><div class="mctl"><button type="button" data-mz="1" aria-label="放大">＋</button><button type="button" data-mz="-1" aria-label="縮小">－</button><button type="button" class="fit" data-mz="0" aria-label="顯示全部地點">全覽</button></div><div class="matt">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div></div><p class="mnote">位置為示意；點圖釘或下方地點開 Google 地圖。地圖可拖曳、縮放。</p><ol class="mlg">${g.map(p=>`<li><span class="pn">${p.n}</span><a href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener">${p.items.map(x=>`<time>${esc(x.t)}</time>${esc(x.title)}`).join("<br>")}</a></li>`).join("")}</ol></details>`};
+const mapHtml=(d,di)=>{const g=mapPts(d);if(!g.length)return"";return `<details class="dmap" data-di="${di}"><summary>🗺️ 今日地圖<span>${g.length} 個地點</span></summary><div class="dmbox"><div class="mtiles"></div><div class="mctl"><button type="button" data-mz="1" aria-label="放大">＋</button><button type="button" data-mz="-1" aria-label="縮小">－</button><button type="button" class="fit" data-mz="0" aria-label="顯示全部地點">全覽</button></div><div class="matt">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div></div><p class="mnote">位置為示意；點圖釘或下方地點開 Google 地圖。地圖可拖曳、縮放。</p><ol class="mlg">${g.map(p=>`<li><span class="pn">${p.n}</span><a href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener">${p.items.map(x=>`<time>${esc(x.t)}</time>${esc(x.title)}`).join("<br>")}</a></li>`).join("")}</ol></details>`};
 /* 全覽：取所有點的像素外框，選能容納（含邊距）的最大 z（上限 16），中心設為外框中點 */
 const mFit=(box,st)=>{const W=box.clientWidth,H=box.clientHeight;let z=16;for(;z>3;z--){const p=st.g.map(q=>mPx(q.ll,z)),xs=p.map(v=>v[0]),ys=p.map(v=>v[1]);if(Math.max(...xs)-Math.min(...xs)<=W-70&&Math.max(...ys)-Math.min(...ys)<=H-60)break}const p=st.g.map(q=>mPx(q.ll,z)),xs=p.map(v=>v[0]),ys=p.map(v=>v[1]);st.z=z;st.cx=(Math.max(...xs)+Math.min(...xs))/2;st.cy=(Math.max(...ys)+Math.min(...ys))/2};
 /* 繪製：依中心與容器尺寸計算可見圖磚範圍，輸出 OSM 圖磚 img 與圖釘（相對容器左上角定位） */
@@ -782,7 +782,7 @@ const mDraw=box=>{const st=box._m,W=box.clientWidth,H=box.clientHeight,z=st.z,n=
   return `<button type="button" class="pin grp" data-mzx="${c.x}" data-mzy="${c.y}" style="left:${l}px;top:${t}px" title="放大查看 ${esc(lab)}" aria-label="放大查看 ${esc(lab)}">${lab}</button>`}).join("");
  const L=box.querySelector(".mtiles");L.style.transform="";L.innerHTML=h};
 /* 初始化：首次展開時建立狀態並綁定拖曳（Pointer Events；位移 >5px 視為拖曳並取消圖釘點擊） */
-const mInit=dt=>{const box=dt.querySelector(".mbox");if(!box)return;if(box._m){mDraw(box);return}
+const mInit=dt=>{const box=dt.querySelector(".dmbox");if(!box)return;if(box._m){mDraw(box);return}
  box._m={g:mapPts(C.days[+dt.dataset.di])};mFit(box,box._m);mDraw(box);
  let sx=0,sy=0,dx=0,dy=0,on=false,moved=false;const L=box.querySelector(".mtiles");
  box.addEventListener("pointerdown",e=>{if(e.target.closest(".mctl,.matt"))return;on=true;moved=false;sx=e.clientX;sy=e.clientY;dx=dy=0});
@@ -793,11 +793,11 @@ const mInit=dt=>{const box=dt.querySelector(".mbox");if(!box)return;if(box._m){m
 /* 地圖事件：details 展開時初始化；＋／－以中心為基準縮放（世界像素 ×2／÷2）；全覽重設 */
 document.addEventListener("toggle",e=>{const t=e.target;if(t.open&&t.matches&&t.matches("details.dmap"))mInit(t)},true);
 /* 聚合圖釘點擊：以聚合點為中心放大 2 層（上限 18） */
-document.addEventListener("click",e=>{const b=e.target.closest("[data-mzx]");if(!b)return;const box=b.closest(".mbox"),st=box&&box._m;if(!st)return;const z=Math.min(18,st.z+2),f=2**(z-st.z);st.cx=+b.dataset.mzx*f;st.cy=+b.dataset.mzy*f;st.z=z;mDraw(box)});
-document.addEventListener("click",e=>{const b=e.target.closest("[data-mz]");if(!b)return;const box=b.closest(".mbox"),st=box&&box._m;if(!st)return;const k=+b.dataset.mz;
+document.addEventListener("click",e=>{const b=e.target.closest("[data-mzx]");if(!b)return;const box=b.closest(".dmbox"),st=box&&box._m;if(!st)return;const z=Math.min(18,st.z+2),f=2**(z-st.z);st.cx=+b.dataset.mzx*f;st.cy=+b.dataset.mzy*f;st.z=z;mDraw(box)});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-mz]");if(!b)return;const box=b.closest(".dmbox"),st=box&&box._m;if(!st)return;const k=+b.dataset.mz;
  if(k===0)mFit(box,st);else{const z=Math.min(18,Math.max(3,st.z+k));const f=2**(z-st.z);st.cx*=f;st.cy*=f;st.z=z}mDraw(box)});
 /* 視窗尺寸變更時重繪已開啟的地圖（保留中心與層級） */
-let mRz;addEventListener("resize",()=>{clearTimeout(mRz);mRz=setTimeout(()=>document.querySelectorAll("details.dmap[open] .mbox").forEach(b=>b._m&&mDraw(b)),150)});
+let mRz;addEventListener("resize",()=>{clearTimeout(mRz);mRz=setTimeout(()=>document.querySelectorAll("details.dmap[open] .dmbox").forEach(b=>b._m&&mDraw(b)),150)});
 /* 每日行程渲染：旅程中預設展開當天，否則展開 Day 1；天氣小卡先填手動資料，再由 autoWx 覆寫 */
 const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div>${(()=>{const w=(C.wx||[])[di];return w&&w.icon?`<a class="wxb" id="wxb-${di}" href="#weather" title="${esc(w.sky)}，${esc(w.temp)}" onclick="event.stopPropagation()"><span class="wi" aria-hidden="true">${w.icon}</span><b>${esc(w.short)}</b><small>${esc(w.range)}</small><i class="au">${esc((w.geo||[]).map(g=>g.n).join("・"))}｜手動 ${esc(w.src||"")}</i></a>`:"<span></span>"})()}<svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
 <div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
