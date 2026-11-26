@@ -53,23 +53,28 @@
 --tree:light-dark(#24503f,#183a2e)}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
+/* 基礎重設：box-sizing、預設字型堆疊、捲動行為 */
 *{box-sizing:border-box;min-width:0}
 html{scroll-padding-top:72px}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;overflow-x:clip}
 h1,h2,h3{font-family:"Noto Serif TC","PMingLiU",serif;line-height:1.1;letter-spacing:-.01em;margin:0;text-wrap:balance}
+/* 版面骨架：.band 區塊間距、.wrap 內容最大寬度 */
 .band{padding-block:clamp(28px,4vw,56px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
 .wrap{max-width:1240px;margin:0 auto}
 .top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;padding-bottom:20px}
 .top h1{font-size:clamp(34px,5.2vw,54px);font-weight:900}
 .sub{color:var(--soft);margin:10px 0 0;font-size:17px}
+/* 出發倒數徽章 */
 .count{background:var(--red);color:var(--redink);border-radius:14px;padding:14px 20px;text-align:center;min-width:170px}
 .count b{display:block;font:900 clamp(34px,5vw,46px)/1 "Noto Serif TC",serif;white-space:nowrap}
 .count span{font-size:14px}
+/* 主視覺場景容器與飄雪動畫（尊重 prefers-reduced-motion） */
 .scene{position:relative;height:clamp(230px,34vw,400px);overflow:hidden}
 .scene svg{position:absolute;inset:0;width:100%;height:100%}
 .flake{animation:fall linear infinite}
 @keyframes fall{from{transform:translateY(-40px)}to{transform:translateY(900px)}}
 @media(prefers-reduced-motion:reduce){.flake{animation:none}}
+/* 路線站點列：水平捲動、站名錨點 */
 .line{background:var(--red);color:var(--redink);padding:18px max(5vw,16px) 22px}
 .stops{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;max-width:1240px;margin:0 auto;padding-bottom:4px}
 .stop{flex:1 0 108px;scroll-snap-align:start;position:relative;padding-top:26px;text-align:center}
@@ -78,10 +83,12 @@ h1,h2,h3{font-family:"Noto Serif TC","PMingLiU",serif;line-height:1.1;letter-spa
 .stop::after{content:"";position:absolute;top:2px;left:calc(50% - 9px);width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid #7d1f17}
 .stop b{display:block;font-size:16px;white-space:nowrap}
 .stop small{font-size:13px;opacity:.9;white-space:nowrap}
+/* 黏性日期導覽列（sticky） */
 nav.days{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--rule)}
 nav.days .scroll{display:flex;gap:8px;max-width:1240px;margin:0 auto;padding:10px max(5vw,16px);overflow-x:auto}
 nav.days a{flex:none;color:var(--ink);text-decoration:none;border:1px solid var(--rule);border-radius:999px;padding:9px 16px;font-size:15px;min-height:44px;display:flex;align-items:center}
 nav.days a:hover,nav.days a:focus-visible{border-color:var(--red);color:var(--red);outline:none}
+/* 航班票券卡 */
 .flights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .ticket{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:18px 20px}
 .ticket .t{font:900 28px/1 "Noto Serif TC",serif;white-space:nowrap}
@@ -90,6 +97,7 @@ nav.days a:hover,nav.days a:focus-visible{border-color:var(--red);color:var(--re
 .ticket .mid i{display:block;height:2px;background:var(--red);margin:6px 0;position:relative}
 .ticket .tag{font-size:13px;color:var(--red);font-weight:700}
 .note{font-size:14px;color:var(--soft);margin-top:10px}
+/* 每日區塊與標題列（Day 編號、插圖 .ico） */
 section.day{border-top:1px solid var(--rule)}
 .dayhead{display:grid;grid-template-columns:auto minmax(0,1fr) 120px;gap:20px;align-items:center;margin-bottom:22px}
 .dnum{background:var(--red);color:var(--redink);border-radius:12px;padding:10px 14px;text-align:center;line-height:1.1}
@@ -112,16 +120,19 @@ aside.tips li{margin:6px 0}
 .stay{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);font-size:15px}
 .stay b{color:var(--pine)}
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+/* 通用卡片、三欄格線 */
 .card{background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:18px 20px}
 .card h3{font-size:19px;margin-bottom:6px}
 .card p{margin:4px 0;color:var(--soft);font-size:15px}
 .card .n{color:var(--red);font-weight:700;font-size:14px}
 .sec h2{font-size:clamp(26px,3.4vw,36px);font-weight:900;margin-bottom:18px}
+/* 溫度條：.tbar 以絕對定位呈現區間 */
 .temps{display:grid;gap:12px}
 .trow{display:grid;grid-template-columns:7.5em minmax(0,1fr) 6.5em;gap:12px;align-items:center;font-size:15px}
 .tbar{position:relative;height:14px;background:var(--rule);border-radius:7px}
 .tbar i{position:absolute;top:0;bottom:0;border-radius:7px;background:linear-gradient(90deg,#4f8fc9,var(--red))}
 .tval{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
+/* 行李勾選清單與進度 */
 .check{columns:2 260px;column-gap:28px;margin:0;padding:0;list-style:none}
 .check li{break-inside:avoid;margin:0 0 4px}
 .check label{display:flex;gap:10px;align-items:center;min-height:44px;cursor:pointer}
@@ -130,20 +141,24 @@ aside.tips li{margin:6px 0}
 .prog{font-size:14px;color:var(--soft);margin:-8px 0 14px}
 button.reset{font:inherit;font-size:15px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);border-radius:999px;padding:10px 18px;min-height:44px;cursor:pointer;margin-top:10px}
 button.reset:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+/* 實用日語列表 */
 .phr{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
 .phr div{border-left:4px solid var(--pine);padding:6px 14px}
 .phr b{display:block;font-size:18px}
 .phr .phrg{grid-column:1/-1;margin:14px 0 0;font-size:17px;border:0;padding:0}
 .phr .phrg:first-child{margin-top:0}
 .phr span{color:var(--soft);font-size:14px}
+/* 緊急聯絡區（深色底） */
 .sos{background:var(--pine);color:#fff}
 .sos h2{color:#fff}
 .sos .grid3 .card{background:#ffffff14;border-color:#ffffff33}
 .sos .card p,.sos .card .n{color:#fff}
 .sos .big{font:900 34px/1.1 "Noto Serif TC",serif;white-space:nowrap}
 footer{padding:24px max(5vw,16px);color:var(--soft);font-size:14px;text-align:center}
+/* RWD：手機斷點 */
 @media(max-width:860px){.daybody{grid-template-columns:minmax(0,1fr)}.flights{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){.top{grid-template-columns:minmax(0,1fr)}.count{justify-self:start}.dayhead{grid-template-columns:auto minmax(0,1fr)}.ico{display:none}.trow{grid-template-columns:6em minmax(0,1fr) 5.8em;font-size:14px}.ticket{grid-template-columns:minmax(0,1fr) auto;}.ticket .mid{grid-column:1/-1;order:3}}
+/* 快速查詢：輸入框、分類 chip、結果列表與關鍵字標示 */
 .find{background:var(--panel);border-bottom:1px solid var(--rule)}
 .find h2{font-size:clamp(24px,3vw,32px);font-weight:900;margin-bottom:6px}
 .find .hint{color:var(--soft);font-size:15px;margin:0 0 14px}
@@ -166,6 +181,7 @@ footer{padding:24px max(5vw,16px);color:var(--soft);font-size:14px;text-align:ce
 .cnt{font-size:14px;color:var(--soft);margin-top:10px}
 mark{background:color-mix(in srgb,var(--gold) 35%,transparent);color:inherit;border-radius:3px;padding:0 1px}
 .daytools{display:flex;gap:8px;flex-wrap:wrap;margin:-8px 0 14px}
+/* 行程項目 details.it：summary 時間軸、分類標籤、展開箭頭 */
 details.it{border-bottom:1px dashed var(--rule)}
 details.it:last-child{border-bottom:0}
 details.it summary{display:grid;grid-template-columns:4.2em minmax(0,1fr) 28px;gap:14px;padding:12px 0;cursor:pointer;list-style:none;min-height:44px}
@@ -178,6 +194,7 @@ details.it summary small{display:block;color:var(--soft);font-size:14px}
 .arr{width:28px;height:28px;border-radius:50%;border:1px solid var(--rule);display:grid;place-items:center;align-self:center;transition:transform .2s}
 .arr::before{content:"";width:8px;height:8px;border-right:2px solid var(--soft);border-bottom:2px solid var(--soft);transform:translateY(-2px) rotate(45deg)}
 details[open]>summary .arr{transform:rotate(180deg)}
+/* 行程說明 .det、注意框、條列 .pts 與粗體標籤 .lb */
 .det{margin:0 0 14px calc(4.2em + 14px);padding:12px 16px;background:var(--panel);border-radius:10px;font-size:15px}
 .det p{margin:0 0 6px}
 .det .warn{margin:8px 0 0;padding:8px 12px;border-left:4px solid var(--red);background:color-mix(in srgb,var(--red) 8%,transparent);border-radius:0 8px 8px 0}
@@ -200,6 +217,7 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .sos .ins .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.6}
 .sos .ins .lb{font-weight:700;margin-right:6px;color:var(--lamp)}
 .sos .ins .lb::after{content:"："}
+/* 飯店 Google 評分 */
 .rate{margin:-4px 0 8px;font-size:14px;color:var(--soft)}
 .rate .st{color:#e0a100;font-weight:700;margin-right:4px}
 .hinfo .pts{margin:0;padding:0;list-style:none}
@@ -207,6 +225,7 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .hinfo .pts li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
 .hinfo .lb{font-weight:700;margin-right:4px}
 .hinfo .lb::after{content:"："}
+/* 天氣小卡 .wxb：圖示、API 標註、陣風／降雪提醒 */
 .wxb{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:74px;padding:8px 10px;border:1px solid var(--rule);border-radius:14px;background:var(--panel);text-decoration:none;color:inherit;line-height:1.25}
 .wxb .wi{font-size:30px;line-height:1}
 .wxb b{font-size:13px;margin-top:4px;white-space:nowrap}
@@ -223,10 +242,12 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .wxb .snq{font-style:normal;font-size:11px;color:var(--soft);white-space:nowrap;margin-top:2px}
 @media(max-width:600px){.wxb .snq{flex-basis:100%}}
 .wxc .sky .ext{display:block;flex-basis:100%;font-size:12px;color:var(--soft)}
+/* 今日區塊即時天氣列 */
 .nowwx{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-top:10px;padding:10px 14px;border:1px dashed var(--rule);border-radius:12px}
 .nowwx b{font-size:20px}
 .nowwx small{color:var(--soft);font-size:11px}
 @media(max-width:600px){.wxb .alr{flex-basis:100%;font-size:11px}}
+/* 實用日語分類摺疊 details.phrd */
 .phrs{display:grid;gap:10px}
 .phrd{border:1px solid var(--rule);border-radius:14px;background:var(--panel)}
 .phrd>summary{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;list-style:none;font-size:17px}
@@ -235,6 +256,7 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .phrd>summary::after{content:"⌄";margin-left:10px;color:var(--soft);transition:transform .2s}
 .phrd[open]>summary::after{transform:rotate(180deg)}
 .phrd>.phr{padding:0 18px 16px}
+/* 行李清單分類摺疊 details.pkd、標籤 chip */
 .pks{display:grid;gap:10px}
 .pkd{border:1px solid var(--rule);border-radius:14px;background:var(--panel)}
 .pkd>summary{display:flex;align-items:center;gap:10px;padding:14px 18px;cursor:pointer;list-style:none;font-size:17px}
@@ -264,10 +286,12 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .det .warn p{margin:0}
 .det .warn .pts li:last-child{margin-bottom:0}
 
+/* 閃爍定位提示（reveal 後短暫高亮） */
 .flash{animation:fl 1.6s ease}
 @keyframes fl{0%,40%{background:color-mix(in srgb,var(--gold) 30%,transparent)}100%{background:transparent}}
 @media(prefers-reduced-motion:reduce){.arr{transition:none}.flash{animation:none}}
 @media(max-width:600px){.det{margin-left:0}.qrow{grid-template-columns:minmax(0,1fr)}details.it summary{grid-template-columns:3.6em minmax(0,1fr) 28px;gap:10px}details.it time{font-size:17px}}
+/* 以下 #navpv、#pv、.lock、.ed、#tool、#toast、#edbody 等為早期編輯／預覽介面樣式；GitHub Pages 版未渲染對應元素，保留不影響輸出 */
 #navpv{display:none;background:var(--red);color:#fff;border-color:var(--red)}
 #navpv.on{display:flex}
 #pv{position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;display:none}
@@ -301,6 +325,7 @@ table.pt td.r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-n
 .ed{display:none;font:inherit;font-size:14px;font-weight:500;border:1px dashed var(--red);background:var(--bg);color:var(--red);border-radius:999px;padding:6px 14px;min-height:36px;cursor:pointer;vertical-align:middle;margin-left:8px;align-items:center;letter-spacing:0}
 body.editing .ed{display:inline-flex}
 .ed:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+/* 公告列 */
 .ann{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:color-mix(in srgb,var(--gold) 22%,var(--bg));border-block:1px solid color-mix(in srgb,var(--gold) 45%,transparent);padding:12px max(5vw,16px);font-size:16px}
 .ann b{background:var(--red);color:#fff;border-radius:6px;padding:2px 10px;font-size:14px;white-space:nowrap}
 .ann[hidden]{display:none}
@@ -312,6 +337,7 @@ body.editing .ed{display:inline-flex}
 #tool button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 #toast{position:fixed;left:50%;bottom:84px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:60;max-width:calc(100vw - 32px)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
+/* Modal 基礎樣式（body.modal-on 鎖定背景捲動） */
 .modal{position:fixed;inset:0;z-index:50;background:rgba(10,14,20,.55);display:grid;place-items:center;padding:16px}
 .modal[hidden]{display:none}
 body.modal-on{overflow:hidden}
@@ -346,10 +372,12 @@ body.modal-on{overflow:hidden}
 .line.more .stops{-webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);mask-image:linear-gradient(90deg,#000 80%,transparent)}
 .stop{color:inherit;text-decoration:none;border-radius:10px}
 .stop:focus-visible{outline:3px solid #fff;outline-offset:2px}
+/* 頂部工具列與大字模式按鈕 */
 .topbar{display:flex;gap:8px;align-items:center}
 #bigbtn{flex:none}
 html.big body{zoom:1.15}
 section.day{padding-block:0}
+/* 每日 details.dayx：summary 卡片化、展開狀態 */
 details.dayx>summary{list-style:none;cursor:pointer;padding-block:clamp(22px,3vw,40px);display:block}
 details.dayx>summary::-webkit-details-marker{display:none}
 details.dayx>summary:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
@@ -360,6 +388,7 @@ details.dayx>.wrap{padding-bottom:clamp(28px,4vw,56px)}
 details.dayx[open]>summary .arr.big{transform:rotate(180deg)}
 .dayx .arr.big{transition:transform .2s}
 .allrow{display:flex;justify-content:flex-end;max-width:1240px;margin:0 auto;padding:14px max(5vw,16px) 0}
+/* 動作按鈕列、地圖連結按鈕 a.go */
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
 a.go{display:inline-flex;align-items:center;min-height:40px;padding:8px 16px;border-radius:999px;background:var(--pine);color:#fff;text-decoration:none;font-size:15px;font-weight:700}
 a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
@@ -369,6 +398,7 @@ a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .trow{grid-template-columns:7.5em minmax(0,1fr) 6.5em 5.5em}
 .wx{font-size:14px;color:var(--pine);white-space:nowrap;text-align:right}
 .phr>div{display:flex;justify-content:space-between;align-items:center;gap:10px}
+/* 今日卡片格線：下一站／今晚住宿／天氣 */
 #today{background:var(--pine);color:#fff;padding:18px max(5vw,16px)}
 #today[hidden]{display:none}
 .tgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
@@ -379,6 +409,7 @@ a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .tnext small{display:block;opacity:.85;font-size:14px}
 #today .btn{background:#ffffff1a;color:#fff;border-color:#ffffff66}
 #today a.go{background:#fff;color:var(--pine)}
+/* 飯店資訊 modal：日文給司機看的大字區 */
 #taxi{z-index:70}
 .tbox{background:#fff;color:#111;border-radius:18px;width:min(640px,100%);max-height:calc(100svh - 32px);overflow:auto;padding:24px 22px;text-align:center}
 .tbox p{margin:0 0 12px}
@@ -388,6 +419,7 @@ a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .tk4{font-size:clamp(20px,5vw,26px);font-weight:700}
 .tk5{font-size:15px;color:#666}
 #taxix{margin-top:8px}
+/* 載入中提示、加到主畫面說明 */
 #loading{padding:40px max(5vw,16px);text-align:center;color:var(--soft)}
 .install{font-size:14px;color:var(--soft)}
 @media(max-width:860px){.tgrid{grid-template-columns:minmax(0,1fr)}}
@@ -395,6 +427,7 @@ a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 
 /* ===== Winter theme: Ginzan blue hour, Zao rime ice, Sendai crescent, fox village ===== */
 :root{--bg:light-dark(#f7f9fc,#0e1626);--ink:light-dark(#18202c,#e9eef6);--soft:light-dark(#5a6676,#a6b3c4);--rule:light-dark(#dfe6ef,#24324a);--red:light-dark(#b4502a,#f0935a);--pine:light-dark(#223a5e,#a9c3e6);--gold:light-dark(#a86f10,#f0b84a);--panel:light-dark(#edf2f8,#152038);--night:#1d3050;--lamp:#ffd27a;--woodc:#6b3f2b;--yuki:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237d95b8%22%20stroke-width%3D%221.2%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.22%22%3E%3Cg%20transform%3D%22translate%2830%2030%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2890%2088%29%20scale%28.6%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3C/g%3E%3Cg%20fill%3D%22%237d95b8%22%20opacity%3D%22.25%22%3E%3Ccircle%20cx%3D%2285%22%20cy%3D%2225%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2295%22%20r%3D%221.3%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%221%22/%3E%3C/g%3E%3C/svg%3E");--flake:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-12%20-12%2024%2024%22%3E%3Cg%20stroke%3D%22%23000%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%3E%3Cg%20id%3D%22a%22%3E%3Cpath%20d%3D%22M0-10V10M-3-7L0-4L3-7M-3%207L0%204L3%207%22/%3E%3C/g%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%2860%29%22/%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%28120%29%22/%3E%3C/g%3E%3C/svg%3E")}
+/* 冬季主題覆寫：hero、倒數、場景、導覽列與各區塊配色（後宣告覆蓋前述基礎樣式） */
 .hero{background:linear-gradient(180deg,#0c1628 0%,#121e33 100%);color:#eef3fa}
 .hero .top{padding-bottom:6px}
 .hero .top h1{color:#fff}
@@ -456,11 +489,13 @@ footer .install{color:#9fb0c8}
 .allrow .btn,.daytools .btn{background:var(--bg)}
 .mfoot .primary{background:var(--night);border-color:var(--night)}
 .sos h2::before{background:#ffd27a}
+/* 主視覺插畫 srcset 圖片定位 */
 .scene.photo{height:clamp(300px,50vw,640px);background:#121e33}
 .scene.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 64%;display:block}
 .scene.photo svg{pointer-events:none}
 .scene.photo::before{content:"";position:absolute;left:0;right:0;top:0;height:28%;background:linear-gradient(#121e33,rgba(18,30,51,0));z-index:1;pointer-events:none}
 .scene.photo svg{z-index:2}
+/* 預報表 .fct（手機橫向捲動） */
 .fch{font-size:17px;margin:6px 0 10px;color:var(--pine)}
 .fch a{font-size:13px;font-weight:400;color:var(--soft);margin-left:6px}
 .fct{width:100%;border-collapse:collapse;font-size:15px;background:var(--bg);border-radius:12px;overflow:hidden}
@@ -471,6 +506,7 @@ footer .install{color:#9fb0c8}
 #fc+h3{margin-top:22px}
 #fc .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .fct{min-width:520px}
+/* 每日天氣建議卡 .wxc 與保暖等級 .lv */
 .wxlead{margin:-6px 0 14px;color:var(--soft)}
 .wxd{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:26px}
 .wxc{background:var(--bg);border:1px solid var(--rule);border-radius:14px;padding:16px 18px;display:grid;gap:8px;align-content:start}
@@ -491,6 +527,7 @@ footer .install{color:#9fb0c8}
 .wxbox{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--bg);border:1px dashed var(--rule);font-size:15px}
 .wxbox b{color:var(--red)}
 .wxbox p{margin:4px 0 0}
+/* 飯店資訊 modal 冬季主題、.hinfo 欄位定義列表 */
 .tbox{text-align:left}
 .tbox .hk{font-size:14px;color:#b4502a;font-weight:700;margin:0}
 .tbox .hn{font:900 24px/1.25 "Noto Serif TC",serif;margin:2px 0 12px}
@@ -506,6 +543,7 @@ footer .install{color:#9fb0c8}
 </head>
 <body>
 
+<!-- Hero：標題、倒數、主視覺插畫與飄雪 SVG -->
 <div class="hero">
 <header class="band top wrap">
   <div>
@@ -520,17 +558,22 @@ footer .install{color:#9fb0c8}
 <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g id="snowfall"></g></svg>
 </div>
 
+<!-- 路線站點（由 content.json days 產生錨點） -->
 <div class="line" id="line" aria-label="路線"><div class="stops" id="stops"><a class="stop" href="#day1"><b>仙台</b><small>Day 1–2</small></a><a class="stop" href="#day2"><b>松島</b><small>Day 2</small></a><a class="stop" href="#day3"><b>東根</b><small>Day 3</small></a><a class="stop" href="#day3"><b>銀山溫泉</b><small>Day 3–4</small></a><a class="stop" href="#day4"><b>山形市</b><small>Day 4</small></a><a class="stop" href="#day4"><b>藏王溫泉</b><small>Day 4–5</small></a><a class="stop" href="#day5"><b>仙台</b><small>Day 5</small></a><a class="stop" href="#day6"><b>白石・岩沼</b><small>Day 6</small></a><a class="stop" href="#day7"><b>名取・機場</b><small>Day 7</small></a></div></div>
+<!-- 今日模式：旅程期間依日本時間顯示（renderToday） -->
 <section id="today" hidden aria-label="今天"></section>
 <svg class="drift" viewBox="0 0 1200 34" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 L0 18 Q60 4 140 14 T300 12 T470 18 T640 8 T820 16 T1000 10 T1200 16 L1200 34 Z"/></svg>
 </div>
+<!-- 公告（content.json announce） -->
 <div class="ann" id="ann" hidden></div>
 
+<!-- 黏性導覽：大字切換、各區塊錨點、Day 1–7 -->
 <nav class="days" aria-label="跳到">
   <div class="scroll"><button class="btn" type="button" id="bigbtn" aria-pressed="false">大字</button><span id="nav" style="display:contents"></span></div>
 </nav>
 
 
+<!-- 快速查詢：buildIdx 建索引，run 做關鍵字＋分類篩選 -->
 <section class="band find" id="search">
   <div class="wrap">
     <h2>快速查詢</h2>
@@ -546,6 +589,7 @@ footer .install{color:#9fb0c8}
 </section>
 
 
+<!-- 航班資訊（靜態） -->
 <section class="band sec" id="flight">
   <div class="wrap">
     <h2>航班</h2>
@@ -557,10 +601,12 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 每日行程容器（renderDays 動態產生） -->
 <div class="allrow"><button class="btn" type="button" id="allopen">展開每一天</button></div>
 <div id="loading"><p>行程載入中…</p></div>
 <div id="days"></div>
 
+<!-- 住宿一覽（renderHotels） -->
 <section class="band sec" id="hotel" style="border-top:1px solid var(--rule)">
   <div class="wrap">
     <h2>住宿一覽</h2>
@@ -568,6 +614,7 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 旅程天氣：API 說明、每日建議卡、預報表、溫度條 -->
 <section class="band sec" id="weather" style="background:var(--panel)">
   <div class="wrap">
     <h2>旅程天氣預估</h2>
@@ -582,6 +629,7 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 行李清單（renderPack，勾選狀態存 localStorage） -->
 <section class="band sec" id="pack">
   <div class="wrap">
     <h2>行李清單</h2>
@@ -593,6 +641,7 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 旅途小提醒（renderNotes） -->
 <section class="band sec" id="tips" style="background:var(--panel)">
   <div class="wrap">
     <h2>旅途小提醒</h2>
@@ -600,6 +649,7 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 退稅新制（renderTax，content.json tax） -->
 <section class="band sec" id="tax">
   <div class="wrap">
     <h2>退稅新制（2026/11/1 起）</h2>
@@ -608,6 +658,7 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 實用日語（renderPhr，Web Speech API 播放） -->
 <section class="band sec" id="talk">
   <div class="wrap">
     <h2>實用日語</h2>
@@ -615,6 +666,7 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 緊急聯絡、保險救助、飯店資訊入口 -->
 <section class="band sec sos" id="sos">
   <div class="wrap">
     <h2>緊急聯絡</h2>
@@ -634,13 +686,17 @@ footer .install{color:#9fb0c8}
   </div>
 </section>
 
+<!-- 頁尾：更新時間、資料來源標示（Open-Meteo CC BY 4.0） -->
 <footer><svg class="fox" viewBox="0 0 120 96" aria-hidden="true"><path d="M30 92 Q18 60 40 50 L70 50 Q86 56 84 92 Z" fill="#d9782f"/><path d="M40 50 L34 22 L50 38 L64 38 L78 22 L72 50 Z" fill="#d9782f"/><path d="M47 60 Q57 70 67 60 L63 84 L51 84 Z" fill="#fff"/><circle cx="48" cy="50" r="2.6" fill="#1b1b1b"/><circle cx="66" cy="50" r="2.6" fill="#1b1b1b"/><circle cx="57" cy="57" r="2.2" fill="#1b1b1b"/><path d="M82 86 Q118 78 112 46 Q100 70 80 74 Z" fill="#d9782f"/><path d="M112 46 Q118 56 110 62 Q102 54 112 46 Z" fill="#fff"/></svg>2026 東北雪國自駕之旅・全團行程資訊<br><span id="upd"></span><br><span class="credit">天氣資料：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Weather data by Open-Meteo.com</a>（CC BY 4.0）</span><br><span class="install">加到手機主畫面：iPhone 用 Safari 打開 → 分享 → 加入主畫面；Android 用 Chrome 選單 → 加到主畫面。打開過一次後，沒網路也能看。</span></footer>
 
+<!-- 飯店資訊 modal（openTaxi 填入內容） -->
 <div class="modal" id="taxi" hidden><div class="tbox" role="dialog" aria-modal="true" aria-label="飯店詳細資訊"><div id="taxibody"></div><button class="btn" type="button" id="taxix">關閉</button></div></div>
 <script>
 {
 const $=id=>document.getElementById(id);
+/* HTML 跳脫；所有 content.json 字串輸出前經過此函式，避免 XSS */
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+/* 每日插圖 SVG path 字典，鍵值對應 day.ico */
 const ico={
 plane:'<path d="M10 52 L110 30 L114 38 L64 54 L44 80 L34 80 L44 58 L18 64 L12 72 L6 72 L10 56 Z" fill="var(--red)"/><circle cx="96" cy="18" r="8" fill="var(--gold)"/>',
 boat:'<path d="M0 66 Q30 58 60 66 T120 66 L120 90 L0 90 Z" fill="#5f8fb8"/><path d="M18 52 L102 52 L92 68 L28 68 Z" fill="var(--red)"/><rect x="34" y="34" width="50" height="18" rx="3" fill="var(--snow)" stroke="var(--rule)"/><rect x="40" y="38" width="10" height="8" fill="#5f8fb8"/><rect x="56" y="38" width="10" height="8" fill="#5f8fb8"/><rect x="72" y="38" width="8" height="8" fill="#5f8fb8"/><path d="M96 30 Q104 20 112 30 L112 52 L96 52 Z" fill="var(--pine)"/>',
@@ -651,46 +707,73 @@ fox:'<path d="M0 88 Q60 76 120 88 Z" fill="var(--snowsh)"/><path d="M30 80 Q24 5
 train:'<rect x="14" y="26" width="92" height="46" rx="12" fill="var(--snow)" stroke="var(--rule)" stroke-width="2"/><rect x="14" y="52" width="92" height="8" fill="var(--red)"/><rect x="24" y="34" width="20" height="14" rx="3" fill="#5f8fb8"/><rect x="50" y="34" width="20" height="14" rx="3" fill="#5f8fb8"/><rect x="76" y="34" width="20" height="14" rx="3" fill="#5f8fb8"/><circle cx="34" cy="76" r="6" fill="var(--ink)"/><circle cx="86" cy="76" r="6" fill="var(--ink)"/><path d="M0 84 L120 84" stroke="var(--soft)" stroke-width="3"/>'
 };
 
+/* 全域狀態：fetch 後的 content.json */
 let C=null;
+/* 查詢分類 chip 定義 */
 const CATS=["美食","交通","景點","溫泉","住宿","採買"];
+/* Google 地圖地點搜尋 URL（maps/search，不直接進導航） */
 const navUrl=q=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+/* 標題處理：箭頭符號包 span，避免斷行落在箭頭前 */
 const nb=t=>esc(t).split(/\s*→\s*/).map(s=>`<span class="nb">${s}</span>`).join(' <span class="ar">→</span> ');
+/* localStorage 包裝：try/catch 吞例外（私密模式、停用儲存時不中斷） */
 const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
 
 /* ---------- time (Japan) ---------- */
 const params=new URLSearchParams(location.search);
+/* 取得日本當地時間：Intl.DateTimeFormat 指定 Asia/Tokyo，與裝置時區無關；回傳 {date, min（當日分鐘數）, real} */
 const nowJ=()=>{const n=params.get("now")?new Date(params.get("now")+"+09:00"):new Date();const f=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(n);const g=t=>f.find(p=>p.type===t).value;return{date:`${g("year")}-${g("month")}-${g("day")}`,min:+g("hour")*60+ +g("minute"),real:n}};
+/* 旅程第幾天：日本日期與 2026-12-01 的日曆天差，0–6 有效，其餘回傳 -1 */
 const tripDay=()=>{const j=nowJ();const d=Math.round((new Date(j.date+"T00:00:00Z")-new Date("2026-12-01T00:00:00Z"))/864e5);return d>=0&&d<7?d:-1};
+/* "HH:MM" 轉當日分鐘數，供下一站比較 */
 const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]:(/晚/.test(t)?19*60:null)};
 
 /* ---------- render ---------- */
 const renderAnn=()=>{const a=$("ann");a.hidden=!C.announce;a.innerHTML=C.announce?`<b>最新公告</b><span>${esc(C.announce)}</span>`:"";$("upd").textContent=C.updated?`內容最後更新：${C.updated}`:""};
+/* 導覽列 Day 錨點與路線站點渲染 */
 const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}" data-day="${i}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#tax">退稅</a><a href="#sos">緊急</a>'};
+/* 文字條列化：優先依 \n 切分；超過 70 字或含「；」時依句讀切分；「標籤：內容」轉為粗體 .lb */
 const pts=t=>{if(!t)return"";let L=String(t).includes("\n")?String(t).split("\n"):(String(t).length>70||String(t).includes("；")?String(t).split(/(?<=[。；;])(?![）)」])/):[String(t)]);L=L.map(x=>x.replace(/^[；;]\s*/,"").replace(/[；;]\s*$/,"").trim()).filter(Boolean);const f=x=>{const m=x.match(/^([^：:]{1,8})：(.+)$/);return m?`<b class="lb">${esc(m[1])}</b>${esc(m[2])}`:esc(x)};return L.length<2?`<p>${f(L[0]||"")}</p>`:`<ul class="pts">${L.map(x=>`<li>${f(x)}</li>`).join("")}</ul>`};
+/* 單一行程項目模板（details.it）：summary＋說明＋注意＋地圖按鈕 */
 const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google 地圖</a></p>`:''}</div></details>`;
+/* 依 day.stay 名稱比對 hotels 索引 */
 const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
+/* 每日行程渲染：旅程中預設展開當天，否則展開 Day 1；天氣小卡先填手動資料，再由 autoWx 覆寫 */
 const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div>${(()=>{const w=(C.wx||[])[di];return w&&w.icon?`<a class="wxb" id="wxb-${di}" href="#weather" title="${esc(w.sky)}，${esc(w.temp)}" onclick="event.stopPropagation()"><span class="wi" aria-hidden="true">${w.icon}</span><b>${esc(w.short)}</b><small>${esc(w.range)}</small><i class="au">${esc((w.geo||[]).map(g=>g.n).join("・"))}｜手動 ${esc(w.src||"")}</i></a>`:"<span></span>"})()}<svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
 <div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
 <div class="daybody"><div class="sched">${(d.s||[]).map((x,i)=>itemHtml(x,`${id}-${i}`)).join('')}</div>
 <aside class="tips">${(C.wx&&C.wx[di])?`<div class="wxbox"><b>${esc(C.wx[di].sky)}・${esc(C.wx[di].temp)}${C.wx[di].rain&&C.wx[di].rain!=="—"?"・降雨 "+esc(C.wx[di].rain):""}</b><br>${lvHtml(+C.wx[di].lv||0)}<p><b>穿著</b> ${esc(C.wx[di].wear)}</p><p><b>開車</b> ${esc(C.wx[di].drive)}</p><p><a href="#wx-${di}">看天氣詳細</a></p></div>`:""}<h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b>${hi>=0?`<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button>`:""}</div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
 </div></details></section>`}).join('')};
+/* 飯店 Google 評分列 */
 const rateHtml=h=>h.gr?`<p class="rate"><span class="st">★ ${esc(h.gr)}</span> Google（${esc(h.gn)} 則）${h.star?`・${esc(h.star)}`:""}</p>`:"";
+/* 住宿卡片與緊急區飯店按鈕 */
 const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card hotel" id="hotel-${i}"><div class="n">${esc(h.when)}${h.rooms?`・${esc(h.rooms)}`:""}</div><h3>${esc(h.name)}</h3>${rateHtml(h)}<p>${esc(h.desc)}</p>${h.ja?`<p class="ja" lang="ja">${esc(h.ja)}<br>${esc(h.addr)}<br>TEL ${esc(h.tel)}</p>`:""}<p class="acts">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">地圖</a>`:""}${h.ja?`<button class="btn sm" type="button" data-taxi="${i}">飯店資訊</button>`:""}</p></div>`).join('');
 $("sostaxi").innerHTML=C.hotels.map((h,i)=>h.ja?`<button class="btn light" type="button" data-taxi="${i}">${esc(h.when.split("・")[0])} ${esc(h.name)}</button>`:"").join("")};
+/* 氣象廳預報表（人工整理資料） */
 const renderFc=()=>{const f=C.forecast,el=$("fc");if(!f||!el){if(el)el.innerHTML="";return}
 el.innerHTML=`<h3 class="fch">氣象廳預報表（人工整理・11/25） <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
+/* 保暖等級文字對照 */
 const WL=["","輕便冬裝","保暖冬裝","防水保暖","全副雪地裝備"];
+/* 保暖等級指示格 */
 const lvHtml=n=>`<span class="lv" aria-label="穿著等級 ${n} / 4">${[1,2,3,4].map(k=>`<i class="${k<=n?"on":""}"></i>`).join("")}${esc(WL[n]||"")}</span>`;
+/* 每日天氣建議卡；.sky.live 為 API 即時列的 placeholder */
 const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><header><a href="#day${i+1}"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></a><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}<small class="src">人工整理・${esc(w.src||"")}</small></div><div class="sky live" hidden></div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl></article>`}).join("")};
+/* 溫度條：-12～20°C 線性映射成 left／width 百分比 */
 const renderTemps=()=>{renderFc();const lo=-12,hi=20;$("temps").innerHTML=C.temps.map((t,ti)=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow" id="temp-${ti}"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°<small class="tsrc">人工 ${esc(t.src||"")}</small></span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
+/* 行李勾選狀態的 localStorage key */
 const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}catch(e){st={}}
+/* 更新總進度與各分類「已勾／總數」 */
 const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`;(C.pack||[]).forEach((g,gi)=>{const e=document.querySelector(`.pkd[data-g="${gi}"] .pkn`);if(e){const m=g.L.filter(x=>st[x.t]).length;e.textContent=`${m} / ${g.L.length}`;e.classList.toggle("done",m===g.L.length)}})};
+/* 行李清單：分類 details＋checkbox，勾選以品項文字為 key */
 const renderPack=()=>{const G=C.pack||[{g:"行李",note:"",L:C.items.map(t=>({t,tag:""}))}];C.items=G.flatMap(g=>g.L.map(x=>x.t));let k=0;$("check").innerHTML=G.map((g,gi)=>`<details class="pkd" data-g="${gi}"${gi===0?" open":""}><summary><b>${esc(g.g)}</b><span class="pkn"></span></summary>${g.note?`<p class="pknote">${esc(g.note)}</p>`:""}<ul class="check">${g.L.map(x=>{const i=k++;return `<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x.t)}" ${st[x.t]?'checked':''}><span>${esc(x.t)}${x.tag?`<em class="tag t-${x.tag==="必帶"?"must":"who"}">${esc(x.tag)}</em>`:""}</span></label></li>`}).join("")}</ul></details>`).join("");upd()};
 $("check").addEventListener("change",e=>{const v=e.target.dataset.v;if(v===undefined)return;st[v]=e.target.checked;store.set(pkKey,JSON.stringify(st));upd()});
 $("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
+/* 退稅新制卡片（含圖片 figure） */
 const renderTax=()=>{const T=C.tax;if(!T){$("tax").hidden=true;return}$("taxlead").textContent=T.lead||"";$("taxg").innerHTML=(T.cards||[]).map((c,i)=>`<div class="card${/機場/.test(c.title)?" air":""}" id="tax-${i}"><h3>${esc(c.title)}</h3>${(c.imgs||[]).length?`<div class="taxmaps">${c.imgs.map(m=>`<figure class="taxmap"><a href="${esc(m.src)}" target="_blank" rel="noopener"><img src="${esc(m.src)}" alt="${esc(m.cap||"")}" loading="lazy"></a><figcaption>${esc(m.cap||"")}</figcaption></figure>`).join("")}<p class="taxmapn">點圖可以放大</p></div>`:""}${pts((c.pts||[]).join("\n")+((c.pts||[]).length<2?"\n":""))}</div>`).join("")};
+/* 旅途小提醒 */
 const renderNotes=()=>{$("notes").innerHTML=C.notes.map((n,i)=>`<div class="card" id="note-${i}"><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></div>`).join('')};
+/* Web Speech API（speechSynthesis）可用性偵測 */
 const canSpeak="speechSynthesis" in window;
+/* 實用日語：依 g 欄位分組成 details.phrd */
 const renderPhr=()=>{const G=[];C.phr.forEach((p,i)=>{const g=p.g||"常用";let o=G.find(x=>x.g===g);if(!o){o={g,L:[]};G.push(o)}o.L.push([p,i])});$("phr").innerHTML=G.map(o=>`<details class="phrd"><summary><b>${esc(o.g)}</b><span>${o.L.length} 句</span></summary><div class="phr">${o.L.map(([p,i])=>`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`).join("")}</div></details>`).join("")};
 document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(!b)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(b.dataset.say);u.lang="ja-JP";u.rate=.85;const v=speechSynthesis.getVoices().find(v=>/^ja/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(err){}});
 
@@ -703,6 +786,7 @@ el.hidden=false;el.innerHTML=`<div class="wrap tgrid"><div><span class="tl">今�
 <div class="tnext">${next?`<span class="tl">下一站</span><b><time>${esc(next.t)}</time> ${nb(next.title)}</b>${next.sub?`<small>${esc(next.sub)}</small>`:""}<p class="acts"><button class="btn sm" type="button" data-goto="day${td+1}-${nx}">看詳細</button>${next.q?`<a class="go" href="${navUrl(next.q)}" target="_blank" rel="noopener">地圖</a>`:""}</p>`:`<span class="tl">今天的行程都結束了</span><b>好好休息</b>`}</div>
 <div class="tstay">${d.stay?`<span class="tl">今晚住宿</span><b>${esc(d.stay)}</b>${hi>=0?`<p class="acts">${C.hotels[hi].q?`<a class="go" href="${navUrl(C.hotels[hi].q)}" target="_blank" rel="noopener">地圖</a>`:""}<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button></p>`:""}`:`<span class="tl">今晚</span><b>回到台灣</b>`}</div></div>`};
 
+/* 即時天氣：Open-Meteo current，當天第一個定位點，localStorage 快取 15 分鐘 */
 const nowWx=async()=>{try{const td=tripDay();if(td<0)return;const w=(C.wx||[])[td];if(!w||!w.geo)return;const box=$("today");if(!box||box.hidden)return;
  const key="wxnow1",g=w.geo[0];let c=null;try{c=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
  let v=c&&c.n===g.n&&Date.now()-c.t<900e3?c.v:null,t=c&&v?c.t:Date.now();
@@ -718,12 +802,14 @@ $("taxibody").innerHTML=`<p class="hk">${esc(h.stay||h.when)}</p><h3 class="hn">
 <dl class="hinfo">${row("房間",h.rooms)}${row("房型",h.rtype)}${row("入住",h.cin)}${row("退房",h.cout)}${row("交通",h.access)}${row("停車",h.park)}${row("泡湯",h.bath)}${row("餐飲",h.food)}${list("設施",h.facil)}${list("注意",h.notes)}</dl>
 <p class="acts" style="justify-content:center">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">Google 地圖</a>`:""}</p>`;
 $("taxi").hidden=false;document.body.classList.add("modal-on");$("taxix").focus({preventScroll:true});document.querySelector(".tbox").scrollTop=0};
+/* 關閉 modal 並還原焦點 */
 const closeTaxi=()=>{$("taxi").hidden=true;document.body.classList.remove("modal-on")};
 document.addEventListener("click",e=>{const t=e.target.closest("[data-taxi]");if(t){openTaxi(+t.dataset.taxi);return}if(e.target.id==="taxi"||e.target.closest("#taxix"))closeTaxi()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("taxi").hidden)closeTaxi()});
 
 /* ---------- open/scroll helpers ---------- */
 const reveal=el=>{const pk=el.closest&&el.closest("details.pkd");if(pk)pk.open=true;const dx=el.closest("details.dayx");if(dx)dx.open=true;const pd=el.closest&&el.closest("details.phrd");if(pd)pd.open=true;if(el.tagName==="DETAILS")el.open=true};
+/* 錨點導覽：reveal＋更新 location.hash */
 const go=id=>{const el=$(id);if(!el)return;reveal(el);el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:el.classList.contains("day")?"start":"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")};
 document.addEventListener("click",e=>{const o=e.target.closest("[data-open]"),c=e.target.closest("[data-close]"),g=e.target.closest("[data-goto]");
 if(o)document.querySelectorAll(`#${o.dataset.open} details.it`).forEach(x=>x.open=true);
@@ -734,6 +820,7 @@ $("allopen").addEventListener("click",()=>{const any=[...document.querySelectorA
 
 /* ---------- search ---------- */
 let idx=[];
+/* 建立查詢索引：行程、飯店、提醒、日語、行李、退稅、緊急資訊 */
 const buildIdx=()=>{idx=[];idx.push({lab:"緊急",cat:"保險",title:"國泰產險 海外急難救助",sub:"+886-2-27551258 24小時中文 保險 救助 醫療 口譯 護照 行李 住院",tgt:"ins"});(C.tax&&C.tax.cards||[]).forEach((c,i)=>idx.push({lab:"退稅",cat:"購物",title:c.title,sub:(c.pts||[]).join(" "),tgt:`tax-${i}`}));
 C.days.forEach((d,di)=>{const id="day"+(di+1);(d.s||[]).forEach((x,i)=>idx.push({lab:`Day ${di+1}`,cat:x.cat||"",title:`${x.t} ${x.title}`,sub:[x.sub,x.detail,x.warn].filter(Boolean).join(" "),tgt:`${id}-${i}`}));(d.t||[]).forEach(x=>idx.push({lab:`Day ${di+1}`,cat:"提醒",title:`${d.title}：今日提醒`,sub:x,tgt:id}))});
 if(C.announce)idx.push({lab:"公告",cat:"提醒",title:"最新公告",sub:C.announce,tgt:"ann"});
@@ -744,10 +831,14 @@ C.phr.forEach((p,i)=>idx.push({lab:"日語",cat:p.g||"日語",title:p.ja,sub:p.z
 C.items.forEach((x,i)=>idx.push({lab:"行李",cat:"行李",title:x,sub:"行李清單 要帶什麼",tgt:`pack-${i}`}));
 (C.wx||[]).forEach((w,i)=>idx.push({lab:`Day ${i+1}`,cat:"提醒",title:`Day ${i+1} 天氣：${w.sky} ${w.temp}`,sub:[w.place,"天氣 下雨 下雪 穿著 開車 路況",w.trip,w.drive,w.wear].join(" "),tgt:`wx-${i}`}));C.temps.forEach(t=>idx.push({lab:"天氣",cat:"天氣",title:`${t.place} 約 ${t.lo}° / ${t.hi}°`,sub:"氣溫 天氣 冷 穿著 預報",tgt:"weather"}));
 idx.push({lab:"緊急",cat:"緊急",title:"110 警察",sub:"遺失 竊盜 交通事故 報警",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"119 救護車、消防",sub:"受傷 急病 火災 醫院",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"050-3816-2787 訪日外國人熱線",sub:"24 小時 中文 求助",tgt:"sos"},{lab:"緊急",cat:"緊急",title:"給計程車司機看的飯店地址",sub:"計程車 司機 地址 走散 迷路",tgt:"sos"})};
+/* 查詢分類 chip 狀態 */
 const cats=["全部",...CATS,"提醒","行李","日語","緊急"];let cat="全部",hits=[];
 $("chips").innerHTML=cats.map(c=>`<button class="chip" type="button" data-c="${c}" aria-pressed="${c===cat}">${c}</button>`).join('');
+/* 查詢關鍵字高亮（mark） */
 const hl=(t,ws)=>{let s=esc(t);ws.forEach(w=>{const re=new RegExp(esc(w).replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"gi");s=s.replace(re,m=>`<mark>${m}</mark>`)});return s};
+/* 結果摘要：取關鍵字前後片段 */
 const snip=(t,ws)=>{const w=ws.find(w=>t.toLowerCase().includes(w));if(!w||t.length<70)return t;const p=Math.max(0,t.toLowerCase().indexOf(w)-24);return(p?"…":"")+t.slice(p,p+70)+"…"};
+/* 執行查詢：多關鍵字 AND＋分類篩選，debounce 由 input 事件控制 */
 const run=()=>{if(!C)return;const ws=$("q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
 if(!ws.length&&cat==="全部"){$("res").innerHTML="";$("cnt").textContent="";return}
 hits=idx.filter(r=>{if(cat!=="全部"&&r.cat!==cat)return false;const h=(r.lab+" "+r.cat+" "+r.title+" "+r.sub).toLowerCase();return ws.every(w=>h.includes(w))});
@@ -772,6 +863,7 @@ stops.addEventListener("scroll",hint,{passive:true});const sro=new ResizeObserve
 
 /* 自動天氣：Open-Meteo（免金鑰），失敗時保留 content.json 的手動資料 */
 const WMO=c=>c===0?["☀️","晴"]:c===1?["🌤️","晴"]:c===2?["⛅","晴時多雲"]:c===3?["☁️","陰"]:(c===45||c===48)?["🌫️","霧"]:(c===56||c===57)?["🌧️","凍毛毛雨"]:(c>=51&&c<=55)?["🌦️","毛毛雨"]:(c>=61&&c<=65)?["🌧️","雨"]:(c===66||c===67)?["🌧️","凍雨"]:c===77?["🌨️","霰"]:(c>=71&&c<=75)?["🌨️","雪"]:(c>=80&&c<=82)?["🌦️","陣雨"]:(c===85||c===86)?["🌨️","陣雪"]:c>=95?["⛈️","雷雨"]:null;
+/* 自動天氣：Open-Meteo daily（各地點帶 elevation），單次請求多座標；localStorage 快取 1 小時；覆寫天氣小卡、天氣卡 API 列與溫度條，失敗時保留手動資料 */
 const autoWx=async()=>{try{
  const W=C.wx||[];if(!W.length||!W[0].geo)return;
  const pts=[];W.forEach(w=>(w.geo||[]).forEach(g=>{if(!pts.find(p=>p.n===g.n))pts.push(g)}));
@@ -806,6 +898,7 @@ const autoWx=async()=>{try{
  (C.temps||[]).forEach((t,ti)=>{const w=W[ti];if(!w||!w.geo)return;const g=w.geo[0];if(!g)return;const r=data[g.n+"|"+w.date];if(!r||r.lo==null)return;const row=document.getElementById("temp-"+ti);if(!row)return;const L=-12,H=20,lo=Math.round(r.lo),hi=Math.round(r.hi),a=Math.max(L,lo),b=Math.min(H,hi);const i=row.querySelector(".tbar i");i.style.left=(a-L)/(H-L)*100+"%";i.style.width=Math.max(2,(b-a)/(H-L)*100)+"%";row.querySelector(".tval").innerHTML=`${lo}° / ${hi}°<small class="tsrc">API ${stamp.split(" ")[0]}</small>`;row.classList.add("live")});
  const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點（Day 1 仙台車站、Day 2 松島海岸、Day 3 銀山溫泉、Day 4 藏王溫泉、Day 5 藏王樹冰、Day 6 狐狸村、Day 7 仙台車站）。「每天行程地點的大約溫度」也會自動更新（藏王樹冰用海拔 1,661 m 地藏山頂站計算）。天氣代碼是當天「最差」的天氣，例如只有一小段時間下毛毛雨也會顯示毛毛雨。陣風 40 km/h 以上或預估會下雪時，小卡會出現紅字提醒；旅行期間「今天」區塊會顯示當地現在的氣溫、體感和風速。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
+/* 總渲染入口：content.json 載入完成後依序呼叫各 render 與 autoWx／nowWx */
 const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();nowWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
 fetch("content.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{C=d;$("loading").remove();renderAll()}).catch(()=>{$("loading").innerHTML="<p>行程內容載入失敗。請確認網路後重新整理；加到主畫面並打開過一次後，沒網路也能看。</p>"});
