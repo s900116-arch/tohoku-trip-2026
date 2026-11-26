@@ -260,6 +260,8 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .mtiles img{position:absolute;width:256px;height:256px;max-width:none;pointer-events:none}
 .pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--red);color:#fff;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);display:grid;place-items:center;font:700 12px/1 system-ui,sans-serif;text-decoration:none;z-index:2}
 .pin:hover,.pin:focus-visible{z-index:3;transform:scale(1.15)}
+.pin.grp{width:auto;min-width:26px;padding:0 7px;border-radius:13px;font-size:11px;cursor:zoom-in;transform:translateX(-50%);margin-left:0}
+.pin.grp:hover,.pin.grp:focus-visible{transform:translateX(-50%) scale(1.15)}
 .mctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px;z-index:4}
 .mctl button{width:36px;height:36px;border-radius:8px;border:1px solid #bbb;background:#fff;color:#222;font:700 18px/1 system-ui,sans-serif;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .mctl button.fit{font-size:11px}
@@ -773,7 +775,11 @@ const mFit=(box,st)=>{const W=box.clientWidth,H=box.clientHeight;let z=16;for(;z
 /* 繪製：依中心與容器尺寸計算可見圖磚範圍，輸出 OSM 圖磚 img 與圖釘（相對容器左上角定位） */
 const mDraw=box=>{const st=box._m,W=box.clientWidth,H=box.clientHeight,z=st.z,n=2**z,x0=st.cx-W/2,y0=st.cy-H/2;let h="";
  for(let tx=Math.floor(x0/256);tx<=Math.floor((x0+W)/256);tx++)for(let ty=Math.max(0,Math.floor(y0/256));ty<=Math.min(n-1,Math.floor((y0+H)/256));ty++)h+=`<img src="https://tile.openstreetmap.org/${z}/${((tx%n)+n)%n}/${ty}.png" style="left:${Math.round(tx*256-x0)}px;top:${Math.round(ty*256-y0)}px" alt="" loading="lazy" draggable="false">`;
- h+=st.g.map(p=>{const[x,y]=mPx(p.ll,z);return `<a class="pin" href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener" style="left:${Math.round(x-x0)}px;top:${Math.round(y-y0)}px" title="${esc(p.items.map(i=>i.t+" "+i.title).join(" / "))}">${p.n}</a>`}).join("");
+ /* 圖釘聚合：目前層級下像素距離 <28px 的點合併為一顆（標示編號範圍），點擊後以聚合中心放大 */
+ const cl=[];st.g.forEach(p=>{const[x,y]=mPx(p.ll,z),c=cl.find(c=>Math.hypot(c.x-x,c.y-y)<28);if(c){c.ps.push(p);c.x=(c.x*(c.ps.length-1)+x)/c.ps.length;c.y=(c.y*(c.ps.length-1)+y)/c.ps.length}else cl.push({x,y,ps:[p]})});
+ h+=cl.map(c=>{const l=Math.round(c.x-x0),t=Math.round(c.y-y0);if(c.ps.length===1){const p=c.ps[0];return `<a class="pin" href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener" style="left:${l}px;top:${t}px" title="${esc(p.items.map(i=>i.t+" "+i.title).join(" / "))}">${p.n}</a>`}
+  const ns=c.ps.map(p=>p.n),lab=ns.every((n,i)=>!i||n===ns[i-1]+1)?ns[0]+"–"+ns[ns.length-1]:ns.join(",");
+  return `<button type="button" class="pin grp" data-mzx="${c.x}" data-mzy="${c.y}" style="left:${l}px;top:${t}px" title="放大查看 ${esc(lab)}" aria-label="放大查看 ${esc(lab)}">${lab}</button>`}).join("");
  const L=box.querySelector(".mtiles");L.style.transform="";L.innerHTML=h};
 /* 初始化：首次展開時建立狀態並綁定拖曳（Pointer Events；位移 >5px 視為拖曳並取消圖釘點擊） */
 const mInit=dt=>{const box=dt.querySelector(".mbox");if(!box)return;if(box._m){mDraw(box);return}
@@ -783,9 +789,11 @@ const mInit=dt=>{const box=dt.querySelector(".mbox");if(!box)return;if(box._m){m
  box.addEventListener("pointermove",e=>{if(!on)return;dx=e.clientX-sx;dy=e.clientY-sy;if(!moved&&Math.hypot(dx,dy)>5){moved=true;box.classList.add("drag");try{box.setPointerCapture(e.pointerId)}catch(_){}}if(moved)L.style.transform=`translate(${dx}px,${dy}px)`});
  const end=()=>{if(!on)return;on=false;box.classList.remove("drag");if(moved){box._m.cx-=dx;box._m.cy-=dy;mDraw(box)}};
  box.addEventListener("pointerup",end);box.addEventListener("pointercancel",end);
- box.addEventListener("click",e=>{if(moved&&e.target.closest(".pin")){e.preventDefault();moved=false}},true)};
+ box.addEventListener("click",e=>{if(moved&&e.target.closest(".pin")){e.preventDefault();e.stopPropagation();moved=false}},true)};
 /* 地圖事件：details 展開時初始化；＋／－以中心為基準縮放（世界像素 ×2／÷2）；全覽重設 */
 document.addEventListener("toggle",e=>{const t=e.target;if(t.open&&t.matches&&t.matches("details.dmap"))mInit(t)},true);
+/* 聚合圖釘點擊：以聚合點為中心放大 2 層（上限 18） */
+document.addEventListener("click",e=>{const b=e.target.closest("[data-mzx]");if(!b)return;const box=b.closest(".mbox"),st=box&&box._m;if(!st)return;const z=Math.min(18,st.z+2),f=2**(z-st.z);st.cx=+b.dataset.mzx*f;st.cy=+b.dataset.mzy*f;st.z=z;mDraw(box)});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-mz]");if(!b)return;const box=b.closest(".mbox"),st=box&&box._m;if(!st)return;const k=+b.dataset.mz;
  if(k===0)mFit(box,st);else{const z=Math.min(18,Math.max(3,st.z+k));const f=2**(z-st.z);st.cx*=f;st.cy*=f;st.z=z}mDraw(box)});
 /* 視窗尺寸變更時重繪已開啟的地圖（保留中心與層級） */
