@@ -375,6 +375,11 @@ body.editing .ed{display:inline-flex}
 #toast{position:fixed;left:50%;bottom:84px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:60;max-width:calc(100vw - 32px)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 /* Modal 基礎樣式（body.modal-on 鎖定背景捲動） */
+/* 回到頂端按鈕 #totop：右下固定、捲動超過 600px 才淡入，避開 iPhone 安全區 */
+#totop{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(18px,calc(env(safe-area-inset-bottom,0px) + 10px));z-index:45;width:48px;height:48px;border-radius:50%;border:1px solid var(--rule);background:var(--bg);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.18);display:grid;place-items:center;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .2s,transform .2s,visibility .2s}
+#totop.on{opacity:.92;visibility:visible;transform:none}
+#totop:hover{opacity:1}
+#totop svg{width:22px;height:22px}
 .modal{position:fixed;inset:0;z-index:50;background:rgba(10,14,20,.55);display:grid;place-items:center;padding:16px}
 .modal[hidden]{display:none}
 body.modal-on{overflow:hidden}
@@ -740,6 +745,8 @@ footer .install{color:#9fb0c8}
 </section>
 
 <!-- 頁尾：更新時間、資料來源標示（Open-Meteo CC BY 4.0） -->
+<!-- 回到頂端 -->
+<button id="totop" type="button" aria-label="回到最上面" title="回到最上面"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <footer><svg class="fox" viewBox="0 0 120 96" aria-hidden="true"><path d="M30 92 Q18 60 40 50 L70 50 Q86 56 84 92 Z" fill="#d9782f"/><path d="M40 50 L34 22 L50 38 L64 38 L78 22 L72 50 Z" fill="#d9782f"/><path d="M47 60 Q57 70 67 60 L63 84 L51 84 Z" fill="#fff"/><circle cx="48" cy="50" r="2.6" fill="#1b1b1b"/><circle cx="66" cy="50" r="2.6" fill="#1b1b1b"/><circle cx="57" cy="57" r="2.2" fill="#1b1b1b"/><path d="M82 86 Q118 78 112 46 Q100 70 80 74 Z" fill="#d9782f"/><path d="M112 46 Q118 56 110 62 Q102 54 112 46 Z" fill="#fff"/></svg>2026 東北雪國自駕之旅・全團行程資訊<br><span id="upd"></span><br><span class="credit">天氣資料：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Weather data by Open-Meteo.com</a>（CC BY 4.0）</span><br><span class="install">加到手機主畫面：iPhone 用 Safari 打開 → 分享 → 加入主畫面；Android 用 Chrome 選單 → 加到主畫面。打開過一次後，沒網路也能看。</span></footer>
 
 <!-- 飯店資訊 modal（openTaxi 填入內容） -->
@@ -1004,6 +1011,9 @@ const autoWx=async()=>{try{
  const note=document.getElementById("wxauto");if(note&&n)note.textContent=`每天標題旁的天氣小卡：自動抓 Open-Meteo 最新預報，最後更新日本時間 ${stamp}，小卡下方寫著抓的是哪個地點（Day 1 仙台車站、Day 2 松島海岸、Day 3 銀山溫泉、Day 4 藏王溫泉、Day 5 藏王樹冰、Day 6 狐狸村、Day 7 仙台車站）。「每天行程地點的大約溫度」也會自動更新（藏王樹冰用海拔 1,661 m 地藏山頂站計算）。天氣代碼是當天「最差」的天氣，例如只有一小段時間下毛毛雨也會顯示毛毛雨。陣風 40 km/h 以上或預估會下雪時，小卡會出現紅字提醒；旅行期間「今天」區塊會顯示當地現在的氣溫、體感和風速。每日建議卡同時列出人工整理和最新預報；氣象廳預報表是人工整理（${C.updated||""}）。`;
 }catch(e){/* 離線或 API 失敗：保留手動資料 */}};
 /* 總渲染入口：content.json 載入完成後依序呼叫各 render 與 autoWx／nowWx */
+/* 回到頂端：scroll 事件以 rAF 節流切換 .on；點擊平滑捲回頂端（尊重 prefers-reduced-motion） */
+(()=>{const b=$("totop");if(!b)return;let t=0;const f=()=>{t=0;b.classList.toggle("on",scrollY>600)};addEventListener("scroll",()=>{if(!t)t=requestAnimationFrame(f)},{passive:true});f();
+ b.addEventListener("click",()=>scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"}))})();
 const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();nowWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
 fetch("content.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{C=d;$("loading").remove();renderAll()}).catch(()=>{$("loading").innerHTML="<p>行程內容載入失敗。請確認網路後重新整理；加到主畫面並打開過一次後，沒網路也能看。</p>"});
