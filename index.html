@@ -558,6 +558,22 @@ footer .install{color:#9fb0c8}
 .wxc dl div{display:grid;grid-template-columns:3em minmax(0,1fr);gap:8px;font-size:15px}
 .wxc dt{font-weight:700;color:var(--pine)}
 .wxc dd{margin:0}
+/* 天氣卡摺疊 details.wxx：summary 顯示日期、地點與天氣摘要；.wxd 改 align-items:start 避免收合卡被同列拉高 */
+.wxd{align-items:start}
+.wxx>summary{display:grid;grid-template-columns:minmax(0,1fr) auto 28px;align-items:center;gap:10px;cursor:pointer;list-style:none}
+.wxx>summary::-webkit-details-marker{display:none}
+.wxh{display:grid;gap:2px;min-width:0}
+.wxh b{font:900 20px/1.2 "Noto Serif TC",serif}
+.wxh span{font-size:14px;color:var(--soft)}
+.wxs{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;white-space:nowrap}
+.wxs i{font-style:normal;font-size:20px}
+.wxs small{font-weight:400;color:var(--soft)}
+.wxx[open] .wxs{display:none}
+@media(max-width:600px){.wxh b{font-size:17px}.wxs{font-size:13px}}
+.wxbd{display:grid;gap:8px;margin-top:10px}
+.wxbd header{display:grid;gap:6px}
+.wxgo{justify-self:start;font-size:14px;color:var(--pine);text-decoration:none;font-weight:700}
+.wxgo:hover{text-decoration:underline}
 .lv{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--soft)}
 .lv i{display:inline-block;width:10px;height:14px;border-radius:3px;background:var(--rule)}
 .lv i.on{background:var(--pine)}
@@ -844,8 +860,8 @@ el.innerHTML=`<h3 class="fch">氣象廳預報表（人工整理・11/25） <a hr
 const WL=["","輕便冬裝","保暖冬裝","防水保暖","全副雪地裝備"];
 /* 保暖等級指示格 */
 const lvHtml=n=>`<span class="lv" aria-label="穿著等級 ${n} / 4">${[1,2,3,4].map(k=>`<i class="${k<=n?"on":""}"></i>`).join("")}${esc(WL[n]||"")}</span>`;
-/* 每日天氣建議卡；.sky.live 為 API 即時列的 placeholder */
-const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><header><a href="#day${i+1}"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></a><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}<small class="src">人工整理・${esc(w.src||"")}</small></div><div class="sky live" hidden></div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl></article>`}).join("")};
+/* 每日天氣建議卡（details.wxx 摺疊：旅程前展開 Day 1–2，旅程中展開今天與明天）；.sky.live 為 API 即時列的 placeholder */
+const renderWx=()=>{const el=$("wxdays");if(!el)return;const W=C.wx||[],td=tripDay(),op=td<0?[0,1]:td<7?[td,td+1]:[];el.innerHTML=W.map((w,i)=>{const d=C.days[i]||{};return `<article class="wxc" id="wx-${i}"><details class="wxx"${op.includes(i)?" open":""}><summary><span class="wxh"><b>Day ${i+1}・${esc(d.date||"")}（${esc(d.dow||"")}）</b><span>${nb(w.place)}</span></span><span class="wxs">${w.icon?`<i aria-hidden="true">${w.icon}</i>`:""}${esc(w.short||"")}<small>${esc(w.range||"")}</small></span><span class="arr" aria-hidden="true"></span></summary><div class="wxbd"><header><div class="sky"><b>${esc(w.sky)}</b><span class="tp">${esc(w.temp)}</span>${w.rain&&w.rain!=="—"?`降雨 ${esc(w.rain)}`:""}<small class="src">人工整理・${esc(w.src||"")}</small></div><div class="sky live" hidden></div></header>${lvHtml(+w.lv||0)}<dl><div><dt>行程</dt><dd>${esc(w.trip)}</dd></div><div><dt>開車</dt><dd>${esc(w.drive)}</dd></div><div><dt>穿著</dt><dd>${esc(w.wear)}</dd></div></dl><a class="wxgo" href="#day${i+1}">看 Day ${i+1} 行程 ›</a></div></details></article>`}).join("")};
 /* 溫度條：-12～20°C 線性映射成 left／width 百分比 */
 const renderTemps=()=>{renderFc();const lo=-12,hi=20;$("temps").innerHTML=C.temps.map((t,ti)=>{const a=Math.max(lo,+t.lo),b=Math.min(hi,+t.hi);return `<div class="trow" id="temp-${ti}"><span>${esc(t.place)}</span><div class="tbar"><i style="left:${(a-lo)/(hi-lo)*100}%;width:${Math.max(2,(b-a)/(hi-lo)*100)}%"></i></div><span class="tval">${esc(t.lo)}° / ${esc(t.hi)}°<small class="tsrc">人工 ${esc(t.src||"")}</small></span>${t.w?`<a class="wx" href="https://www.google.com/search?q=${encodeURIComponent(t.w+" 天気")}" target="_blank" rel="noopener">即時預報</a>`:"<span></span>"}</div>`}).join('')};
 /* 行李勾選狀態的 localStorage key */
@@ -897,14 +913,14 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-taxi]");if
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("taxi").hidden)closeTaxi()});
 
 /* ---------- open/scroll helpers ---------- */
-const reveal=el=>{const pk=el.closest&&el.closest("details.pkd");if(pk)pk.open=true;const dx=el.closest("details.dayx");if(dx)dx.open=true;const pd=el.closest&&el.closest("details.phrd");if(pd)pd.open=true;if(el.tagName==="DETAILS")el.open=true};
+const reveal=el=>{const pk=el.closest&&el.closest("details.pkd");if(pk)pk.open=true;const dx=el.closest("details.dayx");if(dx)dx.open=true;const pd=el.closest&&el.closest("details.phrd");if(pd)pd.open=true;const wx=el.classList&&el.classList.contains("wxc")&&el.querySelector("details.wxx");if(wx)wx.open=true;if(el.tagName==="DETAILS")el.open=true};
 /* 錨點導覽：reveal＋更新 location.hash */
 const go=id=>{const el=$(id);if(!el)return;reveal(el);el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:el.classList.contains("day")?"start":"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")};
 document.addEventListener("click",e=>{const o=e.target.closest("[data-open]"),c=e.target.closest("[data-close]"),g=e.target.closest("[data-goto]");
 if(o)document.querySelectorAll(`#${o.dataset.open} details.it`).forEach(x=>x.open=true);
 if(c)document.querySelectorAll(`#${c.dataset.close} details.it`).forEach(x=>x.open=false);
 if(g)go(g.dataset.goto);
-const a=e.target.closest('a[href^="#day"]');if(a){const el=$(a.getAttribute("href").slice(1));if(el){const dx=el.querySelector("details.dayx");if(dx)dx.open=true}}});
+const aw=e.target.closest('a[href^="#wx-"]');if(aw){const c=$(aw.getAttribute("href").slice(1)),x=c&&c.querySelector("details.wxx");if(x)x.open=true}const a=e.target.closest('a[href^="#day"]');if(a){const el=$(a.getAttribute("href").slice(1));if(el){const dx=el.querySelector("details.dayx");if(dx)dx.open=true}}});
 $("allopen").addEventListener("click",()=>{const any=[...document.querySelectorAll("details.dayx")].some(d=>!d.open);document.querySelectorAll("details.dayx").forEach(d=>d.open=any);$("allopen").textContent=any?"收合每一天":"展開每一天"});
 
 /* ---------- search ---------- */
