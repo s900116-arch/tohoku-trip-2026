@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
-<meta name="description" content="12/01–12/07 仙台、松島、銀山溫泉、山形、藏王 7 天 6 夜全團行程：每日行程、導航、住宿、天氣、行李清單。">
+<meta name="description" content="12/01–12/07 仙台、松島、銀山溫泉、山形、藏王 7 天 6 夜全團行程：每日行程、地圖、住宿、天氣、行李清單。">
 <meta name="theme-color" content="#0c1628">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-title" content="東北雪國">
 <meta property="og:type" content="website">
 <meta property="og:title" content="2026 日本東北雪國自駕之旅">
-<meta property="og:description" content="12/01–12/07・仙台／松島／銀山溫泉／山形／藏王｜全團行程、導航、住宿與行李清單">
+<meta property="og:description" content="12/01–12/07・仙台／松島／銀山溫泉／山形／藏王｜全團行程、地圖、住宿與行李清單">
 <meta property="og:url" content="https://s900116-arch.github.io/tohoku-trip-2026/">
 <meta property="og:image" content="https://s900116-arch.github.io/tohoku-trip-2026/og.png">
 <meta property="og:image:width" content="1200">
@@ -653,7 +653,7 @@ train:'<rect x="14" y="26" width="92" height="46" rx="12" fill="var(--snow)" str
 
 let C=null;
 const CATS=["美食","交通","景點","溫泉","住宿","採買"];
-const navUrl=q=>"https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(q);
+const navUrl=q=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
 const nb=t=>esc(t).split(/\s*→\s*/).map(s=>`<span class="nb">${s}</span>`).join(' <span class="ar">→</span> ');
 const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
 
@@ -667,7 +667,7 @@ const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]
 const renderAnn=()=>{const a=$("ann");a.hidden=!C.announce;a.innerHTML=C.announce?`<b>最新公告</b><span>${esc(C.announce)}</span>`:"";$("upd").textContent=C.updated?`內容最後更新：${C.updated}`:""};
 const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}" data-day="${i}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#tax">退稅</a><a href="#sos">緊急</a>'};
 const pts=t=>{if(!t)return"";let L=String(t).includes("\n")?String(t).split("\n"):(String(t).length>70||String(t).includes("；")?String(t).split(/(?<=[。；;])(?![）)」])/):[String(t)]);L=L.map(x=>x.replace(/^[；;]\s*/,"").replace(/[；;]\s*$/,"").trim()).filter(Boolean);const f=x=>{const m=x.match(/^([^：:]{1,8})：(.+)$/);return m?`<b class="lb">${esc(m[1])}</b>${esc(m[2])}`:esc(x)};return L.length<2?`<p>${f(L[0]||"")}</p>`:`<ul class="pts">${L.map(x=>`<li>${f(x)}</li>`).join("")}</ul>`};
-const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google Maps 導航</a></p>`:''}</div></details>`;
+const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google 地圖</a></p>`:''}</div></details>`;
 const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
 const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div>${(()=>{const w=(C.wx||[])[di];return w&&w.icon?`<a class="wxb" id="wxb-${di}" href="#weather" title="${esc(w.sky)}，${esc(w.temp)}" onclick="event.stopPropagation()"><span class="wi" aria-hidden="true">${w.icon}</span><b>${esc(w.short)}</b><small>${esc(w.range)}</small><i class="au">${esc((w.geo||[]).map(g=>g.n).join("・"))}｜手動 11/25</i></a>`:"<span></span>"})()}<svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
 <div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
@@ -675,7 +675,7 @@ const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>
 <aside class="tips">${(C.wx&&C.wx[di])?`<div class="wxbox"><b>${esc(C.wx[di].sky)}・${esc(C.wx[di].temp)}${C.wx[di].rain&&C.wx[di].rain!=="—"?"・降雨 "+esc(C.wx[di].rain):""}</b><br>${lvHtml(+C.wx[di].lv||0)}<p><b>穿著</b> ${esc(C.wx[di].wear)}</p><p><b>開車</b> ${esc(C.wx[di].drive)}</p><p><a href="#wx-${di}">看天氣詳細</a></p></div>`:""}<h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b>${hi>=0?`<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button>`:""}</div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
 </div></details></section>`}).join('')};
 const rateHtml=h=>h.gr?`<p class="rate"><span class="st">★ ${esc(h.gr)}</span> Google（${esc(h.gn)} 則）${h.star?`・${esc(h.star)}`:""}</p>`:"";
-const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card hotel" id="hotel-${i}"><div class="n">${esc(h.when)}${h.rooms?`・${esc(h.rooms)}`:""}</div><h3>${esc(h.name)}</h3>${rateHtml(h)}<p>${esc(h.desc)}</p>${h.ja?`<p class="ja" lang="ja">${esc(h.ja)}<br>${esc(h.addr)}<br>TEL ${esc(h.tel)}</p>`:""}<p class="acts">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">導航</a>`:""}${h.ja?`<button class="btn sm" type="button" data-taxi="${i}">飯店資訊</button>`:""}</p></div>`).join('');
+const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="card hotel" id="hotel-${i}"><div class="n">${esc(h.when)}${h.rooms?`・${esc(h.rooms)}`:""}</div><h3>${esc(h.name)}</h3>${rateHtml(h)}<p>${esc(h.desc)}</p>${h.ja?`<p class="ja" lang="ja">${esc(h.ja)}<br>${esc(h.addr)}<br>TEL ${esc(h.tel)}</p>`:""}<p class="acts">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">地圖</a>`:""}${h.ja?`<button class="btn sm" type="button" data-taxi="${i}">飯店資訊</button>`:""}</p></div>`).join('');
 $("sostaxi").innerHTML=C.hotels.map((h,i)=>h.ja?`<button class="btn light" type="button" data-taxi="${i}">${esc(h.when.split("・")[0])} ${esc(h.name)}</button>`:"").join("")};
 const renderFc=()=>{const f=C.forecast,el=$("fc");if(!f||!el){if(el)el.innerHTML="";return}
 el.innerHTML=`<h3 class="fch">氣象廳預報表（人工整理・11/25） <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
@@ -700,8 +700,8 @@ const d=C.days[td],j=nowJ();if(!d){el.hidden=true;return}
 const items=d.s||[];let nx=items.findIndex(x=>{const m=tmin(x.t);return m!==null&&m>=j.min-10});
 const cur=nx>0?items[nx-1]:null,next=nx>=0?items[nx]:null,hi=hotelIdx(d.stay);
 el.hidden=false;el.innerHTML=`<div class="wrap tgrid"><div><span class="tl">今天 Day ${td+1}・${esc(d.date)}（${esc(d.dow)}）</span><h2>${nb(d.title)}</h2></div>
-<div class="tnext">${next?`<span class="tl">下一站</span><b><time>${esc(next.t)}</time> ${nb(next.title)}</b>${next.sub?`<small>${esc(next.sub)}</small>`:""}<p class="acts"><button class="btn sm" type="button" data-goto="day${td+1}-${nx}">看詳細</button>${next.q?`<a class="go" href="${navUrl(next.q)}" target="_blank" rel="noopener">導航</a>`:""}</p>`:`<span class="tl">今天的行程都結束了</span><b>好好休息</b>`}</div>
-<div class="tstay">${d.stay?`<span class="tl">今晚住宿</span><b>${esc(d.stay)}</b>${hi>=0?`<p class="acts">${C.hotels[hi].q?`<a class="go" href="${navUrl(C.hotels[hi].q)}" target="_blank" rel="noopener">導航</a>`:""}<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button></p>`:""}`:`<span class="tl">今晚</span><b>回到台灣</b>`}</div></div>`};
+<div class="tnext">${next?`<span class="tl">下一站</span><b><time>${esc(next.t)}</time> ${nb(next.title)}</b>${next.sub?`<small>${esc(next.sub)}</small>`:""}<p class="acts"><button class="btn sm" type="button" data-goto="day${td+1}-${nx}">看詳細</button>${next.q?`<a class="go" href="${navUrl(next.q)}" target="_blank" rel="noopener">地圖</a>`:""}</p>`:`<span class="tl">今天的行程都結束了</span><b>好好休息</b>`}</div>
+<div class="tstay">${d.stay?`<span class="tl">今晚住宿</span><b>${esc(d.stay)}</b>${hi>=0?`<p class="acts">${C.hotels[hi].q?`<a class="go" href="${navUrl(C.hotels[hi].q)}" target="_blank" rel="noopener">地圖</a>`:""}<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button></p>`:""}`:`<span class="tl">今晚</span><b>回到台灣</b>`}</div></div>`};
 
 const nowWx=async()=>{try{const td=tripDay();if(td<0)return;const w=(C.wx||[])[td];if(!w||!w.geo)return;const box=$("today");if(!box||box.hidden)return;
  const key="wxnow1",g=w.geo[0];let c=null;try{c=JSON.parse(localStorage.getItem(key)||"null")}catch(e){}
@@ -716,7 +716,7 @@ const openTaxi=i=>{const h=C.hotels[i];if(!h)return;const row=(k,v)=>v?`<div><dt
 $("taxibody").innerHTML=`<p class="hk">${esc(h.stay||h.when)}</p><h3 class="hn">${esc(h.name)}</h3>${rateHtml(h)}
 <div class="drv"><p class="tk1" lang="ja">こちらへ行ってください</p><p class="tk2" lang="ja">${esc(h.ja).replace("（","<br>（")}</p><p class="tk3" lang="ja">${esc(h.addr)}</p><p class="tk4">TEL ${esc(h.tel)}</p><p class="tk5">搭計程車時把這一格給司機看</p></div>
 <dl class="hinfo">${row("房間",h.rooms)}${row("房型",h.rtype)}${row("入住",h.cin)}${row("退房",h.cout)}${row("交通",h.access)}${row("停車",h.park)}${row("泡湯",h.bath)}${row("餐飲",h.food)}${list("設施",h.facil)}${list("注意",h.notes)}</dl>
-<p class="acts" style="justify-content:center">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">Google Maps 導航</a>`:""}</p>`;
+<p class="acts" style="justify-content:center">${h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">Google 地圖</a>`:""}</p>`;
 $("taxi").hidden=false;document.body.classList.add("modal-on");$("taxix").focus({preventScroll:true});document.querySelector(".tbox").scrollTop=0};
 const closeTaxi=()=>{$("taxi").hidden=true;document.body.classList.remove("modal-on")};
 document.addEventListener("click",e=>{const t=e.target.closest("[data-taxi]");if(t){openTaxi(+t.dataset.taxi);return}if(e.target.id==="taxi"||e.target.closest("#taxix"))closeTaxi()});
