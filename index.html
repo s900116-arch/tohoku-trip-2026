@@ -247,6 +247,31 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .nowwx b{font-size:20px}
 .nowwx small{color:var(--soft);font-size:11px}
 @media(max-width:600px){.wxb .alr{flex-basis:100%;font-size:11px}}
+/* 每日地圖 details.dmap：OSM 圖磚拼接（Web Mercator）、編號圖釘、縮放控制、圖例 */
+.dmap{border:1px solid var(--rule);border-radius:14px;background:var(--panel);margin:0 0 18px}
+.dmap>summary{display:flex;align-items:center;gap:10px;padding:12px 18px;cursor:pointer;list-style:none;font-size:17px}
+.dmap>summary::-webkit-details-marker{display:none}
+.dmap>summary span{margin-left:auto;color:var(--soft);font-size:14px}
+.dmap>summary::after{content:"⌄";color:var(--soft);transition:transform .2s}
+.dmap[open]>summary::after{transform:rotate(180deg)}
+.mbox{position:relative;height:clamp(280px,56vw,440px);margin:0 12px;border-radius:10px;overflow:hidden;background:#e9e5dd;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.mbox.drag{cursor:grabbing}
+.mtiles{position:absolute;inset:0;will-change:transform}
+.mtiles img{position:absolute;width:256px;height:256px;max-width:none;pointer-events:none}
+.pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--red);color:#fff;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);display:grid;place-items:center;font:700 12px/1 system-ui,sans-serif;text-decoration:none;z-index:2}
+.pin:hover,.pin:focus-visible{z-index:3;transform:scale(1.15)}
+.mctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px;z-index:4}
+.mctl button{width:36px;height:36px;border-radius:8px;border:1px solid #bbb;background:#fff;color:#222;font:700 18px/1 system-ui,sans-serif;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.mctl button.fit{font-size:11px}
+.matt{position:absolute;right:0;bottom:0;z-index:4;font-size:11px;background:rgba(255,255,255,.85);color:#333;padding:1px 6px;border-top-left-radius:6px}
+.matt a{color:#333}
+.mnote{margin:8px 18px 0;color:var(--soft);font-size:13px}
+ol.mlg{list-style:none;margin:0;padding:10px 18px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 18px}
+ol.mlg li{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+ol.mlg .pn{flex:none;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font:700 11px/1 system-ui,sans-serif;margin-top:2px}
+ol.mlg a{color:var(--ink);text-decoration:none}
+ol.mlg a:hover{text-decoration:underline}
+ol.mlg time{color:var(--red);font-variant-numeric:tabular-nums;margin-right:4px}
 /* 實用日語分類摺疊 details.phrd */
 .phrs{display:grid;gap:10px}
 .phrd{border:1px solid var(--rule);border-radius:14px;background:var(--panel)}
@@ -737,10 +762,38 @@ const pts=t=>{if(!t)return"";let L=String(t).includes("\n")?String(t).split("\n"
 const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google 地圖</a></p>`:''}</div></details>`;
 /* 依 day.stay 名稱比對 hotels 索引 */
 const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
+/* 每日地圖：以 content.json 各行程 ll（[lat,lon]）建立；同座標合併為同一編號 */
+const mapPts=d=>{const g=[];(d.s||[]).forEach(x=>{if(!x.ll)return;const k=x.ll.join(),f=g.find(p=>p.k===k);f?f.items.push(x):g.push({k,ll:x.ll,items:[x]})});g.forEach((p,i)=>p.n=i+1);return g};
+/* Web Mercator 投影：經緯度 → 縮放層級 z 的世界像素座標（256px 圖磚） */
+const mPx=(ll,z)=>{const n=256*2**z,s=Math.sin(ll[0]*Math.PI/180);return[(ll[1]+180)/360*n,(.5-Math.log((1+s)/(1-s))/(4*Math.PI))*n]};
+/* 地圖區塊 HTML：summary（地點數）＋地圖容器（延遲至展開時繪製）＋圖例 */
+const mapHtml=(d,di)=>{const g=mapPts(d);if(!g.length)return"";return `<details class="dmap" data-di="${di}"><summary>🗺️ 今日地圖<span>${g.length} 個地點</span></summary><div class="mbox"><div class="mtiles"></div><div class="mctl"><button type="button" data-mz="1" aria-label="放大">＋</button><button type="button" data-mz="-1" aria-label="縮小">－</button><button type="button" class="fit" data-mz="0" aria-label="顯示全部地點">全覽</button></div><div class="matt">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div></div><p class="mnote">位置為示意；點圖釘或下方地點開 Google 地圖。地圖可拖曳、縮放。</p><ol class="mlg">${g.map(p=>`<li><span class="pn">${p.n}</span><a href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener">${p.items.map(x=>`<time>${esc(x.t)}</time>${esc(x.title)}`).join("<br>")}</a></li>`).join("")}</ol></details>`};
+/* 全覽：取所有點的像素外框，選能容納（含邊距）的最大 z（上限 16），中心設為外框中點 */
+const mFit=(box,st)=>{const W=box.clientWidth,H=box.clientHeight;let z=16;for(;z>3;z--){const p=st.g.map(q=>mPx(q.ll,z)),xs=p.map(v=>v[0]),ys=p.map(v=>v[1]);if(Math.max(...xs)-Math.min(...xs)<=W-70&&Math.max(...ys)-Math.min(...ys)<=H-60)break}const p=st.g.map(q=>mPx(q.ll,z)),xs=p.map(v=>v[0]),ys=p.map(v=>v[1]);st.z=z;st.cx=(Math.max(...xs)+Math.min(...xs))/2;st.cy=(Math.max(...ys)+Math.min(...ys))/2};
+/* 繪製：依中心與容器尺寸計算可見圖磚範圍，輸出 OSM 圖磚 img 與圖釘（相對容器左上角定位） */
+const mDraw=box=>{const st=box._m,W=box.clientWidth,H=box.clientHeight,z=st.z,n=2**z,x0=st.cx-W/2,y0=st.cy-H/2;let h="";
+ for(let tx=Math.floor(x0/256);tx<=Math.floor((x0+W)/256);tx++)for(let ty=Math.max(0,Math.floor(y0/256));ty<=Math.min(n-1,Math.floor((y0+H)/256));ty++)h+=`<img src="https://tile.openstreetmap.org/${z}/${((tx%n)+n)%n}/${ty}.png" style="left:${Math.round(tx*256-x0)}px;top:${Math.round(ty*256-y0)}px" alt="" loading="lazy" draggable="false">`;
+ h+=st.g.map(p=>{const[x,y]=mPx(p.ll,z);return `<a class="pin" href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener" style="left:${Math.round(x-x0)}px;top:${Math.round(y-y0)}px" title="${esc(p.items.map(i=>i.t+" "+i.title).join(" / "))}">${p.n}</a>`}).join("");
+ const L=box.querySelector(".mtiles");L.style.transform="";L.innerHTML=h};
+/* 初始化：首次展開時建立狀態並綁定拖曳（Pointer Events；位移 >5px 視為拖曳並取消圖釘點擊） */
+const mInit=dt=>{const box=dt.querySelector(".mbox");if(!box)return;if(box._m){mDraw(box);return}
+ box._m={g:mapPts(C.days[+dt.dataset.di])};mFit(box,box._m);mDraw(box);
+ let sx=0,sy=0,dx=0,dy=0,on=false,moved=false;const L=box.querySelector(".mtiles");
+ box.addEventListener("pointerdown",e=>{if(e.target.closest(".mctl,.matt"))return;on=true;moved=false;sx=e.clientX;sy=e.clientY;dx=dy=0});
+ box.addEventListener("pointermove",e=>{if(!on)return;dx=e.clientX-sx;dy=e.clientY-sy;if(!moved&&Math.hypot(dx,dy)>5){moved=true;box.classList.add("drag");try{box.setPointerCapture(e.pointerId)}catch(_){}}if(moved)L.style.transform=`translate(${dx}px,${dy}px)`});
+ const end=()=>{if(!on)return;on=false;box.classList.remove("drag");if(moved){box._m.cx-=dx;box._m.cy-=dy;mDraw(box)}};
+ box.addEventListener("pointerup",end);box.addEventListener("pointercancel",end);
+ box.addEventListener("click",e=>{if(moved&&e.target.closest(".pin")){e.preventDefault();moved=false}},true)};
+/* 地圖事件：details 展開時初始化；＋／－以中心為基準縮放（世界像素 ×2／÷2）；全覽重設 */
+document.addEventListener("toggle",e=>{const t=e.target;if(t.open&&t.matches&&t.matches("details.dmap"))mInit(t)},true);
+document.addEventListener("click",e=>{const b=e.target.closest("[data-mz]");if(!b)return;const box=b.closest(".mbox"),st=box&&box._m;if(!st)return;const k=+b.dataset.mz;
+ if(k===0)mFit(box,st);else{const z=Math.min(18,Math.max(3,st.z+k));const f=2**(z-st.z);st.cx*=f;st.cy*=f;st.z=z}mDraw(box)});
+/* 視窗尺寸變更時重繪已開啟的地圖（保留中心與層級） */
+let mRz;addEventListener("resize",()=>{clearTimeout(mRz);mRz=setTimeout(()=>document.querySelectorAll("details.dmap[open] .mbox").forEach(b=>b._m&&mDraw(b)),150)});
 /* 每日行程渲染：旅程中預設展開當天，否則展開 Day 1；天氣小卡先填手動資料，再由 autoWx 覆寫 */
 const renderDays=()=>{const td=tripDay();$("days").innerHTML=C.days.map((d,di)=>{const id="day"+(di+1),open=td>=0?di===td:di===0;const hi=hotelIdx(d.stay);return `<section class="band day" id="${id}"><details class="dayx" data-i="${di}" ${open?"open":""}><summary class="wrap"><div class="dayhead"><div class="dnum"><span>Day</span><b>${di+1}</b><span>${esc(d.date)}（${esc(d.dow)}）</span></div><div><h2>${nb(d.title)}</h2><p>${esc(d.lede)}</p></div>${(()=>{const w=(C.wx||[])[di];return w&&w.icon?`<a class="wxb" id="wxb-${di}" href="#weather" title="${esc(w.sky)}，${esc(w.temp)}" onclick="event.stopPropagation()"><span class="wi" aria-hidden="true">${w.icon}</span><b>${esc(w.short)}</b><small>${esc(w.range)}</small><i class="au">${esc((w.geo||[]).map(g=>g.n).join("・"))}｜手動 ${esc(w.src||"")}</i></a>`:"<span></span>"})()}<svg class="ico" viewBox="0 0 120 90" aria-hidden="true">${ico[d.ico]||""}</svg><span class="arr big" aria-hidden="true"></span></div></summary><div class="wrap">
 <div class="daytools"><button class="btn" type="button" data-open="${id}">展開全部項目</button><button class="btn" type="button" data-close="${id}">收合全部項目</button></div>
-<div class="daybody"><div class="sched">${(d.s||[]).map((x,i)=>itemHtml(x,`${id}-${i}`)).join('')}</div>
+${mapHtml(d,di)}<div class="daybody"><div class="sched">${(d.s||[]).map((x,i)=>itemHtml(x,`${id}-${i}`)).join('')}</div>
 <aside class="tips">${(C.wx&&C.wx[di])?`<div class="wxbox"><b>${esc(C.wx[di].sky)}・${esc(C.wx[di].temp)}${C.wx[di].rain&&C.wx[di].rain!=="—"?"・降雨 "+esc(C.wx[di].rain):""}</b><br>${lvHtml(+C.wx[di].lv||0)}<p><b>穿著</b> ${esc(C.wx[di].wear)}</p><p><b>開車</b> ${esc(C.wx[di].drive)}</p><p><a href="#wx-${di}">看天氣詳細</a></p></div>`:""}<h3>今日提醒</h3><ul>${(d.t||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${d.stay?`<div class="stay">今晚住宿：<b>${esc(d.stay)}</b>${hi>=0?`<button class="btn sm" type="button" data-taxi="${hi}">飯店資訊</button>`:""}</div>`:'<div class="stay">晚上抵達台灣，旅程結束</div>'}</aside></div>
 </div></details></section>`}).join('')};
 /* 飯店 Google 評分列 */
