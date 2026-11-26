@@ -604,6 +604,17 @@ footer .install{color:#9fb0c8}
 .tfoot{position:sticky;bottom:0;z-index:2;display:flex;justify-content:center;padding:18px 0 max(16px,env(safe-area-inset-bottom,0px));margin-top:14px;background:linear-gradient(rgba(255,255,255,0),#fff 40%)}
 .tfoot:empty{display:none}
 .tfoot .go{box-shadow:0 4px 14px rgba(0,0,0,.2)}
+/* 手機版每日標題排版統一：Day 方塊與箭頭靠上對齊；天氣小卡改為固定格線（圖示｜天氣｜溫度・降雨 同一列，來源與提醒列在下方），寬度撐滿標題欄，各天一致 */
+@media(max-width:600px){
+details.dayx .dayhead{align-items:start}
+details.dayx .dayhead .dnum{align-self:start;width:96px;box-sizing:border-box;padding-left:6px;padding-right:6px}
+details.dayx .dayhead .arr{align-self:start;margin-top:6px}
+.wxb{display:grid!important;grid-template-columns:auto auto minmax(0,1fr);column-gap:6px;row-gap:2px;align-items:center;justify-items:start;justify-self:stretch!important;width:100%;box-sizing:border-box;text-align:left;padding:6px 12px!important;border-radius:12px!important}
+.wxb .wi{grid-column:1;grid-row:1;font-size:20px}
+.wxb b{grid-column:2;grid-row:1;white-space:nowrap;margin:0}
+.wxb small{grid-column:3;grid-row:1;white-space:nowrap}
+.wxb .au,.wxb .alr,.wxb .snq{grid-column:1/-1;flex-basis:auto;margin-top:0}
+}
 </style>
 </head>
 <body>
