@@ -802,8 +802,8 @@ const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#f
 const pts=t=>{if(!t)return"";let L=String(t).includes("\n")?String(t).split("\n"):(String(t).length>70||String(t).includes("；")?String(t).split(/(?<=[。；;])(?![）)」])/):[String(t)]);L=L.map(x=>x.replace(/^[；;]\s*/,"").replace(/[；;]\s*$/,"").trim()).filter(Boolean);const f=x=>{const m=x.match(/^([^：:]{1,8})：(.+)$/);return m?`<b class="lb">${esc(m[1])}</b>${esc(m[2])}`:esc(x)};return L.length<2?`<p>${f(L[0]||"")}</p>`:`<ul class="pts">${L.map(x=>`<li>${f(x)}</li>`).join("")}</ul>`};
 /* 單一行程項目模板（details.it）：summary＋說明＋注意＋地圖按鈕 */
 const itemHtml=(x,id)=>`<details class="it" id="${id}"><summary><time>${esc(x.t)}</time><div><b>${nb(x.title)}</b>${x.cat?`<span class="cat">${esc(x.cat)}</span>`:""}${x.sub?`<small>${esc(x.sub)}</small>`:''}</div><span class="arr" aria-hidden="true"></span></summary><div class="det">${pts(x.detail)||"<p>—</p>"}${x.warn?`<div class="warn"><b>注意</b>${pts(x.warn)}</div>`:''}${x.q?`<p class="acts"><a class="go" href="${navUrl(x.q)}" target="_blank" rel="noopener">Google 地圖</a></p>`:''}</div></details>`;
-/* 依 day.stay 名稱比對 hotels 索引 */
-const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name)):-1;
+/* 依 day.stay 名稱比對 hotels 索引：取飯店名「（」前的主名稱做包含比對（例：仙台大都會大飯店（本館・西口）↔ 仙台大都會大飯店 本館（第 1 晚）） */
+const hotelIdx=name=>name?C.hotels.findIndex(h=>name.includes(h.name.split("（")[0].trim())):-1;
 /* 每日地圖：以 content.json 各行程 ll（[lat,lon]）建立；同座標合併為同一編號 */
 const mapPts=d=>{const g=[];(d.s||[]).forEach(x=>{if(!x.ll)return;const k=x.ll.join(),f=g.find(p=>p.k===k);f?f.items.push(x):g.push({k,ll:x.ll,items:[x]})});g.forEach((p,i)=>p.n=i+1);return g};
 /* Web Mercator 投影：經緯度 → 縮放層級 z 的世界像素座標（256px 圖磚） */
