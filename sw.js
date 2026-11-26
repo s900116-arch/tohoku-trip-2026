@@ -1,7 +1,7 @@
 /* Service Worker：PWA 離線支援
    策略：同源資源 network-first（略過 HTTP 快取），離線時回退 Cache Storage；Google Fonts 採 cache-first。
    CACHE 名稱於每次發版遞增，activate 時清除舊版快取。 */
-const CACHE="tohoku26-v57";
+const CACHE="tohoku26-v58";
 /* 預快取清單：首頁、資料檔、manifest、圖示與主視覺（install 階段寫入） */
 const CORE=["./","index.html","content.json","manifest.webmanifest","icon-192.png","icon-512.png","apple-touch-icon.png","favicon.svg","favicon-32.png","hero-800.jpg","hero-1200.jpg"];
 /* install：預快取 CORE 後 skipWaiting，新版 SW 立即進入 activate */
