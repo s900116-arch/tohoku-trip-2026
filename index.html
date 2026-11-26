@@ -248,6 +248,9 @@ details[open]>summary .arr{transform:rotate(180deg)}
 .pkd>.check{padding:0 18px 12px}
 .check .tag{font-style:normal;font-size:11px;margin-left:6px;padding:1px 7px;border-radius:999px;border:1px solid var(--rule);color:var(--soft);white-space:nowrap;text-decoration:none;display:inline-block}
 .check .tag.t-must{color:#b4502a;border-color:#b4502a}
+#tax .taxmap{margin:0 0 12px}
+#tax .taxmap img{width:100%;height:auto;border-radius:10px;background:#fff;border:1px solid var(--rule)}
+#tax .taxmap figcaption{font-size:12px;color:var(--soft);margin-top:4px}
 .det .pts{margin:0;padding:0;list-style:none}
 .det .pts li{position:relative;padding-left:14px;margin:0 0 6px;line-height:1.7}
 .det .pts li::before{content:"";position:absolute;left:2px;top:.72em;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45}
@@ -682,7 +685,7 @@ const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`�
 const renderPack=()=>{const G=C.pack||[{g:"行李",note:"",L:C.items.map(t=>({t,tag:""}))}];C.items=G.flatMap(g=>g.L.map(x=>x.t));let k=0;$("check").innerHTML=G.map((g,gi)=>`<details class="pkd" data-g="${gi}"${gi===0?" open":""}><summary><b>${esc(g.g)}</b><span class="pkn"></span></summary>${g.note?`<p class="pknote">${esc(g.note)}</p>`:""}<ul class="check">${g.L.map(x=>{const i=k++;return `<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x.t)}" ${st[x.t]?'checked':''}><span>${esc(x.t)}${x.tag?`<em class="tag t-${x.tag==="必帶"?"must":"who"}">${esc(x.tag)}</em>`:""}</span></label></li>`}).join("")}</ul></details>`).join("");upd()};
 $("check").addEventListener("change",e=>{const v=e.target.dataset.v;if(v===undefined)return;st[v]=e.target.checked;store.set(pkKey,JSON.stringify(st));upd()});
 $("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
-const renderTax=()=>{const T=C.tax;if(!T){$("tax").hidden=true;return}$("taxlead").textContent=T.lead||"";$("taxg").innerHTML=(T.cards||[]).map((c,i)=>`<div class="card${/機場/.test(c.title)?" air":""}" id="tax-${i}"><h3>${esc(c.title)}</h3>${pts((c.pts||[]).join("\n")+((c.pts||[]).length<2?"\n":""))}</div>`).join("")};
+const renderTax=()=>{const T=C.tax;if(!T){$("tax").hidden=true;return}$("taxlead").textContent=T.lead||"";$("taxg").innerHTML=(T.cards||[]).map((c,i)=>`<div class="card${/機場/.test(c.title)?" air":""}" id="tax-${i}"><h3>${esc(c.title)}</h3>${c.img?`<figure class="taxmap"><a href="${esc(c.img)}" target="_blank" rel="noopener"><img src="${esc(c.img)}" alt="${esc(c.imgcap||"")}" loading="lazy"></a><figcaption>${esc(c.imgcap||"")}（點圖放大）</figcaption></figure>`:""}${pts((c.pts||[]).join("\n")+((c.pts||[]).length<2?"\n":""))}</div>`).join("")};
 const renderNotes=()=>{$("notes").innerHTML=C.notes.map((n,i)=>`<div class="card" id="note-${i}"><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></div>`).join('')};
 const canSpeak="speechSynthesis" in window;
 const renderPhr=()=>{const G=[];C.phr.forEach((p,i)=>{const g=p.g||"常用";let o=G.find(x=>x.g===g);if(!o){o={g,L:[]};G.push(o)}o.L.push([p,i])});$("phr").innerHTML=G.map(o=>`<details class="phrd"><summary><b>${esc(o.g)}</b><span>${o.L.length} 句</span></summary><div class="phr">${o.L.map(([p,i])=>`<div id="phr-${i}"><div><b lang="ja">${esc(p.ja)}</b><span>${esc(p.zh)}</span></div>${canSpeak?`<button class="btn sm say" type="button" data-say="${esc(p.ja)}" aria-label="播放發音：${esc(p.ja)}">播放</button>`:""}</div>`).join("")}</div></details>`).join("")};
