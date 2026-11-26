@@ -778,7 +778,7 @@ const mDraw=box=>{const st=box._m,W=box.clientWidth,H=box.clientHeight,z=st.z,n=
  /* 圖釘聚合：目前層級下像素距離 <28px 的點合併為一顆（標示編號範圍），點擊後以聚合中心放大 */
  const cl=[];st.g.forEach(p=>{const[x,y]=mPx(p.ll,z),c=cl.find(c=>Math.hypot(c.x-x,c.y-y)<28);if(c){c.ps.push(p);c.x=(c.x*(c.ps.length-1)+x)/c.ps.length;c.y=(c.y*(c.ps.length-1)+y)/c.ps.length}else cl.push({x,y,ps:[p]})});
  h+=cl.map(c=>{const l=Math.round(c.x-x0),t=Math.round(c.y-y0);if(c.ps.length===1){const p=c.ps[0];return `<a class="pin" href="${navUrl(p.items[0].q||p.ll.join(","))}" target="_blank" rel="noopener" style="left:${l}px;top:${t}px" title="${esc(p.items.map(i=>i.t+" "+i.title).join(" / "))}">${p.n}</a>`}
-  const ns=c.ps.map(p=>p.n),lab=ns.every((n,i)=>!i||n===ns[i-1]+1)?ns[0]+"–"+ns[ns.length-1]:ns.join(",");
+  const ns=c.ps.map(p=>p.n),lab=ns.every((n,i)=>!i||n===ns[i-1]+1)?ns[0]+"～"+ns[ns.length-1]:ns.join(",");
   return `<button type="button" class="pin grp" data-mzx="${c.x}" data-mzy="${c.y}" style="left:${l}px;top:${t}px" title="放大查看 ${esc(lab)}" aria-label="放大查看 ${esc(lab)}">${lab}</button>`}).join("");
  const L=box.querySelector(".mtiles");L.style.transform="";L.innerHTML=h};
 /* 初始化：首次展開時建立狀態並綁定拖曳（Pointer Events；位移 >5px 視為拖曳並取消圖釘點擊） */
