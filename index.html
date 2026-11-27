@@ -910,7 +910,7 @@ const renderHotels=()=>{$("hotels").innerHTML=C.hotels.map((h,i)=>`<div class="c
 $("sostaxi").innerHTML=C.hotels.map((h,i)=>h.ja?`<button class="btn light" type="button" data-taxi="${i}">${esc(h.when.split("・")[0])} ${esc(h.name)}</button>`:"").join("")};
 /* 氣象廳預報表（人工整理資料） */
 const renderFc=()=>{const f=C.forecast,el=$("fc");if(!f||!el){if(el)el.innerHTML="";return}
-el.innerHTML=`<h3 class="fch">氣象廳預報表（人工整理・11/25） <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
+el.innerHTML=`<h3 class="fch">氣象廳預報表（人工整理${f.asof?"・"+esc(f.asof):""}） <a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.src)}</a></h3><div class="scroll"><table class="fct"><thead><tr><th>日期</th>${f.cols.map(c=>`<th>${esc(c)}<br><small>${/^天氣/.test(c)?"降雨機率":"最高 / 最低"}</small></th>`).join("")}</tr></thead><tbody>${f.rows.map(r=>`<tr><td>${esc(r.d)}${r.avg?'<small>5 日平均</small>':''}</td>${r.v.map(v=>`<td class="num">${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div><p class="note">${esc(f.note)}</p>`};
 /* 保暖等級文字對照 */
 const WL=["","輕便冬裝","保暖冬裝","防水保暖","全副雪地裝備"];
 /* 保暖等級指示格 */
@@ -1069,6 +1069,11 @@ const autoWx=async()=>{try{
  b.addEventListener("click",()=>scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"}))})();
 const renderAll=()=>{renderAnn();renderNav();renderToday();renderDays();autoWx();nowWx();renderHotels();renderTemps();renderWx();renderPack();renderNotes();renderTax();renderPhr();buildIdx();run();
 if(location.hash){const el=$(location.hash.slice(1));if(el){const dx=el.querySelector?el.querySelector("details.dayx"):null;if(dx)dx.open=true;reveal(el)}}};
+/* 天氣自動更新：分頁切回前景（visibilitychange）或每 15 分鐘重跑 renderAnn／renderToday／autoWx／nowWx；
+   autoWx（每日預報，localStorage 快取 1 小時）與 nowWx（即時，15 分鐘）自帶快取期限，未過期只重繪不重抓 */
+const wxRefresh=()=>{if(!C||document.hidden)return;renderAnn();renderToday();autoWx();nowWx()};
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)wxRefresh()});
+setInterval(wxRefresh,15*60e3);
 fetch("content.json",{cache:"no-cache"}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{C=d;$("loading").remove();renderAll()}).catch(()=>{$("loading").innerHTML="<p>行程內容載入失敗。請確認網路後重新整理；加到主畫面並打開過一次後，沒網路也能看。</p>"});
 setInterval(()=>{if(C)renderToday()},60000);
 
