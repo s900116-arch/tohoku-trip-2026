@@ -307,6 +307,11 @@ ol.mlg time{color:var(--red);font-variant-numeric:tabular-nums;margin-right:4px}
 .pkd>.check{padding:0 18px 12px}
 .check .tag{font-style:normal;font-size:11px;margin-left:6px;padding:1px 7px;border-radius:999px;border:1px solid var(--rule);color:var(--soft);white-space:nowrap;text-decoration:none;display:inline-block}
 .check .tag.t-must{color:#b4502a;border-color:#b4502a}
+/* 行李清單：隨身／託運標籤與說明列 */
+.tag.t-carry{color:#1f5fa8;border-color:#1f5fa8;background:rgba(31,95,168,.06)}
+.tag.t-chk{color:#6b5a3e;border-color:#a08a62;background:rgba(160,138,98,.08)}
+.pklg{margin:0 0 10px;font-size:13px;color:var(--soft)}
+.pklg .tag{font-style:normal;font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid;display:inline-block;margin-right:2px}
 #tax .taxmaps{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;align-items:start;margin:0 0 12px}
 #tax .taxmapn{grid-column:1/-1;margin:0;font-size:12px;color:var(--soft)}
 @media(max-width:600px){#tax .taxmaps{grid-template-columns:1fr}}
@@ -901,7 +906,7 @@ const pkKey="tohoku26-pack";let st={};try{st=JSON.parse(store.get(pkKey)||"{}")}
 /* 更新總進度與各分類「已勾／總數」 */
 const upd=()=>{const n=C.items.filter(x=>st[x]).length;$("prog").textContent=`已準備 ${n} / ${C.items.length} 項`;(C.pack||[]).forEach((g,gi)=>{const e=document.querySelector(`.pkd[data-g="${gi}"] .pkn`);if(e){const m=g.L.filter(x=>st[x.t]).length;e.textContent=`${m} / ${g.L.length}`;e.classList.toggle("done",m===g.L.length)}})};
 /* 行李清單：分類 details＋checkbox，勾選以品項文字為 key */
-const renderPack=()=>{const G=C.pack||[{g:"行李",note:"",L:C.items.map(t=>({t,tag:""}))}];C.items=G.flatMap(g=>g.L.map(x=>x.t));let k=0;$("check").innerHTML=G.map((g,gi)=>`<details class="pkd" data-g="${gi}"${gi===0?" open":""}><summary><b>${esc(g.g)}</b><span class="pkn"></span></summary>${g.note?`<p class="pknote">${esc(g.note)}</p>`:""}<ul class="check">${g.L.map(x=>{const i=k++;return `<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x.t)}" ${st[x.t]?'checked':''}><span>${esc(x.t)}${x.tag?`<em class="tag t-${x.tag==="必帶"?"must":"who"}">${esc(x.tag)}</em>`:""}</span></label></li>`}).join("")}</ul></details>`).join("");upd()};
+const renderPack=()=>{const G=C.pack||[{g:"行李",note:"",L:C.items.map(t=>({t,tag:""}))}];C.items=G.flatMap(g=>g.L.map(x=>x.t));let k=0;$("check").innerHTML=`<p class="pklg"><em class="tag t-carry">🎒隨身</em> 一定要帶上飛機　<em class="tag t-chk">🧳託運</em> 不能帶上飛機或建議放託運</p>`+G.map((g,gi)=>`<details class="pkd" data-g="${gi}"${gi===0?" open":""}><summary><b>${esc(g.g)}</b><span class="pkn"></span></summary>${g.note?`<p class="pknote">${esc(g.note)}</p>`:""}<ul class="check">${g.L.map(x=>{const i=k++;return `<li id="pack-${i}"><label><input type="checkbox" id="pk${i}" data-v="${esc(x.t)}" ${st[x.t]?'checked':''}><span>${esc(x.t)}${x.tag?`<em class="tag t-${x.tag==="必帶"?"must":"who"}">${esc(x.tag)}</em>`:""}${x.bag?`<em class="tag t-${x.bag==="隨身"?"carry":"chk"}">${x.bag==="隨身"?"🎒":"🧳"}${esc(x.bag)}</em>`:""}</span></label></li>`}).join("")}</ul></details>`).join("");upd()};
 $("check").addEventListener("change",e=>{const v=e.target.dataset.v;if(v===undefined)return;st[v]=e.target.checked;store.set(pkKey,JSON.stringify(st));upd()});
 $("reset").addEventListener("click",()=>{st={};store.del(pkKey);renderPack()});
 /* 退稅新制卡片（含圖片 figure） */
