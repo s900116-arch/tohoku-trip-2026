@@ -807,7 +807,11 @@ const tripDay=()=>{const j=nowJ();const d=Math.round((new Date(j.date+"T00:00:00
 const tmin=t=>{const m=/^(\d{1,2}):(\d{2})/.exec(t||"");return m?+m[1]*60+ +m[2]:(/晚/.test(t)?19*60:null)};
 
 /* ---------- render ---------- */
-const renderAnn=()=>{const a=$("ann");a.hidden=!C.announce;a.innerHTML=C.announce?`<b>最新公告</b><span>${esc(C.announce)}</span>`:"";$("upd").textContent=C.updated?`內容最後更新：${C.updated}`:""};
+/* 首頁公告：只顯示當天（出發前顯示 Day 1）的天氣摘要，取自 C.wx；C.announce 有內容時附在後面 */
+const renderAnn=()=>{const a=$("ann"),td=tripDay(),after=td<0&&nowJ().date>"2026-12-07",i=td<0?0:td,w=(C.wx||[])[i],d=C.days[i];let t="";
+ if(w&&d&&!after){const rain=String(w.rain||"").replace(/（[^）]*）/g,"");t=`${td<0?"出發日":"今天"} Day ${i+1}・${d.date}：${w.icon||""}${w.short||w.sky}，${w.range||w.temp}${rain&&rain!=="—"?`，降雨 ${rain}`:""}${w.snow&&+w.snow.see>0?`，看到雪約 ${+w.snow.see}%`:""}。`}
+ if(C.announce)t+=(t?" ":"")+C.announce;
+ a.hidden=!t;a.innerHTML=t?`<b>${td<0?"出發日天氣":"今日天氣"}</b><span>${esc(t)} <a href="#wx-${i}">看詳細</a></span>`:"";$("upd").textContent=C.updated?`內容最後更新：${C.updated}`:""};
 /* 導覽列 Day 錨點與路線站點渲染 */
 const renderNav=()=>{$("nav").innerHTML='<a href="#search">查詢</a><a href="#flight">航班</a>'+C.days.map((d,i)=>`<a href="#day${i+1}" data-day="${i}">Day ${i+1}・${esc(d.date)}</a>`).join('')+'<a href="#hotel">住宿</a><a href="#weather">天氣</a><a href="#pack">行李</a><a href="#tips">提醒</a><a href="#tax">退稅</a><a href="#sos">緊急</a>'};
 /* 文字條列化：優先依 \n 切分；超過 70 字或含「；」時依句讀切分；「標籤：內容」轉為粗體 .lb */
