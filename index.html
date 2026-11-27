@@ -33,6 +33,25 @@
    TYPE Noto Serif TC 900 display + system sans text
    LAYOUT title + countdown across the top, scene full width under it, red stop line; then days as hanging-time schedules; phone stacks */
 :root{color-scheme:light dark;
+--bg:#ffffff;
+--ink:#1b1f24;
+--soft:#5b636d;
+--rule:#e6e2dc;
+--red:#c4372b;
+--redink:#ffffff;
+--pine:#1f4a3c;
+--gold:#b37a12;
+--panel:#faf7f2;
+--sky1:#a9c4dd;
+--sky2:#eef3f7;
+--far:#b8c8d8;
+--mid:#8aa2ba;
+--snow:#ffffff;
+--snowsh:#dfe7ef;
+--wood:#6e3f2b;
+--win:#f3c86b;
+--tree:#24503f}
+@supports (color:light-dark(#000,#fff)){:root{color-scheme:light dark;
 --bg:light-dark(#ffffff,#10161d);
 --ink:light-dark(#1b1f24,#eef1f4);
 --soft:light-dark(#5b636d,#a9b3bd);
@@ -50,7 +69,7 @@
 --snowsh:light-dark(#dfe7ef,#9fb0c2);
 --wood:light-dark(#6e3f2b,#4a2a1e);
 --win:light-dark(#f3c86b,#ffcf6a);
---tree:light-dark(#24503f,#183a2e)}
+--tree:light-dark(#24503f,#183a2e)}}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
 /* 基礎重設：box-sizing、預設字型堆疊、捲動行為 */
@@ -472,7 +491,8 @@ a.go:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 @media(max-width:600px){details.dayx .dayhead{grid-template-columns:auto minmax(0,1fr) auto 36px}.trow{grid-template-columns:5.2em minmax(0,1fr) 5.4em;row-gap:2px}.trow .wx{grid-column:2/-1;text-align:left}}
 
 /* ===== Winter theme: Ginzan blue hour, Zao rime ice, Sendai crescent, fox village ===== */
-:root{--bg:light-dark(#f7f9fc,#0e1626);--ink:light-dark(#18202c,#e9eef6);--soft:light-dark(#5a6676,#a6b3c4);--rule:light-dark(#dfe6ef,#24324a);--red:light-dark(#b4502a,#f0935a);--pine:light-dark(#223a5e,#a9c3e6);--gold:light-dark(#a86f10,#f0b84a);--panel:light-dark(#edf2f8,#152038);--night:#1d3050;--lamp:#ffd27a;--woodc:#6b3f2b;--yuki:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237d95b8%22%20stroke-width%3D%221.2%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.22%22%3E%3Cg%20transform%3D%22translate%2830%2030%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2890%2088%29%20scale%28.6%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3C/g%3E%3Cg%20fill%3D%22%237d95b8%22%20opacity%3D%22.25%22%3E%3Ccircle%20cx%3D%2285%22%20cy%3D%2225%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2295%22%20r%3D%221.3%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%221%22/%3E%3C/g%3E%3C/svg%3E");--flake:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-12%20-12%2024%2024%22%3E%3Cg%20stroke%3D%22%23000%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%3E%3Cg%20id%3D%22a%22%3E%3Cpath%20d%3D%22M0-10V10M-3-7L0-4L3-7M-3%207L0%204L3%207%22/%3E%3C/g%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%2860%29%22/%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%28120%29%22/%3E%3C/g%3E%3C/svg%3E")}
+:root{--bg:#f7f9fc;--ink:#18202c;--soft:#5a6676;--rule:#dfe6ef;--red:#b4502a;--pine:#223a5e;--gold:#a86f10;--panel:#edf2f8;--night:#1d3050;--lamp:#ffd27a;--woodc:#6b3f2b;--yuki:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237d95b8%22%20stroke-width%3D%221.2%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.22%22%3E%3Cg%20transform%3D%22translate%2830%2030%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2890%2088%29%20scale%28.6%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3C/g%3E%3Cg%20fill%3D%22%237d95b8%22%20opacity%3D%22.25%22%3E%3Ccircle%20cx%3D%2285%22%20cy%3D%2225%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2295%22%20r%3D%221.3%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%221%22/%3E%3C/g%3E%3C/svg%3E");--flake:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-12%20-12%2024%2024%22%3E%3Cg%20stroke%3D%22%23000%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%3E%3Cg%20id%3D%22a%22%3E%3Cpath%20d%3D%22M0-10V10M-3-7L0-4L3-7M-3%207L0%204L3%207%22/%3E%3C/g%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%2860%29%22/%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%28120%29%22/%3E%3C/g%3E%3C/svg%3E")}
+@supports (color:light-dark(#000,#fff)){:root{--bg:light-dark(#f7f9fc,#0e1626);--ink:light-dark(#18202c,#e9eef6);--soft:light-dark(#5a6676,#a6b3c4);--rule:light-dark(#dfe6ef,#24324a);--red:light-dark(#b4502a,#f0935a);--pine:light-dark(#223a5e,#a9c3e6);--gold:light-dark(#a86f10,#f0b84a);--panel:light-dark(#edf2f8,#152038);--night:#1d3050;--lamp:#ffd27a;--woodc:#6b3f2b;--yuki:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%237d95b8%22%20stroke-width%3D%221.2%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.22%22%3E%3Cg%20transform%3D%22translate%2830%2030%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2890%2088%29%20scale%28.6%29%22%3E%3Cpath%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%2860%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3Cpath%20transform%3D%22rotate%28120%29%22%20d%3D%22M0-9V9M-2.6-6.4L0-3.8L2.6-6.4M-2.6%206.4L0%203.8L2.6%206.4%22/%3E%3C/g%3E%3C/g%3E%3Cg%20fill%3D%22%237d95b8%22%20opacity%3D%22.25%22%3E%3Ccircle%20cx%3D%2285%22%20cy%3D%2225%22%20r%3D%221.6%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2295%22%20r%3D%221.3%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2260%22%20r%3D%221%22/%3E%3C/g%3E%3C/svg%3E");--flake:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-12%20-12%2024%2024%22%3E%3Cg%20stroke%3D%22%23000%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%3E%3Cg%20id%3D%22a%22%3E%3Cpath%20d%3D%22M0-10V10M-3-7L0-4L3-7M-3%207L0%204L3%207%22/%3E%3C/g%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%2860%29%22/%3E%3Cuse%20href%3D%22%23a%22%20transform%3D%22rotate%28120%29%22/%3E%3C/g%3E%3C/svg%3E")}}
 /* 冬季主題覆寫：hero、倒數、場景、導覽列與各區塊配色（後宣告覆蓋前述基礎樣式） */
 .hero{background:linear-gradient(180deg,#0c1628 0%,#121e33 100%);color:#eef3fa}
 .hero .top{padding-bottom:6px}
@@ -636,7 +656,7 @@ details.dayx .dayhead .arr{align-self:start;margin-top:6px}
 </header>
 
 <div class="scene photo" role="img" aria-label="雪夜的銀山溫泉街插畫：兩岸亮燈的木造旅館、雙頭瓦斯燈、積雪的小橋">
-<img src="hero-1200.jpg" srcset="hero-800.jpg 800w, hero-1200.jpg 1200w, hero-1920.jpg 1920w" sizes="100vw" width="2528" height="1686" alt="" fetchpriority="high">
+<img src="hero-1200.jpg" srcset="hero-800.jpg 800w, hero-1200.jpg 1200w, hero-1920.jpg 1920w" sizes="100vw" width="2528" height="1686" alt="" fetchpriority="high" decoding="async">
 <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g id="snowfall"></g></svg>
 </div>
 
@@ -938,16 +958,19 @@ const nowWx=async()=>{try{const td=tripDay();if(td<0)return;const w=(C.wx||[])[t
  e.innerHTML=`<span class="tl">${esc(g.n)} 現在</span><b>${m[0]} ${Math.round(v.temperature_2m)}°C</b><span>體感 ${Math.round(v.apparent_temperature)}°・${esc(m[1])}・風 ${Math.round(v.wind_speed_10m)} km/h（陣風 ${Math.round(v.wind_gusts_10m)}）</span><small>Open-Meteo・${ts.getUTCHours()}:${String(ts.getUTCMinutes()).padStart(2,"0")} 更新</small>`;
 }catch(e){}};
 /* ---------- taxi card ---------- */
-const openTaxi=i=>{const h=C.hotels[i];if(!h)return;const row=(k,v)=>v?`<div><dt>${k}</dt><dd>${String(v).includes("\n")?pts(v):esc(v)}</dd></div>`:"";const list=(k,a)=>a&&a.length?`<div><dt>${k}</dt><dd><ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd></div>`:"";
+let taxiFrom=null;
+const openTaxi=i=>{const h=C.hotels[i];if(!h)return;taxiFrom=document.activeElement;const row=(k,v)=>v?`<div><dt>${k}</dt><dd>${String(v).includes("\n")?pts(v):esc(v)}</dd></div>`:"";const list=(k,a)=>a&&a.length?`<div><dt>${k}</dt><dd><ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd></div>`:"";
 $("taxibody").innerHTML=`<p class="hk">${esc(h.stay||h.when)}</p><h3 class="hn">${esc(h.name)}</h3>${rateHtml(h)}
 <div class="drv"><p class="tk1" lang="ja">こちらへ行ってください</p><p class="tk2" lang="ja">${esc(h.ja).replace("（","<br>（")}</p><p class="tk3" lang="ja">${esc(h.addr)}</p><p class="tk4">TEL ${esc(h.tel)}</p><p class="tk5">搭計程車時把這一格給司機看</p></div>
 <dl class="hinfo">${row("房間",h.rooms)}${row("房型",h.rtype)}${row("入住",h.cin)}${row("退房",h.cout)}${row("交通",h.access)}${row("停車",h.park)}${row("泡湯",h.bath)}${row("餐飲",h.food)}${list("設施",h.facil)}${list("注意",h.notes)}</dl>
 `;$("taxifoot").innerHTML=h.q?`<a class="go" href="${navUrl(h.q)}" target="_blank" rel="noopener">Google 地圖</a>`:"";
 $("taxi").hidden=false;document.body.classList.add("modal-on");$("taxix").focus({preventScroll:true});document.querySelector(".tbox").scrollTop=0};
 /* 關閉 modal 並還原焦點 */
-const closeTaxi=()=>{$("taxi").hidden=true;document.body.classList.remove("modal-on")};
+/* 關閉飯店視窗：焦點還給開啟它的按鈕 */
+const closeTaxi=()=>{$("taxi").hidden=true;document.body.classList.remove("modal-on");if(taxiFrom&&taxiFrom.focus)taxiFrom.focus({preventScroll:true});taxiFrom=null};
 document.addEventListener("click",e=>{const t=e.target.closest("[data-taxi]");if(t){openTaxi(+t.dataset.taxi);return}if(e.target.id==="taxi"||e.target.closest("#taxix"))closeTaxi()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("taxi").hidden)closeTaxi()});
+/* 飯店視窗鍵盤操作：Esc 關閉；Tab／Shift+Tab 在視窗內循環（焦點圈選） */
+document.addEventListener("keydown",e=>{const m=$("taxi");if(m.hidden)return;if(e.key==="Escape"){closeTaxi();return}if(e.key!=="Tab")return;const f=[...m.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent);if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}});
 
 /* ---------- open/scroll helpers ---------- */
 const reveal=el=>{const pk=el.closest&&el.closest("details.pkd");if(pk)pk.open=true;const dx=el.closest("details.dayx");if(dx)dx.open=true;const pd=el.closest&&el.closest("details.phrd");if(pd)pd.open=true;const wx=el.classList&&el.classList.contains("wxc")&&el.querySelector("details.wxx");if(wx)wx.open=true;if(el.tagName==="DETAILS")el.open=true};

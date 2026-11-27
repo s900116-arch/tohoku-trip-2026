@@ -3,6 +3,13 @@
 2026東北雪國7日遊網頁：https://s900116-arch.github.io/tohoku-trip-2026/
 時間為台灣時間；每一筆都可以在 GitHub 的 commit 紀錄用代碼查到修改內容。功能總覽見 [FEATURES-功能總覽.md](FEATURES-功能總覽.md)。
 
+## 2026-11-28
+
+### Codex 審查修正
+| 時間 | 代碼 | 變更 |
+|---|---|---|
+| 02:05 | — | 依 Codex 審查：SW 只清本站 tohoku26- 前綴快取（不再刪到同網域 pdd-calculator 的快取）、只從本站快取讀取；離線時只有頁面導覽才回退 index.html，其他資源回網路錯誤；light-dark() 加一般色彩備援（舊版 iOS／Android 瀏覽器）；主視覺加 decoding=async；飯店視窗加 Tab 焦點圈選、關閉後焦點回到原按鈕 |
+
 ## 2026-11-27
 
 ### 行李隨身／託運
