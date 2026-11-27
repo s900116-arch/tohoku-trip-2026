@@ -36,3 +36,4 @@
 ## 其他文件
 - [FEATURES-功能總覽.md](FEATURES-功能總覽.md)：網頁功能與內容總覽
 - [CHANGELOG-變更紀錄.md](CHANGELOG-變更紀錄.md)：網頁變更紀錄
+- [ITINERARY-行程表.txt](ITINERARY-行程表.txt)：完整行程純文字版（航班、每日行程、住宿、實用提醒）
