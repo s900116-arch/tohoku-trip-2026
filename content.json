@@ -1,5 +1,5 @@
 {
- "updated": "2026/11/28 02:30",
+ "updated": "2026/11/28 18:00",
  "announce": "",
  "days": [
   {
@@ -1906,6 +1906,19 @@
      "不要寄走：機場確認前先用宅配、郵寄寄走的免稅品，不能退稅",
      "分開結帳：在日本要吃、要用的東西，一般結帳就好，不要辦免稅",
      "數量：只能買自己出境時帶得走的量"
+    ]
+   },
+   {
+    "title": "退款業者怎麼看（新制）",
+    "pts": [
+     "看收據：新制退稅由「退款業者」處理，收據或店家給的傳單會寫業者名稱，掃那家業者的 QR Code 登記退款方式（信用卡、支付寶等）",
+     "常見業者：JPrefund、J-TaxRefund（ユニクロ、ドン・キホーテ等）、Global Blue（JINS、精品、機場店）、Global Tax Free-Planet、Tax Refund Japan（WAmazing）、Tourego、Smaregi（中小型店、選品店）、Japan Tax-Free、Ocean（大賀藥局、Animate）、PIE VAT、InTaxFree",
+     "AEON：AEON 夢樂城（永旺夢樂城）目前多用 Global Tax Free-Planet，手續費約 1.5%；一般 AEON 也有用其他業者，Day 7 在 AEON 名取買的以收據上的業者為準",
+     "手續費：依業者和店家不同，目前回報約 1.35%–2.5%；Tourego 約 1.5%，有些店家會自己吸收",
+     "退現金：只有 Global Tax Free-Planet 在成田、羽田、那霸部分機台能領現金；仙台機場沒有，一律選信用卡（VISA／Master 最通用）",
+     "小心同名：「Japan Tax-Free（日本免稅）」跟 JPrefund、J-TaxRefund 名字很像，是不同公司；它可以退 JPYC 穩定幣或信用卡，信用卡手續費較高",
+     "資安提醒：只掃收據或店家給的 QR Code；信用卡卡號、安全碼只在業者官方頁面輸入。Ocean 退信用卡會導到中國的跨境支付認證頁，介意的話那家店就不要辦免稅",
+     "收據拍照：結帳後把收據（含業者名稱）拍照留存，之後查退款進度用"
     ]
    },
    {
